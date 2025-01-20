@@ -3,9 +3,9 @@
         android:label="money_manager_3"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <!-- <meta-data
+        <meta-data
             android:name="com.google.android.gms.client_id"
-            android:value=" 938529681325-uh70urnuqahgpirpuvduh6ush55mh3oe.apps.googleusercontent.com" /> -->
+            android:value=" 938529681325-uh70urnuqahgpirpuvduh6ush55mh3oe.apps.googleusercontent.com" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
