@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:money_manager_3/service/auth_service.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -7,38 +7,12 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-  @override
-  void initState() {
-    super.initState();
-    _handleSignIn();
-  }
   Future<void> _handleSignIn() async {
-    try {
-      GoogleSignInAccount? user = await _googleSignIn.signIn();
-      print("--------------------------------------------------");
-      if (user != null) {
-        print('User Name: ${user.displayName}');
-        print('User Email: ${user.email}');
-        // You can also access other user details here
-      }
-      await _googleSignIn.signIn();
-      // Handle successful sign-in here
-    } catch (error) {
-      print("++++++++++++++++++++++++++++++++++++++++++++++++++++");
-      print(error);
-      // Handle sign-in error here
-    }
+    AuthService.instance.signIn();
   }
+
   Future<void> _handleSignOut() async {
-    try {
-      await _googleSignIn.signOut();
-      print("User signed out");
-      // Handle successful sign-out here
-    } catch (error) {
-      print("Error signing out: $error");
-      // Handle sign-out error here
-    }
+    AuthService.instance.signOut();
   }
 
   @override

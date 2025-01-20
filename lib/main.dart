@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/service/auth_service.dart';
 import 'package:money_manager_3/service/database_service.dart';
 import 'package:money_manager_3/sign_up.dart';
 
 Future<void> main() async {
   await DatabaseService.instance.init();
+  AuthService.instance.init();
+
   runApp(const MyApp());
 }
 
