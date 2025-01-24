@@ -1,3 +1,5 @@
+// id|name|currency|balance|createdDate
+
 class AccountDto {
   final String id;
   final String name;
@@ -32,5 +34,16 @@ class AccountDto {
       'currency': currency,
       'createdDate': createdDate.toIso8601String(),
     };
+  }
+
+  factory AccountDto.fromPipedString(String pipedString) {
+    List<String> parts = pipedString.split('|');
+    return AccountDto(
+      id: parts[0],
+      name: parts[1],
+      currency: parts[2],
+      balance: double.parse(parts[3]),
+      createdDate: DateTime.parse(parts[4].isNotEmpty ? parts[4] : DateTime.now().toIso8601String()),
+    );
   }
 }
