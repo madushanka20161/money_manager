@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/dto/account_dto.dart';
+import 'package:money_manager_3/dto/category_dto.dart';
+import 'package:money_manager_3/dto/transaction_dto.dart';
+import 'package:money_manager_3/enum/index.dart';
+import 'package:money_manager_3/state/app_state.dart';
+import 'package:provider/provider.dart';
 
 class HomeDetails extends StatefulWidget {
+  final List<TransactionDto> income;
+  final List<TransactionDto> expenses;
+
+  HomeDetails({required this.income, required this.expenses});
+
   @override
   _HomeDetailsState createState() => _HomeDetailsState();
 }
@@ -22,44 +33,45 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-      return Column(
-        // children: [Text('Home Details')],
-        children: [
-          TabBar(
+    final accounts = context.watch<AppState>().accounts;
+    final category = context.watch<AppState>().categories;
+
+    return Column(
+      children: [
+        TabBar(
+          controller: _tabController,
+          tabs: [
+            Tab(text: 'Income'),
+            Tab(text: 'Expenses'),
+          ],
+        ),
+        Expanded(
+          child: TabBarView(
             controller: _tabController,
-            tabs: [
-              Tab(text: 'Income'),
-              Tab(text: 'Expenses'),
+            children: [
+              _buildListView(
+                TransactionType.income.toString(), accounts, category
+              ),
+              _buildListView(
+                TransactionType.expenses.toString(), accounts, category
+              ),
             ],
           ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildListView('Income'),
-                _buildListView('Expenses'),
-              ],
-            ),
-          ),
-        ],
-      );
-    // );
+        ),
+      ],
+    );
   }
 
-  Widget _buildListView(String type) {
-    List<Map<String, dynamic>> data = [
-      {'icon': Icons.attach_money, 'amount': 100, 'account': 'Bank', 'description': 'Salary'},
-      {'icon': Icons.money_off, 'amount': 50, 'account': 'Cash', 'description': 'Groceries'},
-    ];
+  Widget _buildListView(String type, Map<String, AccountDto> accounts, Map<String, CategoryDTO> categories) {
+    List<TransactionDto> data = type == TransactionType.income.toString() ? widget.income : widget.expenses;
 
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (context, index) {
         return ListTile(
-          leading: Icon(data[index]['icon']),
-          title: Text('${data[index]['amount']} | ${data[index]['account']}'),
-          subtitle: Text(data[index]['description']),
+          leading: Icon(categories[data[index].category]!.icon), // this need to be updated based on category
+          title: Text('${data[index].amount} | ${accounts[data[index].account]?.name}'),
+          subtitle: Text(data[index].description),
         );
       },
     );

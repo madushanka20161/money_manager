@@ -1,10 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/dto/transaction_dto.dart';
+import 'package:money_manager_3/enum/index.dart';
+import 'package:money_manager_3/helper/index.dart';
+import 'package:money_manager_3/service/userstate_service.dart';
+import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/widget/home/home_details.dart';
 import 'package:money_manager_3/widget/home/home_summary.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late List<DateTime> dateRange;
+  late DateTime startDate;
+  late DateTime endDate;
+
+  @override
+  void initState() {
+    super.initState();
+    String? defaultTimePeriod = UserStateService.instance.defaultTimePeriod;
+    dateRange = getDateRange(defaultTimePeriod!);
+    startDate = dateRange[0];
+    endDate = dateRange[1];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final transactions = context.watch<AppState>().transactions;
+    final selectedAccountId = context.watch<AppState>().selectedAccountId;
+    List<TransactionDto> filterTransactions = [];
+
+    // filter transactions based on time period
+    filterTransactions = transactions.values.where((transaction) => transaction.date == startDate || transaction.date.isAfter(startDate) && transaction.date.isBefore(endDate)).toList();
+
+    if (selectedAccountId != '') {
+      filterTransactions = filterTransactions.where((transaction) => transaction.account == selectedAccountId).toList();
+    }
+
+    List<TransactionDto> income = filterTransactions.where((transaction) => transaction.type == TransactionType.income).toList();
+    List<TransactionDto> expenses = filterTransactions.where((transaction) => transaction.type == TransactionType.expenses).toList();
+
+    void onDataPeriodChanged(DateTime sDate, DateTime eDate) {
+      setState(() {
+        startDate = sDate;
+        endDate = eDate;
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Money Mate'),
@@ -53,17 +98,18 @@ class HomePage extends StatelessWidget {
               end: Alignment.bottomRight, // Gradient ends at the bottom-right
             ),
           ),
-            // color: Colors.blue,
-            // height: 100,
             child: Center(
-              child: HomeSummary(),
+              child: HomeSummary(
+                income: income, 
+                expenses: expenses,
+                onDataPeriodChanged: onDataPeriodChanged),
             ),
           ),
           Container(
             color: Colors.green,
             height: MediaQuery.of(context).size.height - 374,
             child: Center(
-              child: HomeDetails(),
+              child: HomeDetails(income: income, expenses: expenses),
             ),
           )
         ],
