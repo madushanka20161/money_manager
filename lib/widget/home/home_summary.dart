@@ -4,17 +4,17 @@ import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
+import 'package:money_manager_3/state/user_state.dart';
+import 'package:money_manager_3/widget/home/current_time_period.dart';
 import 'package:provider/provider.dart';
 
 class HomeSummary extends StatefulWidget {
   final List<TransactionDto> income;
   final List<TransactionDto> expenses;
-  final Function(DateTime startDate, DateTime endDate) onDataPeriodChanged;
 
   HomeSummary({
     required this.income, 
-    required this.expenses, 
-    required this.onDataPeriodChanged
+    required this.expenses,
   });
 
   @override
@@ -36,6 +36,7 @@ class _HomeSummaryState extends State<HomeSummary> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
+    final userState = context.watch<UserState>();
     final accounts = context.watch<AppState>().accounts;
     final String selectedAccountId = context.watch<AppState>().selectedAccountId;
 
@@ -75,7 +76,7 @@ class _HomeSummaryState extends State<HomeSummary> {
           startDate = DateTime(pickedDateRange.start.year, pickedDateRange.start.month, pickedDateRange.start.day, 0, 0, 0);
           endDate = DateTime(pickedDateRange.end.year, pickedDateRange.end.month, pickedDateRange.end.day, 23, 59, 59);
 
-          widget.onDataPeriodChanged(startDate, endDate);
+          appState.setDateRange(startDate, endDate);
         }
       });
     }
@@ -92,12 +93,14 @@ class _HomeSummaryState extends State<HomeSummary> {
           final dateRange = getDateRange(period);
           startDate = dateRange[0];
           endDate = dateRange[1];
-          widget.onDataPeriodChanged(startDate, endDate);
+          appState.setDateRange(startDate, endDate);
           break;
         default:
           await _showDateTimePicker();
           break;
       }
+
+      userState.setDefaultTimePeriod(period);
     }
 
     return Center(
@@ -182,6 +185,7 @@ class _HomeSummaryState extends State<HomeSummary> {
                 ),
               ],  
             ),
+            CurrentTimePeriod(),
           ],
         ),
       );

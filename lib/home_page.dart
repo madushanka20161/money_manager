@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
-import 'package:money_manager_3/helper/index.dart';
-import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/widget/home/home_details.dart';
 import 'package:money_manager_3/widget/home/home_summary.dart';
@@ -14,23 +12,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<DateTime> dateRange;
-  late DateTime startDate;
-  late DateTime endDate;
-
-  @override
-  void initState() {
-    super.initState();
-    String? defaultTimePeriod = UserStateService.instance.defaultTimePeriod;
-    dateRange = getDateRange(defaultTimePeriod!);
-    startDate = dateRange[0];
-    endDate = dateRange[1];
-  }
-
   @override
   Widget build(BuildContext context) {
     final transactions = context.watch<AppState>().transactions;
     final selectedAccountId = context.watch<AppState>().selectedAccountId;
+    DateTime startDate = context.watch<AppState>().startDate;
+    DateTime endDate = context.watch<AppState>().endDate;
     List<TransactionDto> filterTransactions = [];
 
     // filter transactions based on time period
@@ -42,13 +29,6 @@ class _HomePageState extends State<HomePage> {
 
     List<TransactionDto> income = filterTransactions.where((transaction) => transaction.type == TransactionType.income).toList();
     List<TransactionDto> expenses = filterTransactions.where((transaction) => transaction.type == TransactionType.expenses).toList();
-
-    void onDataPeriodChanged(DateTime sDate, DateTime eDate) {
-      setState(() {
-        startDate = sDate;
-        endDate = eDate;
-      });
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -101,8 +81,8 @@ class _HomePageState extends State<HomePage> {
             child: Center(
               child: HomeSummary(
                 income: income, 
-                expenses: expenses,
-                onDataPeriodChanged: onDataPeriodChanged),
+                expenses: expenses
+              ),
             ),
           ),
           Container(

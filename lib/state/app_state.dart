@@ -8,12 +8,16 @@ class AppState with ChangeNotifier {
   final Map<String, TransactionDto> _transactions = {};
   final Map<String, CategoryDTO> _categories = {};
   String _selectedAccountId = '';
+  late DateTime _startDate;
+  late DateTime _endDate;
   bool _isLoading = true;
 
   Map<String, AccountDto> get accounts => _accounts;
   Map<String, TransactionDto> get transactions => _transactions;
   Map<String, CategoryDTO> get categories => _categories;
   String get selectedAccountId => _selectedAccountId;
+  DateTime get startDate => _startDate;
+  DateTime get endDate => _endDate;
   bool get isLoading => _isLoading;
 
   void addAccount(String id, AccountDto account) {
@@ -53,6 +57,12 @@ class AppState with ChangeNotifier {
 
   void setIsLoading(bool isLoading) {
     _isLoading = isLoading;
+    notifyListeners();
+  }
+
+  void setDateRange(DateTime startDate, DateTime endDate) {
+    _startDate = startDate;
+    _endDate = endDate;
     notifyListeners();
   }
 }
