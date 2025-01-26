@@ -95,11 +95,12 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          LineChart01(
-            selectedTab: selectedTab,
-            income: income,
-            expenses: expenses,
-          ),
+          // TODO [V2] need to enable chart in version 2
+          // LineChart01(
+          //   selectedTab: selectedTab,
+          //   income: income,
+          //   expenses: expenses,
+          // ),
           Container(
             color: Colors.green,
             height: MediaQuery.of(context).size.height - 580,
