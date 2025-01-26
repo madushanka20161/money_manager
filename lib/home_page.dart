@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/state/app_state.dart';
+import 'package:money_manager_3/widget/chart/line_chart.dart';
 import 'package:money_manager_3/widget/home/home_details.dart';
 import 'package:money_manager_3/widget/home/home_summary.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String selectedTab = TransactionType.expenses.displayName;
+
+  void onTabChanged(String value) {
+    setState(() {
+      selectedTab = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final transactions = context.watch<AppState>().transactions;
@@ -27,6 +36,7 @@ class _HomePageState extends State<HomePage> {
       filterTransactions = filterTransactions.where((transaction) => transaction.account == selectedAccountId).toList();
     }
 
+    filterTransactions.sort((a, b) => a.date.compareTo(b.date));
     List<TransactionDto> income = filterTransactions.where((transaction) => transaction.type == TransactionType.income).toList();
     List<TransactionDto> expenses = filterTransactions.where((transaction) => transaction.type == TransactionType.expenses).toList();
 
@@ -85,11 +95,20 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          LineChart01(
+            selectedTab: selectedTab,
+            income: income,
+            expenses: expenses,
+          ),
           Container(
             color: Colors.green,
-            height: MediaQuery.of(context).size.height - 374,
+            height: MediaQuery.of(context).size.height - 580,
             child: Center(
-              child: HomeDetails(income: income, expenses: expenses),
+              child: HomeDetails(
+                income: income, 
+                expenses: expenses,
+                onTabChanged: onTabChanged
+              ),
             ),
           )
         ],

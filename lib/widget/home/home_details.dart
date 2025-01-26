@@ -9,8 +9,13 @@ import 'package:provider/provider.dart';
 class HomeDetails extends StatefulWidget {
   final List<TransactionDto> income;
   final List<TransactionDto> expenses;
+  final Function onTabChanged;
 
-  HomeDetails({required this.income, required this.expenses});
+  HomeDetails({
+    required this.income, 
+    required this.expenses,
+    required this.onTabChanged
+  });
 
   @override
   _HomeDetailsState createState() => _HomeDetailsState();
@@ -41,19 +46,26 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
         TabBar(
           controller: _tabController,
           tabs: [
-            Tab(text: 'Income'),
             Tab(text: 'Expenses'),
+            Tab(text: 'Income'),
           ],
+          onTap: (value) {
+            if (value.toString() == '0') {
+              widget.onTabChanged(TransactionType.expenses.displayName);
+            } else {
+              widget.onTabChanged(TransactionType.income.displayName);
+            }
+          },
         ),
         Expanded(
           child: TabBarView(
             controller: _tabController,
             children: [
               _buildListView(
-                TransactionType.income.toString(), accounts, category
+                TransactionType.expenses.toString(), accounts, category
               ),
               _buildListView(
-                TransactionType.expenses.toString(), accounts, category
+                TransactionType.income.toString(), accounts, category
               ),
             ],
           ),
