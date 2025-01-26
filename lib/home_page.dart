@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/state/app_state.dart';
-import 'package:money_manager_3/widget/chart/line_chart.dart';
+// import 'package:money_manager_3/widget/chart/line_chart.dart';
 import 'package:money_manager_3/widget/home/home_details.dart';
 import 'package:money_manager_3/widget/home/home_summary.dart';
 import 'package:provider/provider.dart';
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
           // ),
           Container(
             color: Colors.green,
-            height: MediaQuery.of(context).size.height - 580,
+            height: MediaQuery.of(context).size.height - 400,
             child: Center(
               child: HomeDetails(
                 income: income, 
