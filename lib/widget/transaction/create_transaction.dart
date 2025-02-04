@@ -10,9 +10,11 @@ import 'package:provider/provider.dart';
 
 class CreateTransaction extends StatefulWidget {
   final TransactionType transactionType;
+  final CategoryDTO? category;
 
   CreateTransaction({
-    required this.transactionType
+    required this.transactionType,
+    this.category
   });
 
   @override
@@ -36,6 +38,10 @@ class _CreateTransactionState extends State<CreateTransaction> {
   void initState() {
     super.initState();
     _selectedtransactionType = widget.transactionType;
+    
+    if (widget.category != null) {
+      _selectedCategory = widget.category!.id;
+    }
   }
 
   void validate() {
@@ -356,7 +362,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          SharedService.instance.createTransaction(_selectedtransactionType!, _selectedAccount!, _amount!, _selectedCategory!, _selectedDate!, _description!);
+          SharedService.instance.createTransaction(_selectedtransactionType!, _selectedAccount!, _amount!, _selectedCategory!, _selectedDate!, _description);
           Navigator.pop(context);
         }
       },

@@ -57,7 +57,7 @@ class SharedService {
     databaseService!.saveData('category', categoryString);
   }
 
-  void createTransaction(TransactionType type, String accountId, double amount, String category, DateTime date, String description) {
+  void createTransaction(TransactionType type, String accountId, double amount, String category, DateTime date, String? description) {
     TransactionDto transaction = TransactionDto(
       id: generateUniqueId('TA'), 
       account: accountId, 
@@ -65,7 +65,7 @@ class SharedService {
       category: category, 
       type: type, 
       date: date, 
-      description: description
+      description: description ?? ''
     );
 
     appState!.addTransaction(transaction.id, transaction);

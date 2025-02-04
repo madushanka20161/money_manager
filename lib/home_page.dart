@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
+import 'package:money_manager_3/helper/filter.dart';
 import 'package:money_manager_3/state/app_state.dart';
 // import 'package:money_manager_3/widget/chart/line_chart.dart';
 import 'package:money_manager_3/widget/home/home_details.dart';
@@ -16,31 +17,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TransactionType selectedTab = TransactionType.expenses;
 
-  // void onTabChanged(TransactionType value) {
-  //   setState(() {
-  //     selectedTab = value;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final transactions = context.watch<AppState>().transactions;
-    final selectedAccountId = context.watch<AppState>().selectedAccountId;
-    selectedTab = context.watch<AppState>().selectedTransactionType;
-    DateTime startDate = context.watch<AppState>().startDate;
-    DateTime endDate = context.watch<AppState>().endDate;
-    List<TransactionDto> filterTransactions = [];
-
-    // filter transactions based on time period
-    filterTransactions = transactions.values.where((transaction) => transaction.date == startDate || transaction.date.isAfter(startDate) && transaction.date.isBefore(endDate)).toList();
-
-    if (selectedAccountId != '') {
-      filterTransactions = filterTransactions.where((transaction) => transaction.account == selectedAccountId).toList();
-    }
-
-    filterTransactions.sort((a, b) => a.date.compareTo(b.date));
-    List<TransactionDto> income = filterTransactions.where((transaction) => transaction.type == TransactionType.income).toList();
-    List<TransactionDto> expenses = filterTransactions.where((transaction) => transaction.type == TransactionType.expenses).toList();
+    List<List<TransactionDto>> filteredTransactions = filterTrnsaction(context.watch<AppState>(), null);
+    List<TransactionDto> income = filteredTransactions[0];
+    List<TransactionDto> expenses = filteredTransactions[1];
 
     return Scaffold(
       appBar: AppBar(

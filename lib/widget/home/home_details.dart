@@ -23,6 +23,7 @@ class HomeDetails extends StatefulWidget {
 class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   Map<String, dynamic> transactionByCategory = {};
+  double total = 0;
   TransactionType selectedTab = TransactionType.expenses;
   Function? setSelectedTransactionType;
 
@@ -41,8 +42,11 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
   void generateTransactionByCategory() {
     List<TransactionDto> collection = (selectedTab == TransactionType.income) ? widget.income : widget.expenses;
     transactionByCategory.clear();
+    total = 0;
 
     for (var transaction in collection) {
+      total = total + transaction.amount;
+
       if (transactionByCategory[transaction.category] == null) {
         transactionByCategory[transaction.category] = {
           'total': transaction.amount,
@@ -53,6 +57,15 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
         transactionByCategory[transaction.category]['transaction'].add(transaction);
       }
     }
+
+    transactionByCategory.forEach((key, value) {
+      value['percentage'] = (value['total'] / total) * 100;
+    });
+
+    transactionByCategory = Map.fromEntries(
+      transactionByCategory.entries.toList()
+      ..sort((a, b) => b.value['total'].compareTo(a.value['total']))
+    );
   }
 
   void onTabChanged(int value) {
@@ -115,13 +128,13 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
 
         return ListTile(
           leading: Icon(categories[keyList[index]]!.icon),
-          title: Text('${data['total']} | ${categories[keyList[index]]!.name}'),
+          title: Text('${data['total']} | ${categories[keyList[index]]!.name} | ${data['percentage'].toStringAsFixed(2)}%'),
           onTap: () {
             Navigator.push(
               context,
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) => TransactionList(
-                  transactions: data['transaction'],
+                  trnsactionType: selectedTab,
                   category: categories[keyList[index]]!,
                 ),
                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
