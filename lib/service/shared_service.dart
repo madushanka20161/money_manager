@@ -57,9 +57,9 @@ class SharedService {
     databaseService!.saveData('category', categoryString);
   }
 
-  void createTransaction(TransactionType type, String accountId, double amount, String category, DateTime date, String? description) {
+  void createTransaction(TransactionType type, String accountId, double amount, String category, DateTime date, String? description, String? transactionId) {
     TransactionDto transaction = TransactionDto(
-      id: generateUniqueId('TA'), 
+      id: transactionId ?? generateUniqueId('TA'), 
       account: appState!.accounts[accountId]!, 
       amount: amount, 
       category: appState!.categories[category]!, 
@@ -69,6 +69,12 @@ class SharedService {
     );
 
     appState!.addTransaction(transaction.id, transaction);
+    String transactionString = jsonEncode(appState!.transactions);
+    databaseService!.saveData('transaction', transactionString);
+  }
+
+  void deleteTransaction(TransactionDto trnsaction) {
+    appState!.removeTransaction(trnsaction.id);
     String transactionString = jsonEncode(appState!.transactions);
     databaseService!.saveData('transaction', transactionString);
   }

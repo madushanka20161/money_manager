@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
+import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
@@ -9,12 +10,18 @@ import 'package:money_manager_3/widget/category/select_category.dart';
 import 'package:provider/provider.dart';
 
 class CreateTransaction extends StatefulWidget {
-  final TransactionType transactionType;
+  final TransactionType? transactionType;
   final CategoryDTO? category;
+  final TransactionDto? transaction;
+  final bool? isTrnsactionEdit;
+  final bool? isTrnsactionCopy;
 
   CreateTransaction({
-    required this.transactionType,
-    this.category
+    this.transactionType,
+    this.category,
+    this.transaction,
+    this.isTrnsactionEdit,
+    this.isTrnsactionCopy,
   });
 
   @override
@@ -33,20 +40,47 @@ class _CreateTransactionState extends State<CreateTransaction> {
   double? _amount;
   String? _description;
   bool isSubmitButtonPressed = false; // to execute validation function
+  TextEditingController _amountController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  bool isTrnsactionEdit = false;
+  bool isTrnsactionCopy = false;
 
   @override
   void initState() {
     super.initState();
-    _selectedtransactionType = widget.transactionType;
+
+    if (widget.transactionType == null) {
+      _selectedtransactionType = TransactionType.expenses;
+    } else {
+      _selectedtransactionType = widget.transactionType;
+    }
     
     if (widget.category != null) {
       _selectedCategory = widget.category!.id;
     }
+
+    if (widget.transaction != null) {
+      _selectedAccount = widget.transaction!.account.id;
+      _selectedCategory = widget.transaction!.category.id;
+      _selectedDate = widget.transaction!.date;
+      _amount = widget.transaction!.amount;
+      _description = widget.transaction!.description;
+      _amountController = TextEditingController(text: widget.transaction!.amount.toString());
+      _descriptionController = TextEditingController(text: widget.transaction!.description);
+    }
+
+    if (widget.isTrnsactionEdit != null) {
+      isTrnsactionEdit = widget.isTrnsactionEdit!;
+    }
+
+    if (widget.isTrnsactionCopy != null) {
+      isTrnsactionCopy = widget.isTrnsactionCopy!;
+    }
   }
 
-  void validate() {
-    _formKey.currentState!.validate();
-  }
+  // void validate() {
+  //   _formKey.currentState!.validate();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -181,12 +215,13 @@ class _CreateTransactionState extends State<CreateTransaction> {
         }
         return null;
       },
+      initialValue: _amountController.text,
       builder: (FormFieldState<String> state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              // controller: _amountController,
+              controller: _amountController,
               decoration: InputDecoration(labelText: 'Amount'),
               keyboardType: TextInputType.number,
               onChanged: (value) {
@@ -348,13 +383,39 @@ class _CreateTransactionState extends State<CreateTransaction> {
   }
 
   Widget renderDescriptionInput() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Description'),
-      onChanged: (value) {
-        _description = value;
+    return FormField<String>(
+      validator: (value) {
+        value!.contains('|') ? 'Description cannot contain | symbol' : null;
+        return null;
       },
-      validator: (value) =>
-          value!.contains('|') ? 'Description cannot contain | symbol' : null,
+      initialValue: _descriptionController.text,
+      builder: (FormFieldState<String> state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: _descriptionController,
+              decoration: InputDecoration(labelText: 'Description'),
+              // keyboardType: TextInputType.number,
+              onChanged: (value) {
+                setState(() {
+                  _description = value;
+                  state.didChange(value);
+                  state.validate();
+                });
+              },
+            ),
+            if (state.hasError)
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  state.errorText!,
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 
@@ -362,8 +423,18 @@ class _CreateTransactionState extends State<CreateTransaction> {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          SharedService.instance.createTransaction(_selectedtransactionType!, _selectedAccount!, _amount!, _selectedCategory!, _selectedDate!, _description);
-          Navigator.pop(context);
+          String? previousId = isTrnsactionEdit ? widget.transaction?.id : null;
+          SharedService.instance.createTransaction(_selectedtransactionType!, _selectedAccount!, _amount!, _selectedCategory!, _selectedDate!, _description, previousId);
+          
+          if (isTrnsactionEdit == true || isTrnsactionCopy == true) {
+            // to skip trnsaction view screen
+            int count = 0;
+            Navigator.popUntil(context, (route) {
+              return count++ == 2;
+            });
+          } else {
+            Navigator.pop(context);
+          }
         }
       },
       child: Text('Submit'),
