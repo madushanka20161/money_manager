@@ -14,11 +14,11 @@ List<List<TransactionDto>> filterTrnsaction(AppState appState, CategoryDTO? cate
   filterTransactions = transactions.values.where((transaction) => transaction.date == startDate || transaction.date.isAfter(startDate) && transaction.date.isBefore(endDate)).toList();
 
   if (selectedAccountId != '') {
-    filterTransactions = filterTransactions.where((transaction) => transaction.account == selectedAccountId).toList();
+    filterTransactions = filterTransactions.where((transaction) => transaction.account.id == selectedAccountId).toList();
   }
 
   if (category != null) {
-    filterTransactions = filterTransactions.where((transaction) => transaction.category == category.id).toList();
+    filterTransactions = filterTransactions.where((transaction) => transaction.category.id == category.id).toList();
   }
 
   filterTransactions.sort((a, b) => a.date.compareTo(b.date));

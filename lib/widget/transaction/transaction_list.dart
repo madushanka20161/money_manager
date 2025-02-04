@@ -7,6 +7,7 @@ import 'package:money_manager_3/helper/filter.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/widget/transaction/create_transaction.dart';
 import 'package:money_manager_3/widget/transaction/transaction_search_delegate.dart';
+import 'package:money_manager_3/widget/transaction/transaction_view.dart';
 import 'package:provider/provider.dart';
 
 class TransactionList extends StatefulWidget {
@@ -58,7 +59,15 @@ class _TransactionListState extends State<TransactionList> {
         itemCount: transactions.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text('${transactions[index].description} | ${transactions[index].amount} | ${accounts[transactions[index].account]!.name}'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TransactionView(transaction: transactions[index]),
+                ),
+              );
+            },
+            title: Text('${transactions[index].description} | ${transactions[index].amount} | ${accounts[transactions[index].account.id]!.name}'),
           );
         },
       ),

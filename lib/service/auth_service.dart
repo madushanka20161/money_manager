@@ -152,7 +152,8 @@ class AuthService {
       String transactionsString = DatabaseService.instance.getData('transaction');
       Map<String, dynamic> transations = jsonDecode(transactionsString);
       transations.forEach((id, transaction) {
-        print(transaction);
+        transaction['account'] = _appState.accounts[transaction['account']];
+        transaction['category'] = _appState.categories[transaction['category']];
         TransactionDto transactionDto = TransactionDto.fromJson(transaction);
         _appState.addTransaction(transactionDto.id, transactionDto);
       });

@@ -47,14 +47,14 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
     for (var transaction in collection) {
       total = total + transaction.amount;
 
-      if (transactionByCategory[transaction.category] == null) {
-        transactionByCategory[transaction.category] = {
+      if (transactionByCategory[transaction.category.id] == null) {
+        transactionByCategory[transaction.category.id] = {
           'total': transaction.amount,
           'transaction': [transaction]
         };
       } else {
-        transactionByCategory[transaction.category]['total'] = transactionByCategory[transaction.category]['total'] + transaction.amount;
-        transactionByCategory[transaction.category]['transaction'].add(transaction);
+        transactionByCategory[transaction.category.id]['total'] = transactionByCategory[transaction.category.id]['total'] + transaction.amount;
+        transactionByCategory[transaction.category.id]['transaction'].add(transaction);
       }
     }
 

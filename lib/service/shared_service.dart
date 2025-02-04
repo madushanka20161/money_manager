@@ -60,9 +60,9 @@ class SharedService {
   void createTransaction(TransactionType type, String accountId, double amount, String category, DateTime date, String? description) {
     TransactionDto transaction = TransactionDto(
       id: generateUniqueId('TA'), 
-      account: accountId, 
+      account: appState!.accounts[accountId]!, 
       amount: amount, 
-      category: category, 
+      category: appState!.categories[category]!, 
       type: type, 
       date: date, 
       description: description ?? ''

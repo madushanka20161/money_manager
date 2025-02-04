@@ -45,7 +45,7 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionDto> {
       children: results
           .map<ListTile>((transaction) => ListTile(
                 title: Text(
-                    '${transaction.description} | ${transaction.amount} | ${accounts[transaction.account]!.name}'),
+                    '${transaction.description} | ${transaction.amount} | ${accounts[transaction.account.id]!.name}'),
               ))
           .toList(),
     );

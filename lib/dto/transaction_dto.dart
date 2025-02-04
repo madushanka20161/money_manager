@@ -1,12 +1,14 @@
+import 'package:money_manager_3/dto/account_dto.dart';
+import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 
 // id|account|amount|category|type|date|description
 
 class TransactionDto {
   String id;
-  String account;
+  AccountDto account;
   double amount;
-  String category;
+  CategoryDTO category;
   TransactionType type;
   DateTime date;
   String description;
@@ -36,26 +38,26 @@ class TransactionDto {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'account': account,
+      'account': account.id,
       'amount': amount,
-      'category': category,
+      'category': category.id,
       'type': type.displayName,
       'date': date.toIso8601String(),
       'description': description,
     };
   }
 
-  factory TransactionDto.fromPipedString(String pipedString) {
-    List<String> parts = pipedString.split('|');
+  // factory TransactionDto.fromPipedString(String pipedString) {
+  //   List<String> parts = pipedString.split('|');
     
-    return TransactionDto(
-      id: parts[0],
-      account: parts[1],
-      amount: double.parse(parts[2]),
-      category: parts[3],
-      type: parts[4] == 'income' ? TransactionType.income : TransactionType.expenses,
-      date: DateTime.parse(parts[5]),
-      description: parts[6],
-    );
-  }
+  //   return TransactionDto(
+  //     id: parts[0],
+  //     account: parts[1],
+  //     amount: double.parse(parts[2]),
+  //     category: parts[3],
+  //     type: parts[4] == 'income' ? TransactionType.income : TransactionType.expenses,
+  //     date: DateTime.parse(parts[5]),
+  //     description: parts[6],
+  //   );
+  // }
 }
