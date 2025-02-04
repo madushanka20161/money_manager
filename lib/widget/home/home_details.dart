@@ -10,12 +10,10 @@ import 'package:provider/provider.dart';
 class HomeDetails extends StatefulWidget {
   final List<TransactionDto> income;
   final List<TransactionDto> expenses;
-  final Function onTabChanged;
 
   HomeDetails({
     required this.income, 
     required this.expenses,
-    required this.onTabChanged
   });
 
   @override
@@ -25,7 +23,8 @@ class HomeDetails extends StatefulWidget {
 class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   Map<String, dynamic> transactionByCategory = {};
-  String selectedTab = TransactionType.expenses.displayName;
+  TransactionType selectedTab = TransactionType.expenses;
+  Function? setSelectedTransactionType;
 
   @override
   void initState() {
@@ -39,8 +38,8 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
     super.dispose();
   }
 
-  void generateCategory() {
-    List<TransactionDto> collection = (selectedTab == TransactionType.income.displayName) ? widget.income : widget.expenses;
+  void generateTransactionByCategory() {
+    List<TransactionDto> collection = (selectedTab == TransactionType.income) ? widget.income : widget.expenses;
     transactionByCategory.clear();
 
     for (var transaction in collection) {
@@ -58,19 +57,20 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
 
   void onTabChanged(int value) {
     if (value.toString() == '0') {
-      selectedTab = TransactionType.expenses.displayName;
+      selectedTab = TransactionType.expenses;
     } else {
-      selectedTab = TransactionType.income.displayName;
+      selectedTab = TransactionType.income;
     }
 
-    widget.onTabChanged(selectedTab);
+    setSelectedTransactionType!(selectedTab);
   }
 
   @override
   Widget build(BuildContext context) {
-    generateCategory();
+    generateTransactionByCategory();
     final accounts = context.watch<AppState>().accounts;
     final category = context.watch<AppState>().categories;
+    setSelectedTransactionType = context.watch<AppState>().setSelectedTransactionType;
 
     return Column(
       children: [
@@ -116,7 +116,6 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
         return ListTile(
           leading: Icon(categories[keyList[index]]!.icon),
           title: Text('${data['total']} | ${categories[keyList[index]]!.name}'),
-          // subtitle: Text(data[index].description),
           onTap: () {
             Navigator.push(
               context,
@@ -129,7 +128,6 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
                   const begin = Offset(1.0, 0.0);
                   const end = Offset.zero;
                   const curve = Curves.ease;
-
                   var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
                   var offsetAnimation = animation.drive(tween);
 

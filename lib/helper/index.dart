@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 List<DateTime> getDateRange(String period) {
   final currentDate = DateTime.now();
   late DateTime startDate;
@@ -26,3 +28,30 @@ List<DateTime> getDateRange(String period) {
 
   return [startDate, endDate];
 }
+
+String capitalizeFirstLetter(String input) {
+  if (input.isEmpty) return input;
+  return input[0].toUpperCase() + input.substring(1);
+}
+
+const Map<String, IconData> iconMap = {
+  'attach_money': Icons.attach_money,
+  'shopping_cart': Icons.shopping_cart,
+  'home': Icons.home,
+  'accessible': Icons.accessible,
+  'safety_check': Icons.safety_check,
+  'sailing': Icons.sailing,
+  'abc_outlined': Icons.abc_outlined,
+  'hail': Icons.hail
+};
+
+const Map<String, Color> colorMap = {
+  'blue': Colors.blue,
+  'black': Colors.black,
+  'green': Colors.green,
+  'yellow': Colors.yellow,
+  'orange': Colors.orange,
+  'pink': Colors.pink,
+  'red': Colors.red,
+  'lightBlueAccent': Colors.lightBlueAccent
+};

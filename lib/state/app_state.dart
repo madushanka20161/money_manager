@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
+import 'package:money_manager_3/enum/index.dart';
 
 class AppState with ChangeNotifier {
   final Map<String, AccountDto> _accounts = {};
   final Map<String, TransactionDto> _transactions = {};
   final Map<String, CategoryDTO> _categories = {};
   String _selectedAccountId = '';
+  TransactionType _selectedTransactionType = TransactionType.expenses;
   late DateTime _startDate;
   late DateTime _endDate;
   bool _isLoading = true;
@@ -19,6 +21,7 @@ class AppState with ChangeNotifier {
   DateTime get startDate => _startDate;
   DateTime get endDate => _endDate;
   bool get isLoading => _isLoading;
+  TransactionType get selectedTransactionType => _selectedTransactionType;
 
   void addAccount(String id, AccountDto account) {
     _accounts[id] = account;
@@ -63,6 +66,11 @@ class AppState with ChangeNotifier {
   void setDateRange(DateTime startDate, DateTime endDate) {
     _startDate = startDate;
     _endDate = endDate;
+    notifyListeners();
+  }
+
+  void setSelectedTransactionType(TransactionType type) {
+    _selectedTransactionType = type;
     notifyListeners();
   }
 }

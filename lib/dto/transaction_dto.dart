@@ -3,7 +3,7 @@ import 'package:money_manager_3/enum/index.dart';
 // id|account|amount|category|type|date|description
 
 class TransactionDto {
-  int id;
+  String id;
   String account;
   double amount;
   String category;
@@ -27,7 +27,7 @@ class TransactionDto {
       account: json['account'],
       amount: json['amount'],
       category: json['category'],
-      type: json['type'],
+      type: json['type'] == 'income' ? TransactionType.income : TransactionType.expenses,
       date: DateTime.parse(json['date']),
       description: json['description'],
     );
@@ -39,7 +39,7 @@ class TransactionDto {
       'account': account,
       'amount': amount,
       'category': category,
-      'type': type,
+      'type': type.displayName,
       'date': date.toIso8601String(),
       'description': description,
     };
@@ -49,7 +49,7 @@ class TransactionDto {
     List<String> parts = pipedString.split('|');
     
     return TransactionDto(
-      id: int.parse(parts[0]),
+      id: parts[0],
       account: parts[1],
       amount: double.parse(parts[2]),
       category: parts[3],
