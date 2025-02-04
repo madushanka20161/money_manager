@@ -54,7 +54,14 @@ class _CurrentTimePeriodState extends State<CurrentTimePeriod> {
   }
 
   void setDateRangeForPeriod() {
-    List<DateTime> dateRange = getDateRange(timePeriod);
+    List<DateTime> dateRange;
+
+    try {
+      dateRange = getDateRange(timePeriod, appState);
+    } catch (e) {
+      dateRange = getDateRange(timePeriod, null);
+    }
+    
     startDate = dateRange[0];
     endDate = dateRange[1];
   }

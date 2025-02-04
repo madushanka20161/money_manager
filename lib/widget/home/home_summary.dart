@@ -90,7 +90,7 @@ class _HomeSummaryState extends State<HomeSummary> {
         case 'week':
         case 'month':
         case 'year':
-          final dateRange = getDateRange(period);
+          final dateRange = getDateRange(period, null);
           startDate = dateRange[0];
           endDate = dateRange[1];
           appState.setDateRange(startDate, endDate);

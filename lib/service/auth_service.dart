@@ -63,7 +63,7 @@ class AuthService {
       DatabaseService.instance.saveData('user', jsonString);
 
       String defaultTimePeriod = await DatabaseService.instance.getData('defaultTimePeriod') ?? 'month';
-      List<DateTime> dateRange = getDateRange(defaultTimePeriod!);
+      List<DateTime> dateRange = getDateRange(defaultTimePeriod, null);
       UserStateService.instance.init(defaultTimePeriod);
       _userState.setDefaultTimePeriod(defaultTimePeriod);
       _appState.setIsLoading(false);

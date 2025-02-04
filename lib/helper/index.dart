@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/state/app_state.dart';
 
-List<DateTime> getDateRange(String period) {
+List<DateTime> getDateRange(String period, AppState? appState) {
   final currentDate = DateTime.now();
   late DateTime startDate;
   late DateTime endDate;
@@ -21,6 +22,10 @@ List<DateTime> getDateRange(String period) {
     case 'year':
       startDate = DateTime(currentDate.year, 1, 1, 0, 0, 0);
       endDate = DateTime(currentDate.year, 12, 31, 23, 59, 59);
+      break;
+    case 'custom':
+      startDate = appState!.startDate;
+      endDate = appState.endDate;
       break;
     default:
       throw Exception('[helper - index] Invalid period');
