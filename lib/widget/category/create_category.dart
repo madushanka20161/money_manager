@@ -41,6 +41,7 @@ class _CreateCategoryState extends State<CreateCategory> {
           renderTopSection(),
           renderIconSection(),
           renderColorSelection(),
+          renderCreateButton(),
         ],
       ),
     );
@@ -119,17 +120,23 @@ class _CreateCategoryState extends State<CreateCategory> {
                 ),
             ],
           ),
-          Center(
-            child: ElevatedButton(
-              onPressed: (_categoryName ?? '').isNotEmpty ? () {
-                SharedService.instance.createCategory(_categoryName!, _selectedIcon!, _selectedColor!, widget.transactionType);
-                Navigator.pop(context);
-              } : null,
-              child: Text('Create'),
-            ),
-          )
         ],
       )
+    );
+  }
+
+  Widget renderCreateButton() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: (_categoryName ?? '').isNotEmpty
+            ? () {
+                SharedService.instance.createCategory(_categoryName!,
+                    _selectedIcon!, _selectedColor!, widget.transactionType);
+                Navigator.pop(context);
+              }
+            : null,
+        child: Text('Create'),
+      ),
     );
   }
 }

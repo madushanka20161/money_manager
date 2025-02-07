@@ -50,6 +50,14 @@ const Map<String, IconData> iconMap = {
   'hail': Icons.hail
 };
 
+const Map<String, IconData> accountIconMap = {
+  'account_balance': Icons.account_balance,
+  'account_balance_outlined': Icons.account_balance_outlined,
+  'account_balance_rounded': Icons.account_balance_rounded,
+  'account_balance_sharp': Icons.account_balance_sharp,
+  'account_balance_wallet_rounded': Icons.account_balance_wallet_rounded,
+};
+
 const Map<String, Color> colorMap = {
   'blue': Colors.blue,
   'black': Colors.black,
@@ -60,3 +68,7 @@ const Map<String, Color> colorMap = {
   'red': Colors.red,
   'lightBlueAccent': Colors.lightBlueAccent
 };
+
+const List<String> currencyList = ['USD', 'EUR', 'GBP', 'JPY'];
+const Color defaultColur = Colors.blue;
+const IconData defaultAccountIcon = Icons.account_balance;

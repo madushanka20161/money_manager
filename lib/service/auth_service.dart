@@ -78,13 +78,13 @@ class AuthService {
       print('333333333333333333333333333333333');
 
       // this part for testing
-      String account01 = '1|Main Account|Rs|1000.0|';
-      String account02 = '2|Sampath savings|Rs|5000.0|';
-      List<String> accounts = [account01, account02];
-      accounts.forEach((account) {
-        AccountDto accountDto = AccountDto.fromPipedString(account);
-        _appState.addAccount(accountDto.id, accountDto);
-      });
+      // String account01 = '1|Main Account|Rs|1000.0||true|account_balance|green';
+      // String account02 = '2|Sampath savings|Rs|5000.0||false|account_balance|red';
+      // List<String> accounts = [account01, account02];
+      // accounts.forEach((account) {
+      //   AccountDto accountDto = AccountDto.fromPipedString(account);
+      //   _appState.addAccount(accountDto.id, accountDto);
+      // });
 
       // // this part for transaction testing
       // String transaction01 = '1|1|100|1|income|2025-01-01|Salary';
@@ -149,6 +149,13 @@ class AuthService {
         _appState.addCategory(categoryDto.id, categoryDto);
       });
 
+      String accountsString = DatabaseService.instance.getData('account');
+      Map<String, dynamic> accounts = jsonDecode(accountsString);
+      accounts.forEach((id, account) {
+        AccountDto accountDto = AccountDto.fromJson(account);
+        _appState.addAccount(accountDto.id, accountDto);
+      });
+
       String transactionsString = DatabaseService.instance.getData('transaction');
       Map<String, dynamic> transations = jsonDecode(transactionsString);
       transations.forEach((id, transaction) {
@@ -157,8 +164,6 @@ class AuthService {
         TransactionDto transactionDto = TransactionDto.fromJson(transaction);
         _appState.addTransaction(transactionDto.id, transactionDto);
       });
-
-
     } else {
       print('222222222222222222222222222222222222222222');
     }

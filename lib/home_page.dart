@@ -3,6 +3,7 @@ import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/filter.dart';
 import 'package:money_manager_3/state/app_state.dart';
+import 'package:money_manager_3/widget/account/account_page.dart';
 // import 'package:money_manager_3/widget/chart/line_chart.dart';
 import 'package:money_manager_3/widget/home/home_details.dart';
 import 'package:money_manager_3/widget/home/home_summary.dart';
@@ -55,7 +56,12 @@ class _HomePageState extends State<HomePage> {
               leading: Icon(Icons.account_balance),
               title: Text('Accounts'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AccountPage(),
+                  ),
+                );
               },
             ),
             ListTile(

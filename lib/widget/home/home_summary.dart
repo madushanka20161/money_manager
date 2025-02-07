@@ -42,6 +42,7 @@ class _HomeSummaryState extends State<HomeSummary> {
 
     final List<AccountDto> accountList = accounts.values.toList();
     accountList.insert(0, AccountDto(id: '0', name: 'All Accounts'));
+    // TODO [need to add create account option]
     double totalBalance;
 
     if (selectedAccountId == '') {

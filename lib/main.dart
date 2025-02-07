@@ -7,6 +7,7 @@ import 'package:money_manager_3/service/database_service.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
+// import 'package:money_manager_3/widget/account/create_account.dart';
 // import 'package:money_manager_3/widget/category/create_category.dart';
 // import 'package:money_manager_3/widget/transaction/create_transaction.dart';
 import 'package:provider/provider.dart';
@@ -74,5 +75,6 @@ class _LandingScreenState extends State<LandingScreen> {
         )
       : 
       HomePage();
+      // CreateAccount();
   }
 }

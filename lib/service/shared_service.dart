@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
@@ -32,6 +33,9 @@ class SharedService {
       case 'TA':
         isExit = appState?.transactions[uniqueKey] == null ? false : true;
         break;
+      case 'AC':
+        isExit = appState?.accounts[uniqueKey] == null ? false : true;
+        break;
       default:
         throw Exception('[shared service - generate unique id] Invalid Prefix');
     }
@@ -53,14 +57,22 @@ class SharedService {
     );
     
     appState!.addCategory(category.id, category);
-    String categoryString = jsonEncode(appState!.categories);
-    databaseService!.saveData('category', categoryString);
+    _updateCategoryStore();
   }
 
   void createTransaction(TransactionType type, String accountId, double amount, String category, DateTime date, String? description, String? transactionId) {
+    AccountDto account = appState!.accounts[accountId]!;
+
+    if (transactionId == null) {
+      account.balance = account.balance + amount;
+    } else {
+      TransactionDto oldTrnsaction = appState!.transactions[transactionId]!;
+      account.balance = account.balance - oldTrnsaction.amount + amount;
+    }
+
     TransactionDto transaction = TransactionDto(
       id: transactionId ?? generateUniqueId('TA'), 
-      account: appState!.accounts[accountId]!, 
+      account: account, 
       amount: amount, 
       category: appState!.categories[category]!, 
       type: type, 
@@ -68,13 +80,44 @@ class SharedService {
       description: description ?? ''
     );
 
+    appState!.addAccount(account.id, account);
+    _updateAccountStore();
+
     appState!.addTransaction(transaction.id, transaction);
-    String transactionString = jsonEncode(appState!.transactions);
-    databaseService!.saveData('transaction', transactionString);
+    _updateTransactionStore();
   }
 
   void deleteTransaction(TransactionDto trnsaction) {
     appState!.removeTransaction(trnsaction.id);
+    _updateTransactionStore();
+  }
+
+  void createAccount(String name, double balance, String currency, bool isAddToTotal, Color iconColor, IconData icon) {
+    AccountDto account = AccountDto(
+      id: generateUniqueId('AC'), 
+      name: name,
+      balance: balance,
+      currency: currency,
+      isAddToTotal: isAddToTotal,
+      iconColor: iconColor,
+      icon: icon
+    );
+
+    appState!.addAccount(account.id, account);
+    _updateAccountStore();
+  }
+
+  void _updateCategoryStore() {
+    String categoryString = jsonEncode(appState!.categories);
+    databaseService!.saveData('category', categoryString);
+  }
+
+  void _updateAccountStore() {
+    String accountsString = jsonEncode(appState!.accounts);
+    databaseService!.saveData('account', accountsString);
+  }
+
+  void _updateTransactionStore() {
     String transactionString = jsonEncode(appState!.transactions);
     databaseService!.saveData('transaction', transactionString);
   }
