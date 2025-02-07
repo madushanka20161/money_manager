@@ -92,9 +92,9 @@ class SharedService {
     _updateTransactionStore();
   }
 
-  void createAccount(String name, double balance, String currency, bool isAddToTotal, Color iconColor, IconData icon) {
+  void createAccount(String name, double balance, String currency, bool isAddToTotal, Color iconColor, IconData icon, String? accountId) {
     AccountDto account = AccountDto(
-      id: generateUniqueId('AC'), 
+      id: accountId ?? generateUniqueId('AC'), 
       name: name,
       balance: balance,
       currency: currency,

@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/widget/common/color_selection.dart';
 
 class CreateAccount extends StatefulWidget {
+  final AccountDto? account;
+
+  const CreateAccount({
+    super.key, 
+    this.account
+  });
+  
   @override
   _CreateAccountState createState() => _CreateAccountState();
 }
@@ -16,8 +24,27 @@ class _CreateAccountState extends State<CreateAccount> {
   bool _isAddToTotal = true;
   Color _selectedIconColor = defaultColur;
   IconData _selectedIcon = defaultAccountIcon;
-  final TextEditingController _balanceController = TextEditingController(text: '0');
+  TextEditingController _balanceController = TextEditingController(text: '0');
+  TextEditingController _nameController = TextEditingController();
   List<IconData> iconList = accountIconMap.values.toList();
+  bool isNewAccount = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.account != null) {
+      isNewAccount = false;
+      _accountName = widget.account!.name;
+      _nameController = TextEditingController(text: widget.account!.name);
+      _balance = widget.account!.balance;
+      _balanceController = TextEditingController(text: widget.account!.balance.toString());
+      _selectedCurrency = widget.account!.currency;
+      _isAddToTotal = widget.account!.isAddToTotal;
+      _selectedIconColor = widget.account!.iconColor;
+      _selectedIcon = widget.account!.icon;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +73,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   Widget renderAccountName() {
     return TextFormField(
+      controller: _nameController,
       decoration: InputDecoration(labelText: 'Account Name'),
       onChanged: (value) {
         _accountName = value;
@@ -143,11 +171,12 @@ class _CreateAccountState extends State<CreateAccount> {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          SharedService.instance.createAccount(_accountName, _balance, _selectedCurrency, _isAddToTotal, _selectedIconColor, _selectedIcon);
+          String? id = isNewAccount ? null : widget.account!.id;
+          SharedService.instance.createAccount(_accountName, _balance, _selectedCurrency, _isAddToTotal, _selectedIconColor, _selectedIcon, id);
           Navigator.pop(context);
         }
       },
-      child: Text('Create Account'),
+      child: Text(isNewAccount ? 'Create Account' : 'Update Account'),
     );
   }
 

@@ -43,6 +43,12 @@ class _AccountPageState extends State<AccountPage> {
               itemCount: accounts.length,
               itemBuilder: (context, index) {
                 return ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateAccount(account: accountList[index],)),
+                    );
+                  },
                   title: Row(
                     children: [
                       Text(accountList[index].name),
