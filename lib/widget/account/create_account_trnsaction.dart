@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
+import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
@@ -7,6 +8,12 @@ import 'package:money_manager_3/widget/account/accoun_selection_dropdown.dart';
 import 'package:provider/provider.dart';
 
 class CreateAccountTransaction extends StatefulWidget {
+  final AccountTransactionDTO? accountTrnsaction;
+
+  const CreateAccountTransaction({
+    this.accountTrnsaction
+  });
+
   @override
   _CreateAccountTransactionState createState() => _CreateAccountTransactionState();
 }
@@ -19,16 +26,30 @@ class _CreateAccountTransactionState extends State<CreateAccountTransaction> {
   double _toAmount = 0.0;
   DateTime _date = DateTime.now();
   String? _description;
-  final TextEditingController _amountController = TextEditingController();
-  final TextEditingController _toAmountController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _amountController = TextEditingController();
+  TextEditingController _toAmountController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
   bool isFromAccountError = false;
   bool isToAccountError = false;
   Map<String, AccountDto> accounts = {};
+  bool isNew = true;
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.accountTrnsaction != null) {
+      isNew = false;
+      _fromAccountId = widget.accountTrnsaction!.fromAccount.id;
+      _toAccountId = widget.accountTrnsaction!.toAccount.id;
+      _amount = widget.accountTrnsaction!.amount;
+      _toAmount = widget.accountTrnsaction!.toAmount;
+      _date = widget.accountTrnsaction!.date;
+      _description = widget.accountTrnsaction!.description;
+      _amountController = TextEditingController(text: widget.accountTrnsaction!.amount.toString());
+      _toAmountController = TextEditingController(text: widget.accountTrnsaction!.toAmount.toString());
+      _descriptionController = TextEditingController(text: widget.accountTrnsaction!.description);
+    }
   }
 
   @override
@@ -66,6 +87,7 @@ class _CreateAccountTransactionState extends State<CreateAccountTransaction> {
               onAccountSelect: _onFromAccountChange,
               excludedAccountsId: [_toAccountId],
               isError: isFromAccountError,
+              selectedAccount: _fromAccountId,
             ),
           ],
         ),
@@ -76,6 +98,7 @@ class _CreateAccountTransactionState extends State<CreateAccountTransaction> {
               onAccountSelect: _onToAccountChange,
               excludedAccountsId: [_fromAccountId],
               isError: isToAccountError,
+              selectedAccount: _toAccountId,
             ),
           ],
         ),
@@ -278,12 +301,13 @@ class _CreateAccountTransactionState extends State<CreateAccountTransaction> {
       onPressed: () {
         _validateAccounts();
         if (_formKey.currentState!.validate() && _validateAccounts()) {
+          String? id = isNew ? null : widget.accountTrnsaction!.id;
           SharedService.instance.createAccounttrnsaction(_fromAccountId,
-              _toAccountId, _amount, _toAmount, _date, _description);
+              _toAccountId, _amount, _toAmount, _date, _description, id);
           Navigator.pop(context);
         }
       },
-      child: Text('Trnsfer'),
+      child: Text(isNew ? 'Trnsfer' : 'update'),
     );
   }
 

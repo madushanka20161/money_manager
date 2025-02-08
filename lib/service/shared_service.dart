@@ -117,16 +117,22 @@ class SharedService {
     _updateAccountStore();
   }
 
-  void createAccounttrnsaction(String fromId, String toId, double amount, double toAmount, DateTime date, String? description) {
+  void createAccounttrnsaction(String fromId, String toId, double amount, double toAmount, DateTime date, String? description, String? id) {
     Map<String, AccountDto> accounts = appState!.accounts;
     AccountDto fromAccount = accounts[fromId]!;
     AccountDto toAccount = accounts[toId]!;
 
-    fromAccount.balance = fromAccount.balance - amount;
-    toAccount.balance = toAccount.balance + toAmount;
+    if (id == null) {
+      fromAccount.balance = fromAccount.balance - amount;
+      toAccount.balance = toAccount.balance + toAmount;
+    } else {
+      AccountTransactionDTO oldAccountTrnsaction = appState!.accountTrnsactions[id]!;
+      fromAccount.balance = fromAccount.balance + oldAccountTrnsaction.amount - amount;
+      toAccount.balance = toAccount.balance - oldAccountTrnsaction.amount + toAmount;
+    }
     
     AccountTransactionDTO accountTrnsaction = AccountTransactionDTO(
-      id: generateUniqueId('AT'),
+      id: id ?? generateUniqueId('AT'),
       fromAccount: fromAccount, 
       toAccount: toAccount, 
       amount: amount, 

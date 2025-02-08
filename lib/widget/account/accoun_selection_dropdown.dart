@@ -7,12 +7,14 @@ class AccountSelectionDropdown extends StatefulWidget {
   final Function(String)? onAccountSelect;
   final List<String>? excludedAccountsId;
   final bool? isError;
+  final String? selectedAccount;
 
   const AccountSelectionDropdown({
     super.key, 
     this.onAccountSelect,
     this.excludedAccountsId,
     this.isError,
+    this.selectedAccount,
   });
 
   @override
@@ -21,6 +23,15 @@ class AccountSelectionDropdown extends StatefulWidget {
 
 class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
   String? _selectedAccount;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.selectedAccount != null) {
+      _selectedAccount = widget.selectedAccount;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

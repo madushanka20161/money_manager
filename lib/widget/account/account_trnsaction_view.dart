@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
-import 'package:money_manager_3/widget/transaction/create_transaction.dart';
+import 'package:money_manager_3/widget/account/create_account_trnsaction.dart';
 import 'package:provider/provider.dart';
 
 class AccountTransactionView extends StatefulWidget {
@@ -45,7 +45,9 @@ class _AccountTransactionViewState extends State<AccountTransactionView> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CreateTransaction()),
+                        MaterialPageRoute(builder: (context) => CreateAccountTransaction(
+                          accountTrnsaction: transaction,
+                        )),
                       );
                     },
                   ),
