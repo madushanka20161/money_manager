@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/state/app_state.dart';
+import 'package:money_manager_3/widget/account/account_trnsaction.dart';
 import 'package:money_manager_3/widget/account/create_account.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,10 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   void _makeTransaction() {
-    // TODO: Navigate to make transaction page
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AccountTransaction()),
+    );
   }
 
   @override

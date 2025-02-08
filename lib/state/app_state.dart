@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
+import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
@@ -13,6 +14,7 @@ class AppState with ChangeNotifier {
   late DateTime _startDate;
   late DateTime _endDate;
   bool _isLoading = true;
+  late Map<String, AccountTransactionDTO> _accountTrnsactions = {};
 
   Map<String, AccountDto> get accounts => _accounts;
   Map<String, TransactionDto> get transactions => _transactions;
@@ -22,6 +24,7 @@ class AppState with ChangeNotifier {
   DateTime get endDate => _endDate;
   bool get isLoading => _isLoading;
   TransactionType get selectedTransactionType => _selectedTransactionType;
+  Map<String, AccountTransactionDTO> get accountTrnsactions => _accountTrnsactions;
 
   void addAccount(String id, AccountDto account) {
     _accounts[id] = account;
@@ -71,6 +74,16 @@ class AppState with ChangeNotifier {
 
   void setSelectedTransactionType(TransactionType type) {
     _selectedTransactionType = type;
+    notifyListeners();
+  }
+
+  void addAccountTrnsaction(String id, AccountTransactionDTO accountTrnsaction) {
+    _accountTrnsactions[id] = accountTrnsaction;
+    notifyListeners();
+  }
+
+  void removeAccountTrnsaction(String id) {
+    _accountTrnsactions.remove(id);
     notifyListeners();
   }
 }

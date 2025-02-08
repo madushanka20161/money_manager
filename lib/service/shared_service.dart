@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
+import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
@@ -35,6 +36,9 @@ class SharedService {
         break;
       case 'AC':
         isExit = appState?.accounts[uniqueKey] == null ? false : true;
+        break;
+      case 'AT':
+        isExit = appState?.accountTrnsactions[uniqueKey] == null ? false : true;
         break;
       default:
         throw Exception('[shared service - generate unique id] Invalid Prefix');
@@ -107,6 +111,28 @@ class SharedService {
     _updateAccountStore();
   }
 
+  void createAccounttrnsaction(String fromId, String toId, double amount, double toAmount, DateTime date, String? description) {
+    Map<String, AccountDto> accounts = appState!.accounts;
+    AccountDto fromAccount = accounts[fromId]!;
+    AccountDto toAccount = accounts[toId]!;
+
+    fromAccount.balance = fromAccount.balance - amount;
+    toAccount.balance = toAccount.balance + toAmount;
+    
+    AccountTransactionDTO accountTrnsaction = AccountTransactionDTO(
+      id: generateUniqueId('AT'),
+      fromAccount: fromAccount, 
+      toAccount: toAccount, 
+      amount: amount, 
+      toAmount: toAmount, 
+      date: date, 
+      description: description ?? ''
+    );
+
+    appState!.addAccountTrnsaction(accountTrnsaction.id, accountTrnsaction);
+    _updateAccountTransactionStore();
+  }
+
   void _updateCategoryStore() {
     String categoryString = jsonEncode(appState!.categories);
     databaseService!.saveData('category', categoryString);
@@ -120,5 +146,10 @@ class SharedService {
   void _updateTransactionStore() {
     String transactionString = jsonEncode(appState!.transactions);
     databaseService!.saveData('transaction', transactionString);
+  }
+
+  void _updateAccountTransactionStore() {
+    String accountTransactionString = jsonEncode(appState!.accountTrnsactions);
+    databaseService!.saveData('account-trnsaction', accountTransactionString);
   }
 }

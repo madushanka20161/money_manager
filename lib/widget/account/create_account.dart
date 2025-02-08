@@ -93,7 +93,7 @@ class _CreateAccountState extends State<CreateAccount> {
       decoration: InputDecoration(labelText: 'Balance'),
       keyboardType: TextInputType.number,
       onSaved: (value) {
-        _balance = double.parse(value!);
+        _balance = double.tryParse(value!) ?? 0;
       },
       validator: (value) {
         final n = num.tryParse(value!);
