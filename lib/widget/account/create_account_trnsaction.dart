@@ -6,12 +6,12 @@ import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/widget/account/accoun_selection_dropdown.dart';
 import 'package:provider/provider.dart';
 
-class AccountTransaction extends StatefulWidget {
+class CreateAccountTransaction extends StatefulWidget {
   @override
-  _AccountTransactionState createState() => _AccountTransactionState();
+  _CreateAccountTransactionState createState() => _CreateAccountTransactionState();
 }
 
-class _AccountTransactionState extends State<AccountTransaction> {
+class _CreateAccountTransactionState extends State<CreateAccountTransaction> {
   final _formKey = GlobalKey<FormState>();
   String _fromAccountId = '';
   String _toAccountId = '';

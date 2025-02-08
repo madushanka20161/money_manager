@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
+import 'package:money_manager_3/widget/transaction/create_transaction.dart';
 import 'package:provider/provider.dart';
 
 class AccountTransactionView extends StatefulWidget {
@@ -35,14 +36,17 @@ class _AccountTransactionViewState extends State<AccountTransactionView> {
               ],
             ),
             trailing: SizedBox(
-              width: 96, // Adjust the width as needed
+              width: 96,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
-                      // Add your edit logic here
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CreateTransaction()),
+                      );
                     },
                   ),
                   IconButton(

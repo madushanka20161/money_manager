@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/state/app_state.dart';
-import 'package:money_manager_3/widget/account/account_trnsaction.dart';
+import 'package:money_manager_3/widget/account/create_account_trnsaction.dart';
 import 'package:money_manager_3/widget/account/account_trnsaction_view.dart';
 import 'package:money_manager_3/widget/account/create_account.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +12,6 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  List<String> accounts = ['Account 1', 'Account 2', 'Account 3'];
-
   void _seeHistory() {
     Navigator.push(
       context,
@@ -31,7 +29,7 @@ class _AccountPageState extends State<AccountPage> {
   void _makeTransaction() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AccountTransaction()),
+      MaterialPageRoute(builder: (context) => CreateAccountTransaction()),
     );
   }
 
