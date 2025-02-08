@@ -92,8 +92,14 @@ class SharedService {
   }
 
   void deleteTransaction(TransactionDto trnsaction) {
+    AccountDto account = trnsaction.account;
+    account.balance = account.balance + trnsaction.amount;
+
     appState!.removeTransaction(trnsaction.id);
+    appState!.addAccount(account.id, account);
+    
     _updateTransactionStore();
+    _updateAccountStore();
   }
 
   void createAccount(String name, double balance, String currency, bool isAddToTotal, Color iconColor, IconData icon, String? accountId) {
@@ -132,7 +138,7 @@ class SharedService {
     appState!.addAccountTrnsaction(accountTrnsaction.id, accountTrnsaction);
     appState!.addAccount(fromAccount.id, fromAccount);
     appState!.addAccount(toAccount.id, toAccount);
-    
+
     _updateAccountTransactionStore();
     _updateAccountStore();
   }
