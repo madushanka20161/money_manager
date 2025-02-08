@@ -1,5 +1,6 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
+import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/dto/user_dto.dart';
@@ -164,6 +165,16 @@ class AuthService {
         TransactionDto transactionDto = TransactionDto.fromJson(transaction);
         _appState.addTransaction(transactionDto.id, transactionDto);
       });
+
+      String accountTransactionsString = DatabaseService.instance.getData('account-trnsaction');
+      Map<String, dynamic> accountTransactions = jsonDecode(accountTransactionsString);
+      accountTransactions.forEach((id, accountTransaction) {
+        accountTransaction['fromAccount'] = _appState.accounts[accountTransaction['fromAccount']];
+        accountTransaction['toAccount'] = _appState.accounts[accountTransaction['toAccount']];
+        AccountTransactionDTO accountTransactionDto = AccountTransactionDTO.fromJson(accountTransaction);
+        _appState.addAccountTrnsaction(accountTransactionDto.id, accountTransactionDto);
+      });
+      
     } else {
       print('222222222222222222222222222222222222222222');
     }

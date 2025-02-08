@@ -130,7 +130,32 @@ class SharedService {
     );
 
     appState!.addAccountTrnsaction(accountTrnsaction.id, accountTrnsaction);
+    appState!.addAccount(fromAccount.id, fromAccount);
+    appState!.addAccount(toAccount.id, toAccount);
+    
     _updateAccountTransactionStore();
+    _updateAccountStore();
+  }
+
+  void deleteAccounttrnsaction(String id) {
+    Map<String, AccountTransactionDTO> trnsactions = appState!.accountTrnsactions;
+
+    if (trnsactions[id] != null) {
+      AccountTransactionDTO trnsaction = trnsactions[id]!;
+      Map<String, AccountDto> accounts = appState!.accounts;
+      AccountDto fromAccount = accounts[trnsaction.fromAccount.id]!;
+      AccountDto toAccount = accounts[trnsaction.toAccount.id]!;
+
+      fromAccount.balance = fromAccount.balance + trnsaction.amount;
+      toAccount.balance = toAccount.balance - trnsaction.toAmount;
+
+      appState!.addAccount(fromAccount.id, fromAccount);
+      appState!.addAccount(toAccount.id, toAccount); 
+      appState!.removeAccountTrnsaction(id);
+
+      _updateAccountTransactionStore();
+      _updateAccountStore();
+    }
   }
 
   void _updateCategoryStore() {
