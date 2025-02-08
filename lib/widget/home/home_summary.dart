@@ -46,7 +46,9 @@ class _HomeSummaryState extends State<HomeSummary> {
     double totalBalance;
 
     if (selectedAccountId == '') {
-      totalBalance = accounts.values.fold(0.0, (double sum, account) => sum + account.balance);
+      totalBalance = accounts.values
+        .where((account) => account.isAddToTotal == true)
+        .fold(0.0, (double sum, account) => sum + account.balance);
     } else {
       totalBalance = accounts[selectedAccountId]?.balance ?? 0.0;
     }
@@ -135,7 +137,7 @@ class _HomeSummaryState extends State<HomeSummary> {
               ],
             ),
             Text(
-              'RS ${totalBalance.toStringAsFixed(2)}',
+              '$defaultCurrency ${totalBalance.toStringAsFixed(2)}',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
@@ -143,10 +145,10 @@ class _HomeSummaryState extends State<HomeSummary> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(Icons.arrow_upward),
-                Text('RS. $totalIncome'),
+                Text('$defaultCurrency. $totalIncome'),
                 SizedBox(width: 20),
                 Icon(Icons.arrow_downward),
-                Text('RS. $totalExpenses'),
+                Text('$defaultCurrency. $totalExpenses'),
               ],
             ),
             

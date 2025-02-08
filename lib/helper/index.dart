@@ -69,7 +69,7 @@ const Map<String, Color> colorMap = {
   'lightBlueAccent': Colors.lightBlueAccent
 };
 
-const List<String> currencyList = ['USD', 'EUR', 'GBP', 'JPY'];
+const List<String> currencyList = ['RS', 'USD', 'EUR', 'GBP', 'JPY'];
 const Color defaultColur = Colors.blue;
 const IconData defaultAccountIcon = Icons.account_balance;
 
@@ -78,4 +78,8 @@ const Map<String, double> currencyMap = {
   'EUR': 10.0,
   'GBP': 0.25,
   'JPY': 2.0,
+  'RS' : 290,
 };
+
+// TODO: [need to get this from user]
+const defaultCurrency = 'RS';
