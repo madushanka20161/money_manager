@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
@@ -38,6 +39,7 @@ class _CurrentTimePeriodState extends State<CurrentTimePeriod> {
           disableSwipeLeft = true;
           disableSwipeRight = true;
         });
+        
         break;
       default:
         if (today == startDate || today.isAfter(startDate) && today.isBefore(endDate)) {
@@ -49,6 +51,10 @@ class _CurrentTimePeriodState extends State<CurrentTimePeriod> {
             disableSwipeRight = false;
           });
         }
+
+        setState(() {
+          disableSwipeLeft = false;
+        });
         break;
     }
   }
@@ -169,17 +175,14 @@ class _CurrentTimePeriodState extends State<CurrentTimePeriod> {
           _onSwipeLeft();
         }
       },
-      child: Container(
-        padding: EdgeInsets.all(16.0),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              !disableSwipeLeft ? IconButton(onPressed: _onSwipeLeft, icon: Icon(Icons.arrow_back_ios, size: 16.0, color: Colors.black)) : Container(),
-              Text(displayText, style: TextStyle(fontSize: 16.0)),
-              !disableSwipeRight ? IconButton(onPressed: _onSwipeRight, icon: Icon(Icons.arrow_forward_ios, size: 16.0, color: Colors.black)) : Container(),
-            ],
-          ),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            !disableSwipeLeft ? IconButton(onPressed: _onSwipeLeft, icon: Icon(Icons.arrow_back_ios, size: 18.0, color: Colors.white)) : SizedBox(width: 48, height: 48,),
+            Text(displayText, style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
+            !disableSwipeRight ? IconButton(onPressed: _onSwipeRight, icon: Icon(Icons.arrow_forward_ios, size: 16.0, color: Colors.white)) : SizedBox(width: 48, height: 48,),
+          ],
         ),
       ),
     );

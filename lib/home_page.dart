@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/custom_painter.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/filter.dart';
@@ -74,58 +75,53 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue, Colors.purple], // Start and end colors
-                  begin: Alignment.topLeft, // Gradient starts at the top-left
-                  end: Alignment
-                      .bottomRight, // Gradient ends at the bottom-right
+      body: Stack(
+        children: [
+          CustomPaint(
+            size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
+            painter: DiagonalPainter(),
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Center(
+                  child: HomeSummary(income: income, expenses: expenses),
                 ),
-              ),
-              child: Center(
-                child: HomeSummary(income: income, expenses: expenses),
-              ),
-            ),
-            // TODO [V2] need to enable chart in version 2
-            // LineChart01(
-            //   selectedTab: selectedTab,
-            //   income: income,
-            //   expenses: expenses,
-            // ),
-            Container(
-              color: Colors.green,
-              height: MediaQuery.of(context).size.height - 500,
-              child: Center(
-                child: HomeDetails(
-                  income: income,
-                  expenses: expenses,
-                  // onTabChanged: onTabChanged
+                Container(
+                  constraints: BoxConstraints(
+                    minHeight: 60,  // Minimum width
+                    maxHeight: 200,  // Maximum width
+                  ),
+                  height: double.infinity,
+                  color: Colors.transparent,
+                  child: Center(
+                    child: HomeDetails(
+                      income: income,
+                      expenses: expenses,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Container(
-              height: 50,
-              child: Center(
-                child: IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            CreateTransaction(transactionType: selectedTab),
-                      ),
-                    );
-                  },
+                Container(
+                  height: 50,
+                  child: Center(
+                    child: IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CreateTransaction(transactionType: selectedTab),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
