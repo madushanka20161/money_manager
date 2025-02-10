@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/custom_painter.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
+import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/filter.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/widget/account/account_page.dart';
@@ -103,25 +104,25 @@ class _HomePageState extends State<HomePage> {
           ),
           Positioned(
             bottom: 0,
-            child: Container(
-              width: MediaQuery.of(context).size.width, 
-              height: 50, 
-              color: Colors.red,
-              child: Center(
-                child: IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                          CreateTransaction(transactionType: selectedTab),
-                      ),
-                    );
-                  },
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                      CreateTransaction(transactionType: selectedTab),
+                  ),
+                );
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width, 
+                height: 50, 
+                color: AppConfig.buttonSelectedColor,
+                child: Center(
+                  child: Icon(Icons.add, size: 30),
                 ),
               ),
-            ), // Positioned widget
+            ),
           ),
         ],
       ),
