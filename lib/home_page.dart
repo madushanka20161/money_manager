@@ -104,6 +104,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Positioned(
             bottom: 0,
+            left: 20,
             child: GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -115,9 +116,12 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               child: Container(
-                width: MediaQuery.of(context).size.width, 
-                height: 50, 
-                color: AppConfig.buttonSelectedColor,
+                width: MediaQuery.of(context).size.width - 40, 
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: AppConfig.buttonSelectedColor,
+                ),
+                height: 50,
                 child: Center(
                   child: Icon(Icons.add, size: 30),
                 ),
