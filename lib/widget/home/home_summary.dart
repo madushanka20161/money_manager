@@ -190,7 +190,7 @@ class _HomeSummaryState extends State<HomeSummary> {
             SizedBox(height: 5),
             ToggleButtons(
               isSelected: isSelectedToggleButton,
-              fillColor: const Color.fromARGB(255, 23, 96, 156),
+              fillColor: AppConfig.buttonSelectedColor,
               onPressed: (int index) {
                 onDataPeriodChanged(periods[index]);
                 isSelectedToggleButton.fillRange(0, isSelectedToggleButton.length, false);

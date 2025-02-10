@@ -5,4 +5,5 @@ class AppConfig {
   static double fontSize = 18.0;
   static Color fontColor = Colors.white;
   static double iconSize = 18;
+  static Color buttonSelectedColor =  Color.fromARGB(255, 23, 96, 156);
 }

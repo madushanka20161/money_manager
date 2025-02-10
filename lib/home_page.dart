@@ -5,7 +5,6 @@ import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/filter.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/widget/account/account_page.dart';
-// import 'package:money_manager_3/widget/chart/line_chart.dart';
 import 'package:money_manager_3/widget/home/home_details.dart';
 import 'package:money_manager_3/widget/home/home_summary.dart';
 import 'package:money_manager_3/widget/transaction/create_transaction.dart';
@@ -81,45 +80,48 @@ class _HomePageState extends State<HomePage> {
             size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
             painter: DiagonalPainter(),
           ),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Center(
-                  child: HomeSummary(income: income, expenses: expenses),
+          Column(
+            children: [
+              Center(
+                child: HomeSummary(income: income, expenses: expenses),
+              ),
+              Container(
+                constraints: BoxConstraints(
+                  minHeight: 60,
+                  maxHeight: MediaQuery.of(context).size.height - 50 - 350, // (50 - height of add button, 350 - height of home)
                 ),
-                Container(
-                  constraints: BoxConstraints(
-                    minHeight: 60,  // Minimum width
-                    maxHeight: 200,  // Maximum width
-                  ),
-                  height: double.infinity,
-                  color: Colors.transparent,
-                  child: Center(
-                    child: HomeDetails(
-                      income: income,
-                      expenses: expenses,
-                    ),
+                height: double.infinity,
+                color: Colors.transparent,
+                child: Center(
+                  child: HomeDetails(
+                    income: income,
+                    expenses: expenses,
                   ),
                 ),
-                Container(
-                  height: 50,
-                  child: Center(
-                    child: IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CreateTransaction(transactionType: selectedTab),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 0,
+            child: Container(
+              width: MediaQuery.of(context).size.width, 
+              height: 50, 
+              color: Colors.red,
+              child: Center(
+                child: IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                          CreateTransaction(transactionType: selectedTab),
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ), // Positioned widget
           ),
         ],
       ),
