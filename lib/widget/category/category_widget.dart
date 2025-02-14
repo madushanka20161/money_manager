@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/helper/config.dart';
 
 class CategoryWidget extends StatelessWidget {
   final IconData icon;
   final String text;
-  // final Color color;
   final double? width;
+  final double? height;
   final bool isSelected;
   final Color iconColor;
 
   const CategoryWidget({
     required this.icon,
     required this.text,
-    // required this.color
     this.width,
+    this.height,
     this.isSelected = false,
     required this.iconColor,
   });
@@ -20,16 +21,33 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 30,
-      height: 70,
-      color: isSelected ? Colors.amber : Colors.transparent,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: isSelected ? iconColor : iconColor.withOpacity(0.4),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: AppConfig.padding),
+      width: width ?? 50,
+      height: height ?? 80,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: iconColor,),
-          Text(
-            text,
-            overflow: TextOverflow.visible,
-            maxLines: 1,
+          Icon(
+            icon, 
+            color: AppConfig.fontColor, 
+            size: AppConfig.iconSize * 1.5,
+          ),
+          Container(
+            padding: EdgeInsets.only(top: AppConfig.paddingSmall),
+              child: Text(
+              text,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+              maxLines: 1,
+              style: TextStyle(
+                color: AppConfig.fontColor, 
+                fontSize: AppConfig.fontSize * 0.8
+              ),
+            ),
           ),
         ],
       ),

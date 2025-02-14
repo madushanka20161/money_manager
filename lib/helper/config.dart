@@ -6,4 +6,9 @@ class AppConfig {
   static Color fontColor = Colors.white;
   static double iconSize = 18;
   static Color buttonSelectedColor =  Color.fromARGB(144, 23, 96, 156);
+  static Color errorFontColor = Colors.red;
+  static double errorFontSize = 12.0;
+  static double paddingSmall = 5;
+  static double padding = 10;
+  static TextStyle fontStyle = TextStyle(fontSize: AppConfig.fontSize, color: AppConfig.fontColor);
 }

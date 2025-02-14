@@ -6,6 +6,8 @@ class DiagonalPainter extends CustomPainter {
     final paintBackground = Paint()
       // ..color = Color(0xFF3E93EA)
       ..color = Color.fromARGB(255, 18, 73, 128)
+      // ..color = Color.fromARGB(255, 2, 48, 95)
+      // ..color = Color(0xFF242C3B)
       ..style = PaintingStyle.fill;
 
     canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paintBackground);

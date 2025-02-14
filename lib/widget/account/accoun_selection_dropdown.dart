@@ -8,14 +8,24 @@ class AccountSelectionDropdown extends StatefulWidget {
   final Function(String)? onAccountSelect;
   final List<String>? excludedAccountsId;
   final bool? isError;
+  final String? errorMessage;
   final String? selectedAccount;
+  /*
+    values for mode 1, 2
+    defaulr value is 1
+    1 - for account selection with `all account` options
+    2 - for account selection without `all account` options 
+  */
+  final int? mode;
 
   const AccountSelectionDropdown({
     super.key, 
     this.onAccountSelect,
     this.excludedAccountsId,
     this.isError,
+    this.errorMessage,
     this.selectedAccount,
+    this.mode,
   });
 
   @override
@@ -24,6 +34,7 @@ class AccountSelectionDropdown extends StatefulWidget {
 
 class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
   String? _selectedAccount;
+  int? _mode;
   Map<String, AccountDto> accounts = {};
   List<AccountDto> accountList = [];
 
@@ -34,6 +45,8 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
     if (widget.selectedAccount != null) {
       _selectedAccount = widget.selectedAccount;
     }
+
+    _mode = widget.mode ?? 1;
   }
 
   void _showPopup(BuildContext context) async {
@@ -42,7 +55,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
       builder: (BuildContext context) {
         return SimpleDialog(
           children: [
-            _buildAllAccountOption(context),
+            if (_mode == 1) _buildAllAccountOption(context),
             ...accountList.map((AccountDto account) => _buildDialogOption(context, account)),
             // TODO [need to add create account option]
           ],
@@ -98,37 +111,71 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
     accountList = accountList.where((account) {
       return widget.excludedAccountsId == null || !widget.excludedAccountsId!.contains(account.id);
     }).toList();
-    
-    return SizedBox(
-      width: 150,
-      child: Column(
-        children: [
-          ElevatedButton.icon(
-            onPressed: () {
-              _showPopup(context);
-            }, 
-            icon: Icon(Icons.arrow_drop_down, size: AppConfig.iconSize, color: AppConfig.fontColor,),
-            label: Text(_selectedAccount ?? "All Account", style: TextStyle(color: AppConfig.fontColor),),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(34, 255, 255, 255),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              textStyle: TextStyle(fontSize: AppConfig.fontSize,),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10), // ✅ Rounded corners (20)
+
+    if (_mode == 1) {
+      return SizedBox(
+        width: 150,
+        child: Column(
+          children: [
+            ElevatedButton.icon(
+              onPressed: () {
+                _showPopup(context);
+              }, 
+              icon: Icon(Icons.arrow_drop_down, size: AppConfig.iconSize, color: AppConfig.fontColor,),
+              label: Text(_selectedAccount ?? "All Account", style: TextStyle(color: AppConfig.fontColor),),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(34, 255, 255, 255),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                textStyle: TextStyle(fontSize: AppConfig.fontSize,),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                minimumSize: Size(double.infinity, 50),
               ),
-              minimumSize: Size(double.infinity, 50),
             ),
-          ),
-          widget.isError == true ?
-          Container(
-            height: 2, // Thickness of underline
-            width: 150, // Adjust width of the underline
-            color: Colors.red, // Underline color
-          )
-          :
-          Container(),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    } else {
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+          child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                _showPopup(context);
+              }, 
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _selectedAccount != null ? AppConfig.buttonSelectedColor : Colors.transparent,
+                padding: EdgeInsets.all(AppConfig.padding),
+                textStyle: TextStyle(fontSize: AppConfig.fontSize,),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                minimumSize: Size(double.infinity, 50),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(_selectedAccount ?? "Select Account", style: TextStyle(color: AppConfig.fontColor),),
+                  Icon(Icons.arrow_drop_down, size: AppConfig.iconSize, color: AppConfig.fontColor,),
+                ],
+              ),
+            ),
+            widget.isError == true ?
+            Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  widget.errorMessage ?? 'Please Select an Account',
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                ),
+              )
+            :
+            Container(),
+          ],
+        ),
+      );
+    }
   }
 }
