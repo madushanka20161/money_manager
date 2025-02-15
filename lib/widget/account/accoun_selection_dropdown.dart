@@ -122,13 +122,19 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
                 _showPopup(context);
               }, 
               icon: Icon(Icons.arrow_drop_down, size: AppConfig.iconSize, color: AppConfig.fontColor,),
-              label: Text(_selectedAccount ?? "All Account", style: TextStyle(color: AppConfig.fontColor),),
+              label: Text(
+                _selectedAccount ?? "All Account", 
+                style: TextStyle(color: AppConfig.fontColor),
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                maxLines: 1,
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(34, 255, 255, 255),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: EdgeInsets.all(AppConfig.padding),
                 textStyle: TextStyle(fontSize: AppConfig.fontSize,),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppConfig.borderRadius),
                 ),
                 minimumSize: Size(double.infinity, 50),
               ),
@@ -150,7 +156,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
                 padding: EdgeInsets.all(AppConfig.padding),
                 textStyle: TextStyle(fontSize: AppConfig.fontSize,),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppConfig.borderRadius),
                 ),
                 minimumSize: Size(double.infinity, 50),
               ),
@@ -165,10 +171,10 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
             widget.isError == true ?
             Container(
                 width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.only(top: 5.0),
+                padding: EdgeInsets.only(top: AppConfig.paddingSmall),
                 child: Text(
                   widget.errorMessage ?? 'Please Select an Account',
-                  style: TextStyle(color: Colors.red, fontSize: 12),
+                  style: TextStyle(color: AppConfig.errorFontColor, fontSize: AppConfig.errorFontSize),
                 ),
               )
             :

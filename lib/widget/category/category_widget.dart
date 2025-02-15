@@ -22,7 +22,7 @@ class CategoryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(AppConfig.borderRadius),
         color: isSelected ? iconColor : iconColor.withOpacity(0.4),
       ),
       padding: EdgeInsets.symmetric(horizontal: AppConfig.padding),
@@ -34,7 +34,7 @@ class CategoryWidget extends StatelessWidget {
           Icon(
             icon, 
             color: AppConfig.fontColor, 
-            size: AppConfig.iconSize * 1.5,
+            size: AppConfig.iconSize,
           ),
           Container(
             padding: EdgeInsets.only(top: AppConfig.paddingSmall),

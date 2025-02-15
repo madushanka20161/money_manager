@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
               Container(
                 constraints: BoxConstraints(
                   minHeight: 60,
-                  maxHeight: MediaQuery.of(context).size.height - 50 - 350, // (50 - height of add button, 350 - height of home)
+                  maxHeight: MediaQuery.of(context).size.height - 50 - 360, // (50 - height of add button, 360 - height of home)
                 ),
                 height: double.infinity,
                 color: Colors.transparent,
@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 height: 50,
                 child: Center(
-                  child: Icon(Icons.add, size: 30),
+                  child: Icon(Icons.add, size: AppConfig.iconSize),
                 ),
               ),
             ),

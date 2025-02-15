@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/index.dart';
 
 class ColorSelection extends StatefulWidget {
@@ -28,13 +29,26 @@ class _ColorSelectionState extends State<ColorSelection> {
   Widget build(BuildContext context) {
     List<Color> colorList = colorMap.values.toList();
 
-    return Column(
+    return Container(
+      padding: EdgeInsets.only(top: AppConfig.padding),
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Select Color'),
-          Wrap(
+          Container(
+            padding: EdgeInsets.only(
+              bottom: AppConfig.paddingSmall, 
+              left: AppConfig.padding
+            ),
+            child: Text('Select Icon', style: AppConfig.fontStyle,),
+          ),
+          Center(
+            child: Wrap(
             spacing: 10.0,
-            children: [
-              for (Color color in colorList)
+            runSpacing: 10.0,
+              children: [
+                for (Color color in colorList)
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -44,17 +58,24 @@ class _ColorSelectionState extends State<ColorSelection> {
                     widget.onColorSelected(color);
                   },
                   child: Container(
-                    width: 50,
-                    height: 50,
+                    width: 30,
+                    height: 30,
                     decoration: BoxDecoration(
-                      border: _selectedColor == color ? Border.all(style: BorderStyle.solid, width: 5) : null,
-                      color: color
+                      border: Border.all(
+                        style: BorderStyle.solid, 
+                        width: 3, 
+                        color: color
+                      ),
+                      color: _selectedColor == color ? color : null,
+                      borderRadius: BorderRadius.circular(20)
                     ),
                   ),
                 ),
-            ],
+              ],
+            ),
           ),
         ],
+      ),
     );
   }
 }

@@ -100,7 +100,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
           ),
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(AppConfig.paddingXLarge),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -401,7 +401,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                       child: Icon(
                         Icons.calendar_today,
                         color: AppConfig.fontColor,
-                        size: AppConfig.iconSize * 1.5,
+                        size: AppConfig.iconSize,
                       ),
                     ),
                   ),
@@ -434,7 +434,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: AppConfig.padding),
               child: TextFormField(
                 controller: _descriptionController,
                 style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),
@@ -583,7 +583,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
             child: Icon(
               Icons.add,
               color: AppConfig.fontColor,
-              size: AppConfig.iconSize * 1.5,
+              size: AppConfig.iconSize,
             ),
           ),
         ),
