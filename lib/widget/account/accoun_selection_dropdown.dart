@@ -10,6 +10,7 @@ class AccountSelectionDropdown extends StatefulWidget {
   final bool? isError;
   final String? errorMessage;
   final String? selectedAccount;
+  final double? width;
   /*
     values for mode 1, 2
     defaulr value is 1
@@ -26,6 +27,7 @@ class AccountSelectionDropdown extends StatefulWidget {
     this.errorMessage,
     this.selectedAccount,
     this.mode,
+    this.width,
   });
 
   @override
@@ -144,7 +146,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
       );
     } else {
       return SizedBox(
-        width: MediaQuery.of(context).size.width,
+        width: widget.width ?? MediaQuery.of(context).size.width,
           child: Column(
           children: [
             ElevatedButton(
@@ -163,20 +165,36 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(_selectedAccount ?? "Select Account", style: TextStyle(color: AppConfig.fontColor),),
-                  Icon(Icons.arrow_drop_down, size: AppConfig.iconSize, color: AppConfig.fontColor,),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      _selectedAccount ?? "Select Account", 
+                      style: TextStyle(color: AppConfig.fontColor),
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                      maxLines: 1,
+                    ), 
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Icon(
+                      Icons.arrow_drop_down, 
+                      size: AppConfig.iconSize, 
+                      color: AppConfig.fontColor,
+                    ),
+                  ),
                 ],
               ),
             ),
             widget.isError == true ?
             Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.only(top: AppConfig.paddingSmall),
-                child: Text(
-                  widget.errorMessage ?? 'Please Select an Account',
-                  style: TextStyle(color: AppConfig.errorFontColor, fontSize: AppConfig.errorFontSize),
-                ),
-              )
+              width: widget.width ?? MediaQuery.of(context).size.width,
+              padding: EdgeInsets.only(top: AppConfig.paddingSmall),
+              child: Text(
+                widget.errorMessage ?? 'Please Select an Account',
+                style: TextStyle(color: AppConfig.errorFontColor, fontSize: AppConfig.errorFontSize),
+              ),
+            )
             :
             Container(),
           ],

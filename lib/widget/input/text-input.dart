@@ -7,6 +7,9 @@ class TextInput extends StatefulWidget {
   final TextInputType? inputType;
   final Function onChange;
   final FormFieldValidator? validator;
+  final String? hintText;
+  final IconButton? suffixIcon;
+  final bool? forceValidate;
 
   const TextInput({
     super.key,
@@ -15,6 +18,9 @@ class TextInput extends StatefulWidget {
     this.inputType,
     required this.onChange,
     this.validator,
+    this.hintText,
+    this.suffixIcon,
+    this.forceValidate,
   });
   
   @override
@@ -33,6 +39,12 @@ class _CreateTextInput extends State<TextInput> {
       },
       initialValue: widget.inputController.text,
       builder: (FormFieldState<String> state) {
+        if (widget.forceValidate != null && widget.forceValidate == true) {
+          // ignore: invalid_use_of_protected_member
+          state.setValue(widget.inputController.text);
+          state.validate();
+        }
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -46,6 +58,7 @@ class _CreateTextInput extends State<TextInput> {
                 ),
                 decoration: InputDecoration(
                   labelText: widget.label,
+                  hintText: widget.hintText,
                   labelStyle: TextStyle(
                     color: AppConfig.fontColor, 
                     fontSize: AppConfig.fontSize
@@ -62,7 +75,7 @@ class _CreateTextInput extends State<TextInput> {
                     borderRadius: BorderRadius.circular(AppConfig.borderRadius),
                     borderSide: BorderSide(color: AppConfig.focusedBorderColor),
                   ),
-                  
+                  suffixIcon: widget.suffixIcon,
                 ),
                 keyboardType: widget.inputType ?? TextInputType.text,
                 onChanged: (value) {

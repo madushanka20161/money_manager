@@ -16,7 +16,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AppState()),
+      ChangeNotifierProvider(create: (context) => AppState()),
         ChangeNotifierProvider(create: (context) => UserState()),
       ],
       child: MyApp(),
@@ -64,10 +64,10 @@ class _LandingScreenState extends State<LandingScreen> {
     
     return isLoading ? 
       Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        )
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      )
       : 
       HomePage();
   }

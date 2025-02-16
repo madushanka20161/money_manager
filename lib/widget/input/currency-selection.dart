@@ -7,12 +7,14 @@ class CurrencySelection extends StatefulWidget {
   final double? width;
   final double? height;
   final Function? onCurrencyChange;
+  final String? selectedCurrency;
   
   const CurrencySelection({
     super.key,
     this.width,
     this.height,
-    this.onCurrencyChange
+    this.onCurrencyChange,
+    this.selectedCurrency,
   });
   
   @override
@@ -20,18 +22,22 @@ class CurrencySelection extends StatefulWidget {
 }
 
 class _CreateCurrencySelection extends State<CurrencySelection> {
-  String selectedCurrency = defaultCurrency;
+  String _selectedCurrency = defaultCurrency;
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.selectedCurrency != null) {
+      _selectedCurrency = widget.selectedCurrency!;
+    }
   }
   
   Widget _buildOption(BuildContext context, String currency) {
     return SimpleDialogOption(
       onPressed: () {
         setState(() {
-          selectedCurrency = currency;
+          _selectedCurrency = currency;
         });
 
         if (widget.onCurrencyChange != null) {
@@ -44,7 +50,7 @@ class _CreateCurrencySelection extends State<CurrencySelection> {
         padding: const EdgeInsets.all(8.0),
         child: Text(
           currency,
-          style: TextStyle(backgroundColor: selectedCurrency == currency ? Colors.red : Colors.white),
+          style: TextStyle(backgroundColor: _selectedCurrency == currency ? Colors.red : Colors.white),
         ),
       ),
     );
@@ -83,7 +89,7 @@ class _CreateCurrencySelection extends State<CurrencySelection> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(selectedCurrency, style: TextStyle(color: AppConfig.fontColor),),
+                    Text(_selectedCurrency, style: TextStyle(color: AppConfig.fontColor),),
                     Icon(Icons.arrow_drop_down, size: AppConfig.iconSize, color: AppConfig.fontColor,),
                   ],
                 ),

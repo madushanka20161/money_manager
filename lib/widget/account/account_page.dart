@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/state/app_state.dart';
-import 'package:money_manager_3/widget/account/create_account_trnsaction.dart';
+import 'package:money_manager_3/widget/account/create_account_transaction.dart';
 import 'package:money_manager_3/widget/account/account_trnsaction_view.dart';
 import 'package:money_manager_3/widget/account/create_account.dart';
 import 'package:provider/provider.dart';

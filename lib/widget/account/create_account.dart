@@ -157,6 +157,7 @@ class _CreateAccountState extends State<CreateAccount> {
     return CurrencySelection(
       width: MediaQuery.of(context).size.width,
       height: 80,
+      selectedCurrency: _selectedCurrency,
       onCurrencyChange: (value) {
         setState(() {
           _selectedCurrency = value!;
