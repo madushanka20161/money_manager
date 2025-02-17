@@ -67,7 +67,7 @@ class _HomeSummaryState extends State<HomeSummary> {
       late DateTime startDate;
       late DateTime endDate;
 
-      // TODOD: [V2] Implement check box for select all dates
+      // TODO: [V2] Implement check box for select all dates
       await showDateRangePicker(
         context: context,
         firstDate: DateTime(2000),
