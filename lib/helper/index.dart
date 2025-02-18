@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/state/app_state.dart';
 
 List<DateTime> getDateRange(String period, AppState? appState) {
@@ -37,6 +38,10 @@ List<DateTime> getDateRange(String period, AppState? appState) {
 String capitalizeFirstLetter(String input) {
   if (input.isEmpty) return input;
   return input[0].toUpperCase() + input.substring(1);
+}
+
+String formatNumber(double value) {
+  return value.toStringAsFixed(AppConfig.decimalPlace);
 }
 
 const Map<String, IconData> iconMap = {

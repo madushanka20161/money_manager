@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppConfig {
+  static int decimalPlace = 2;
+
   static double headerFontSize = 30.0;
   static double fontSize = 18.0;
   static Color fontColor = Colors.white;
@@ -27,4 +29,11 @@ class AppConfig {
   static Color activeColor = Colors.white;
 
   static TextStyle fontStyle = TextStyle(fontSize: AppConfig.fontSize, color: AppConfig.fontColor);
+  static ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
+    padding: EdgeInsets.zero,
+    backgroundColor: Colors.transparent,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(AppConfig.borderRadius),
+    ),
+  );
 }

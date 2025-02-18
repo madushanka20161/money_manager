@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager_3/custom_painter.dart';
-import 'package:money_manager_3/dto/account_dto.dart';
+// import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
@@ -32,7 +32,7 @@ class _TransactionListState extends State<TransactionList> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, AccountDto> accounts = context.watch<AppState>().accounts;
+    // final Map<String, AccountDto> accounts = context.watch<AppState>().accounts;
     List<List<TransactionDto>> filterTrnsactions = filterTrnsaction(context.watch<AppState>(), widget.category);
     transactions = widget.trnsactionType == TransactionType.income ? filterTrnsactions[0] : filterTrnsactions[1];
 
@@ -87,7 +87,7 @@ class _TransactionListState extends State<TransactionList> {
                         padding: EdgeInsets.zero,
                         backgroundColor: widget.category.iconColor.withOpacity(0.2),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(AppConfig.borderRadius),
                         ),
                       ),
                       onPressed: () {
@@ -99,7 +99,7 @@ class _TransactionListState extends State<TransactionList> {
                         );
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(AppConfig.padding),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -128,13 +128,13 @@ class _TransactionListState extends State<TransactionList> {
                             )
                           ],
                         ),
-                      )
-                    )
+                      ),
+                    ),
                   ],
                 );
               },
             ),
-          )
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

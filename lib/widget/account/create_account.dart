@@ -95,7 +95,7 @@ class _CreateAccountState extends State<CreateAccount> {
           color: _selectedIconColor.withOpacity(0.8),
         ),
         padding: EdgeInsets.all(AppConfig.padding),
-        width: 80,
+        width: MediaQuery.of(context).size.width,
         height: 80,
         child: Column(
           children: [
@@ -108,10 +108,10 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
             ),
             Text(
-              _accountName.isEmpty ? 'Name' : _accountName,
+              _accountName.isEmpty ? 'Name' : capitalizeFirstLetter(_accountName),
               style: TextStyle(
                 color: AppConfig.fontColor, 
-                fontSize: AppConfig.fontSize * 0.8
+                fontSize: AppConfig.fontSize
               ),
               overflow: TextOverflow.fade,
               softWrap: false,
