@@ -9,6 +9,7 @@ class AppConfig {
   static Color buttonSelectedColor =  Color.fromARGB(144, 23, 96, 156);
   // icon
   static double iconSize = 30;
+  static double iconSizeSmall = iconSize * 0.8;
   static Color iconColor = fontColor;
   // error
   static Color errorFontColor = Colors.red;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/state/app_state.dart';
 
@@ -42,6 +43,10 @@ String capitalizeFirstLetter(String input) {
 
 String formatNumber(double value) {
   return value.toStringAsFixed(AppConfig.decimalPlace);
+}
+
+String formatDate(DateTime value) {
+  return DateFormat('yyyy-MM-dd').format(value);
 }
 
 const Map<String, IconData> iconMap = {

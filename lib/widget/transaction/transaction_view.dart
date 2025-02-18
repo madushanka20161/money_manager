@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/custom_painter.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
+import 'package:money_manager_3/helper/config.dart';
+import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/widget/transaction/create_transaction.dart';
 
@@ -16,45 +19,54 @@ class TransactionView extends StatelessWidget {
       appBar: AppBar(
         title: Text('Transaction View'),
       ),
-      body: Card(
-        margin: EdgeInsets.all(10.0),
-        child: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Account: ${transaction.account.name}', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-              Text('Amount: ${transaction.amount.toStringAsFixed(2)}', style: TextStyle(fontSize: 16.0)),
-              Text('Date: ${transaction.date.toLocal().toString().split(' ')[0]}', style: TextStyle(fontSize: 16.0)),
-              Text('Category: ${transaction.category.name}', style: TextStyle(fontSize: 16.0)),
-              Text('Description: ${transaction.description}', style: TextStyle(fontSize: 16.0)),
-              SizedBox(height: 10.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+      body: Stack(
+        children: [
+          CustomPaint(
+            size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
+            painter: DiagonalPainter(),
+          ),
+          Card(
+            color: Colors.transparent,
+            margin: EdgeInsets.all(AppConfig.padding),
+            child: Padding(
+              padding: EdgeInsets.all(AppConfig.padding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      editTransaction(context);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      deleteTransaction(context);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.copy),
-                    onPressed: () {
-                      copyTransaction(context);
-                    },
+                  Text('Account Name: ${capitalizeFirstLetter(transaction.account.name)}', style: TextStyle(fontSize: AppConfig.fontSize, fontWeight: FontWeight.bold, color: AppConfig.fontColor,)),
+                  Text('${transaction.account.currency}: ${transaction.amount.toStringAsFixed(2)}', style: AppConfig.fontStyle),
+                  Text(transaction.date.toLocal().toString().split(' ')[0], style: AppConfig.fontStyle),
+                  Text('Category: ${transaction.category.name}', style: AppConfig.fontStyle),
+                  Text('Description: ${transaction.description}', style: AppConfig.fontStyle),
+                  SizedBox(height: 10.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit, size: AppConfig.iconSizeSmall, color: AppConfig.iconColor,),
+                        onPressed: () {
+                          editTransaction(context);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete, size: AppConfig.iconSizeSmall, color: AppConfig.iconColor,),
+                        onPressed: () {
+                          deleteTransaction(context);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.copy, size: AppConfig.iconSizeSmall, color: AppConfig.iconColor,),
+                        onPressed: () {
+                          copyTransaction(context);
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
+            ),
+          )
+        ],
       )
     );
   }
