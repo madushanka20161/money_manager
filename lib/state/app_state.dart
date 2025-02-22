@@ -14,7 +14,7 @@ class AppState with ChangeNotifier {
   late DateTime _startDate;
   late DateTime _endDate;
   bool _isLoading = true;
-  late Map<String, AccountTransactionDTO> _accountTrnsactions = {};
+  final Map<String, AccountTransactionDTO> _accountTrnsactions = {};
 
   Map<String, AccountDto> get accounts => _accounts;
   Map<String, TransactionDto> get transactions => _transactions;

@@ -24,14 +24,12 @@ class _DateInputState extends State<DateInput> {
       lastDate: DateTime(2100),
     );
 
-    if (pickedDate != null) {
-      setState(() {
-        widget.dateController.text = "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-      });
+    setState(() {
+      widget.dateController.text = "${pickedDate?.year}-${pickedDate?.month.toString().padLeft(2, '0')}-${pickedDate?.day.toString().padLeft(2, '0')}";
+    });
 
-      widget.onChange(pickedDate);
+    widget.onChange(pickedDate);
     }
-  }
 
   void _formatDate(String value) {
     String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');

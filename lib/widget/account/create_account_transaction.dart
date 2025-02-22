@@ -39,7 +39,7 @@ class _CreateAccountTransactionState extends State<CreateAccountTransaction> {
   bool isNew = true;
   bool isSubmitClick = false;
 
-  TextEditingController _dateController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
   @override
   void initState() {

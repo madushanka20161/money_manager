@@ -50,7 +50,6 @@ class AuthService {
     GoogleSignInAccount? user = await _googleSignIn.signIn();
     print('11111-------22222');
     if (user != null) {
-      print('111111111111111111111111111111111111111111');
       print(user);
 
       UserDTO userDTO = UserDTO(
@@ -59,6 +58,8 @@ class AuthService {
         name: user.displayName ?? '--',
         photoUrl: user.photoUrl ?? '',
       );
+      
+      _userState.setUser(userDTO);
 
       String jsonString = jsonEncode(userDTO);
       DatabaseService.instance.saveData('user', jsonString);

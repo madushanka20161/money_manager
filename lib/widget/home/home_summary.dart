@@ -63,7 +63,7 @@ class _HomeSummaryState extends State<HomeSummary> {
     double totalIncome = widget.income.fold(0.0, (double sum, transaction) => sum + transaction.amount);
     double totalExpenses = widget.expenses.fold(0.0, (double sum, transaction) => sum + transaction.amount);
 
-    Future<void> _showDateTimePicker() async {
+    Future<void> showDateTimePicker() async {
       late DateTime startDate;
       late DateTime endDate;
 
@@ -132,7 +132,7 @@ class _HomeSummaryState extends State<HomeSummary> {
           appState.setDateRange(startDate, endDate);
           break;
         default:
-          await _showDateTimePicker();
+          await showDateTimePicker();
           break;
       }
 
