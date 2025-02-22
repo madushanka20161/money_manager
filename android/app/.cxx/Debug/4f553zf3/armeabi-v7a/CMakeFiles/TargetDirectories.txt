@@ -1,0 +1,2 @@
+D:/madus/mobile/money_manager_3/android/app/.cxx/Debug/4f553zf3/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/madus/mobile/money_manager_3/android/app/.cxx/Debug/4f553zf3/armeabi-v7a/CMakeFiles/rebuild_cache.dir
