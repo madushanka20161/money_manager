@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/shared_service.dart';
@@ -130,8 +131,14 @@ class _CreateCategoryState extends State<CreateCategory> {
       child: ElevatedButton(
         onPressed: (_categoryName ?? '').isNotEmpty
             ? () {
-                SharedService.instance.createCategory(_categoryName!,
-                    _selectedIcon!, _selectedColor!, widget.transactionType);
+              // TODO: neeed to a input for category limit
+                SharedService.instance.createCategory(
+                  _categoryName!,
+                  _selectedIcon!, 
+                  _selectedColor!, 
+                  widget.transactionType, 
+                  CategoryLimitDTO(type: CategoryLimitType.value, limit: 0.0)
+                );
                 Navigator.pop(context);
               }
             : null,

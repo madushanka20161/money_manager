@@ -51,13 +51,14 @@ class SharedService {
     return uniqueKey;
   }
 
-  void createCategory(String name, IconData icon, Color iconColor, TransactionType type) {
+  void createCategory(String name, IconData icon, Color iconColor, TransactionType type, CategoryLimitDTO limit) {
     CategoryDTO category = CategoryDTO(
       id: generateUniqueId('CA'), 
       name: name, 
       type: type, 
       icon: icon,
-      iconColor: iconColor
+      iconColor: iconColor,
+      limit: limit,
     );
     
     appState!.addCategory(category.id, category);

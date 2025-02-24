@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
     UserDTO user = context.watch<UserState>().user!;
     List<TransactionDto> income = filteredTransactions[0];
     List<TransactionDto> expenses = filteredTransactions[1];
+    selectedTab = context.watch<AppState>().selectedTransactionType;
 
     return Scaffold(
       appBar: AppBar(

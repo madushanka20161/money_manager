@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/index.dart';
 
-// id|name|type|icon|iconColor
+// id|name|type|icon|iconColor|limit
 
 class CategoryDTO {
   final String id;
@@ -10,6 +10,7 @@ class CategoryDTO {
   final TransactionType type;
   final IconData icon;
   final Color iconColor;
+  final CategoryLimitDTO limit;
 
   CategoryDTO({
     required this.id,
@@ -17,6 +18,7 @@ class CategoryDTO {
     required this.type,
     required this.icon,
     this.iconColor = Colors.blue,
+    required this.limit,
   });
 
   factory CategoryDTO.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class CategoryDTO {
       type: json['type'] == 'income' ? TransactionType.income : TransactionType.expenses,
       icon: iconMap[json['icon']] ?? Icons.error,
       iconColor: colorMap[json['iconColor']] ?? Colors.blue,
+      limit: CategoryLimitDTO.fromJson(json['limit'])
     );
   }
 
@@ -36,6 +39,7 @@ class CategoryDTO {
       'type': type.displayName,
       'icon': iconToString(icon),
       'iconColor': colorToString(iconColor),
+      'limit': limit.toJson(),
     };
   }
 
@@ -57,5 +61,29 @@ class CategoryDTO {
     }
    
     throw Exception('[category dto - color to string] No $color in colorMap');
+  }
+}
+
+class CategoryLimitDTO {
+  final double limit;
+  final CategoryLimitType type;
+
+  CategoryLimitDTO({
+    required this.limit,
+    required this.type,
+  });
+
+  factory CategoryLimitDTO.fromJson(Map<String, dynamic> json) {
+    return CategoryLimitDTO(
+      limit: json['limit'],
+      type: json['type'] == 'presentage' ? CategoryLimitType.presentage : CategoryLimitType.value,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'limit': limit,
+      'type': type.displayName,
+    };
   }
 }

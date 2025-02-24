@@ -38,3 +38,19 @@ extension TimePeriodExtension on TimePeriod {
     }
   }
 }
+
+enum CategoryLimitType {
+  presentage,
+  value,
+}
+
+extension CategoryLimitTypeExtension on CategoryLimitType {
+  String get displayName {
+    switch (this) {
+      case CategoryLimitType.value:
+        return 'value';
+      case CategoryLimitType.presentage:
+        return 'presentage';
+    }
+  }
+}
