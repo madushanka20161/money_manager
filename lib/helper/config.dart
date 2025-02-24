@@ -17,6 +17,7 @@ class AppConfig {
   // padding
   static double paddingSmall = 5;
   static double padding = 10;
+  static double paddingLarge = 15;
   static double paddingXLarge = 20;
   // border
   static double borderRadius = 10;

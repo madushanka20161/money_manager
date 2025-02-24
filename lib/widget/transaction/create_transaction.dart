@@ -528,13 +528,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
               state.reset();
             });
           },
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.zero,
-            backgroundColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
+          style: AppConfig.elevatedButtonStyle,
           child: CategoryWidget(
             width: categoryButtonWidth,
             height: categoryButtonHeight,
