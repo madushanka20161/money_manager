@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/custom_painter.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
@@ -107,7 +109,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-
       ),
       body: Stack(
         children: [
@@ -115,26 +116,28 @@ class _HomePageState extends State<HomePage> {
             size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
             painter: DiagonalPainter(),
           ),
-          Column(
-            children: [
-              Center(
-                child: HomeSummary(income: income, expenses: expenses),
-              ),
-              Container(
-                constraints: BoxConstraints(
-                  minHeight: 60,
-                  maxHeight: MediaQuery.of(context).size.height - 50 - 360, // (50 - height of add button, 360 - height of home)
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Center(
+                  child: HomeSummary(income: income, expenses: expenses),
                 ),
-                height: double.infinity,
-                color: Colors.transparent,
-                child: Center(
-                  child: HomeDetails(
-                    income: income,
-                    expenses: expenses,
+                Container(
+                  constraints: BoxConstraints(
+                    minHeight: 60,
+                    maxHeight: max(MediaQuery.of(context).size.height - 50 - 360, 300), // (50 - height of add button, 360 - height of home)
+                  ),
+                  height: double.infinity,
+                  color: Colors.transparent,
+                  child: Center(
+                    child: HomeDetails(
+                      income: income,
+                      expenses: expenses,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Positioned(
             bottom: 0,
@@ -157,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 height: 50,
                 child: Center(
-                  child: Icon(Icons.add, size: AppConfig.iconSize),
+                  child: Icon(Icons.add, size: AppConfig.iconSize, color: AppConfig.iconColor,),
                 ),
               ),
             ),
