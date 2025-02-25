@@ -69,7 +69,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    renderCreateAccounticon(),
+                    renderCreateAccountIcon(),
                     renderAccountName(),
                     renderBalance(),
                     renderCurrency(),
@@ -87,7 +87,7 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  Widget renderCreateAccounticon() {
+  Widget renderCreateAccountIcon() {
     return Center(
       child: Container(
         decoration: BoxDecoration(

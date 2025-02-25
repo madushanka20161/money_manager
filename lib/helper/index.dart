@@ -57,7 +57,7 @@ const Map<String, IconData> iconMap = {
   'safety_check': Icons.safety_check,
   'sailing': Icons.sailing,
   'abc_outlined': Icons.abc_outlined,
-  'hail': Icons.hail
+  'hail': Icons.hail,
 };
 
 const Map<String, IconData> accountIconMap = {
@@ -82,6 +82,8 @@ const Map<String, Color> colorMap = {
 const List<String> currencyList = ['RS', 'USD', 'EUR', 'GBP', 'JPY'];
 const Color defaultColur = Colors.blue;
 const IconData defaultAccountIcon = Icons.account_balance;
+const Color defaultCategoryColor = Colors.blue;
+const IconData defaultCategoryIcon = Icons.attach_money;
 
 const Map<String, double> currencyMap = {
   'USD': 1.0,

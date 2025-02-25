@@ -76,7 +76,7 @@ class CategoryLimitDTO {
   factory CategoryLimitDTO.fromJson(Map<String, dynamic> json) {
     return CategoryLimitDTO(
       limit: json['limit'],
-      type: json['type'] == 'presentage' ? CategoryLimitType.presentage : CategoryLimitType.value,
+      type: json['type'] == 'percentage' ? CategoryLimitType.percentage : CategoryLimitType.value,
     );
   }
 

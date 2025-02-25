@@ -40,7 +40,7 @@ extension TimePeriodExtension on TimePeriod {
 }
 
 enum CategoryLimitType {
-  presentage,
+  percentage,
   value,
 }
 
@@ -49,8 +49,8 @@ extension CategoryLimitTypeExtension on CategoryLimitType {
     switch (this) {
       case CategoryLimitType.value:
         return 'value';
-      case CategoryLimitType.presentage:
-        return 'presentage';
+      case CategoryLimitType.percentage:
+        return 'percentage';
     }
   }
 }
