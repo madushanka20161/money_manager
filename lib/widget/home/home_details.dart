@@ -6,6 +6,7 @@ import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/state/app_state.dart';
+import 'package:money_manager_3/state/user_state.dart';
 import 'package:money_manager_3/widget/transaction/transaction_list.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +29,7 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
   double total = 0;
   TransactionType selectedTab = TransactionType.expenses;
   Function? setSelectedTransactionType;
+  String timePeriod = '';
 
   @override
   void initState() {
@@ -86,6 +88,7 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
     final accounts = context.watch<AppState>().accounts;
     final category = context.watch<AppState>().categories;
     setSelectedTransactionType = context.watch<AppState>().setSelectedTransactionType;
+    timePeriod = context.watch<UserState>().defaultTimePeriod!;
 
     return Column(
       children: [
@@ -141,6 +144,19 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
         if (data ==  null) {
           return null;
         }
+
+        CategoryDTO categoryDTO = categories[keyList[index]]!;
+        double limitPoint = 0.4;
+
+        if (categoryDTO.limit.limit > 0 && timePeriod == TimePeriod.month.displayName) {
+          if (categoryDTO.limit.type == CategoryLimitType.percentage) {
+            limitPoint = categoryDTO.limit.limit / data['percentage'];
+          } else {
+            limitPoint = categoryDTO.limit.limit / data['total'];
+          }
+        } else {
+          limitPoint = 0;
+        }
         
         return GestureDetector(
           onTap: () {
@@ -174,7 +190,11 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: const Color.fromARGB(34, 255, 255, 255),
+                // color: const Color.fromARGB(34, 255, 255, 255),
+                gradient: LinearGradient(
+                  colors: [categoryDTO.iconColor.withOpacity(0.4), categoryDTO.iconColor.withOpacity(0.4), Color.fromARGB(34, 255, 255, 255), Color.fromARGB(34, 255, 255, 255)], // Define colors
+                  stops: [0.0, limitPoint, limitPoint, 1.0], // 40% Red, 60% Green
+                ),
               ),
               child: Padding(
                 padding: EdgeInsets.all(10),
