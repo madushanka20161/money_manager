@@ -10,6 +10,8 @@ import 'package:money_manager_3/helper/filter.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
 import 'package:money_manager_3/widget/account/account_page.dart';
+import 'package:money_manager_3/widget/category/category_limit_page.dart';
+import 'package:money_manager_3/widget/category/category_page.dart';
 import 'package:money_manager_3/widget/home/home_details.dart';
 import 'package:money_manager_3/widget/home/home_summary.dart';
 import 'package:money_manager_3/widget/transaction/create_transaction.dart';
@@ -74,6 +76,20 @@ class _HomePageState extends State<HomePage> {
                         title: Text('Accounts', style: AppConfig.fontStyle),
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => AccountPage()));
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.category, color: AppConfig.iconColor, size: AppConfig.iconSizeSmall),
+                        title: Text('Category', style: AppConfig.fontStyle),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryPage()));
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.format_list_numbered_outlined, color: AppConfig.iconColor, size: AppConfig.iconSizeSmall),
+                        title: Text('Category Limit', style: AppConfig.fontStyle),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryLimitPage()));
                         },
                       ),
                       // ListTile(

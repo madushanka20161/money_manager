@@ -3,6 +3,7 @@ import 'package:money_manager_3/custom_painter.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
+import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/widget/category/category_widget.dart';
 import 'package:money_manager_3/widget/category/create_category.dart';
@@ -84,7 +85,7 @@ class _SelectCategoryState extends State<SelectCategory> {
   List<Widget> renderCategoryList(BuildContext context) {
     double categoryButtonWidth = (MediaQuery.of(context).size.width - AppConfig.padding * 2 - 10*3) / 4;
     double categoryButtonHeight = 80;
-    List<CategoryDTO> categoryList = categories.values.where((CategoryDTO category) => category.type == widget.transactionType).toList();
+    List<CategoryDTO> categoryList = getCategoryByType(categories, widget.transactionType);
     List<Widget> widgetList = [];
     
     for (CategoryDTO category in categoryList) {

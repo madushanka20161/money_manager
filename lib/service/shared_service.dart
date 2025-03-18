@@ -65,6 +65,16 @@ class SharedService {
     _updateCategoryStore();
   }
 
+  void updateCategoryLimit(String categoryId, CategoryLimitType limitType, double limit) {
+    CategoryDTO category = appState!.categories[categoryId]!;
+    
+    category.limit.type = limitType;
+    category.limit.limit = limit;
+
+    appState!.addCategory(category.id, category);
+    _updateCategoryStore();
+  }
+
   void createTransaction(TransactionType type, String accountId, double amount, String category, DateTime date, String? description, String? transactionId) {
     AccountDto account = appState!.accounts[accountId]!;
 

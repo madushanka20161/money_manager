@@ -11,6 +11,8 @@ class CategoryWidget extends StatelessWidget {
   final Color iconColor;
   final double? fontSize;
   final double? iconColorOpacity;
+  final bool isTooltip;
+
 
   const CategoryWidget({
     required this.icon,
@@ -21,10 +23,25 @@ class CategoryWidget extends StatelessWidget {
     required this.iconColor,
     this.fontSize,
     this.iconColorOpacity,
+    this.isTooltip = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    return isTooltip
+        ? Tooltip(
+            message: capitalizeFirstLetter(text),
+            decoration: BoxDecoration(
+              color: AppConfig.tooltipBackgroundColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            textStyle: AppConfig.fontStyle,
+            child: renderCategory(),
+          )
+        : renderCategory();
+  }
+
+  Widget renderCategory() {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppConfig.borderRadius),

@@ -7,6 +7,7 @@ import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/widget/category/category_widget.dart';
 import 'package:money_manager_3/widget/common/color_selection.dart';
+import 'package:money_manager_3/widget/input/limit_input.dart';
 import 'package:money_manager_3/widget/input/text-input.dart';
 
 class CreateCategory extends StatefulWidget {
@@ -30,7 +31,6 @@ class _CreateCategoryState extends State<CreateCategory> {
   List<Color> colorList = colorMap.values.toList();
   List<IconData> iconList = iconMap.values.toList();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _limitController = TextEditingController();
 
   @override
   void initState() {
@@ -162,74 +162,19 @@ class _CreateCategoryState extends State<CreateCategory> {
   }
 
   Widget renderLimitInput() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 2,
-          child: Padding(
-            padding: EdgeInsets.only(top: AppConfig.padding),
-              child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(10, 55),
-                padding: EdgeInsets.zero,
-                backgroundColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppConfig.borderRadius),
-                ),
-              ),
-              onPressed: () {
-                setState(() {
-                  _limitType = _limitType == CategoryLimitType.value ? CategoryLimitType.percentage : CategoryLimitType.value;
-                });
-              }, 
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(capitalizeFirstLetter(_limitType.displayName), style: AppConfig.fontStyle),
-                  Icon(Icons.unfold_more_sharp, color: AppConfig.iconColor),
-                ],
-              ),
-            )
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Padding(
-            padding: EdgeInsets.only(left: AppConfig.padding),
-            child: TextInput(
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return null;
-                }
-
-                final number = num.tryParse(value);
-                if (number == null) {
-                  return 'Please enter a valid number';
-                }
-
-                if (_limitType == CategoryLimitType.percentage && (number < 0 || number > 100)) {
-                  return 'The percentage must be between 0 and 100';
-                }
-
-                if (_limitType == CategoryLimitType.value && number < 0) {
-                  return 'The value must be greater than 0';
-                }
-
-                return null;
-              },
-              inputController: _limitController,
-              label: 'Limit',
-              inputType: TextInputType.number,
-              onChange: (value) {
-                setState(() {
-                  _limitValue = value;
-                });
-              },
-            ),
-          ),
-        ),
-      ],
+    return LimitInput(
+      limitType: _limitType,
+      limitValue: _limitValue,
+      onTypeChange: (CategoryLimitType type) {
+        setState(() {
+          _limitType = type;
+        });
+      },
+      onValueChange: (double value) {
+        setState(() {
+          _limitValue = value;
+        });
+      },
     );
   }
 

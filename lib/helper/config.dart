@@ -29,11 +29,20 @@ class AppConfig {
   static double popupRadius = borderRadius;
   // radio button
   static Color activeColor = Colors.white;
+  // tool tip
+  static Color tooltipBackgroundColor = Colors.blue.withOpacity(0.9);
 
   static TextStyle fontStyle = TextStyle(fontSize: AppConfig.fontSize, color: AppConfig.fontColor);
   static ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
     padding: EdgeInsets.zero,
     backgroundColor: Colors.transparent,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(AppConfig.borderRadius),
+    ),
+  );
+  static ButtonStyle elevatedButtonSelectedStyle = ElevatedButton.styleFrom(
+    padding: EdgeInsets.zero,
+    backgroundColor: buttonSelectedColor,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(AppConfig.borderRadius),
     ),

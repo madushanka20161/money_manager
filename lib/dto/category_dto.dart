@@ -65,8 +65,8 @@ class CategoryDTO {
 }
 
 class CategoryLimitDTO {
-  final double limit;
-  final CategoryLimitType type;
+  double limit;
+  CategoryLimitType type;
 
   CategoryLimitDTO({
     required this.limit,

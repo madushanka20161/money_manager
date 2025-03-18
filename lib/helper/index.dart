@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_manager_3/dto/category_dto.dart';
+import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/state/app_state.dart';
 
@@ -47,6 +49,10 @@ String formatNumber(double value) {
 
 String formatDate(DateTime value) {
   return DateFormat('yyyy-MM-dd').format(value);
+}
+
+List<CategoryDTO> getCategoryByType(Map<String, CategoryDTO> categories, TransactionType type) {
+  return categories.values.where((CategoryDTO category) => category.type == type).toList();
 }
 
 const Map<String, IconData> iconMap = {

@@ -10,6 +10,7 @@ class TextInput extends StatefulWidget {
   final String? hintText;
   final IconButton? suffixIcon;
   final bool? forceValidate;
+  final double? topPadding;
 
   const TextInput({
     super.key,
@@ -21,6 +22,7 @@ class TextInput extends StatefulWidget {
     this.hintText,
     this.suffixIcon,
     this.forceValidate,
+    this.topPadding,
   });
   
   @override
@@ -49,7 +51,7 @@ class _CreateTextInput extends State<TextInput> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: widget.topPadding ?? AppConfig.padding),
               child: TextFormField(
                 controller: widget.inputController,
                 style: TextStyle(
