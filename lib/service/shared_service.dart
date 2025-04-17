@@ -79,10 +79,15 @@ class SharedService {
     AccountDto account = appState!.accounts[accountId]!;
 
     if (transactionId == null) {
-      account.balance = account.balance - amount;
+      account.balance += type == TransactionType.expenses ? -amount : amount;
     } else {
       TransactionDto oldTrnsaction = appState!.transactions[transactionId]!;
-      account.balance = account.balance + oldTrnsaction.amount - amount;
+
+      if (type == TransactionType.expenses) {
+        account.balance = account.balance + oldTrnsaction.amount - amount;
+      } else {
+        account.balance = account.balance - oldTrnsaction.amount + amount;
+      }
     }
 
     TransactionDto transaction = TransactionDto(

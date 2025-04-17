@@ -71,6 +71,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
       _description = widget.transaction!.description;
       _amountController = TextEditingController(text: widget.transaction!.amount.toString());
       _descriptionController = TextEditingController(text: widget.transaction!.description);
+      _selectedtransactionType = widget.transaction!.type;
     }
 
     if (widget.isTrnsactionEdit != null) {
@@ -504,7 +505,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
             }
           }
         },
-        child: Text('Add', style: AppConfig.fontStyle,),
+        child: Text(isTrnsactionEdit ? 'Update' : 'Add', style: AppConfig.fontStyle,),
       ),
     );
   }

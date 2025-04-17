@@ -150,9 +150,9 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
 
         if (categoryDTO.limit.limit > 0 && timePeriod == TimePeriod.month.displayName) {
           if (categoryDTO.limit.type == CategoryLimitType.percentage) {
-            limitPoint = categoryDTO.limit.limit / data['percentage'];
+            limitPoint = data['percentage'] / categoryDTO.limit.limit;
           } else {
-            limitPoint = categoryDTO.limit.limit / data['total'];
+            limitPoint = data['total'] / categoryDTO.limit.limit;
           }
         } else {
           limitPoint = 0;

@@ -96,7 +96,7 @@ class _CreateAccountState extends State<CreateAccount> {
         ),
         padding: EdgeInsets.all(AppConfig.padding),
         width: MediaQuery.of(context).size.width,
-        height: 80,
+        height: 85,
         child: Column(
           children: [
             Container(
