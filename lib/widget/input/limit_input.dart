@@ -76,6 +76,7 @@ class _LimitInputState extends State<LimitInput> {
           flex: 2,
           child: Padding(
             padding: EdgeInsets.only(left: AppConfig.padding),
+            // TODO [V2 - once user click the input need to clear the value]
             child: TextInput(
               validator: (value) {
                 if (value == null || value.isEmpty) {

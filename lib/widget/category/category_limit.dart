@@ -195,17 +195,18 @@ class _CategoryLimitState extends State<CategoryLimit> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Remove Limit'),
-          content: Text('Are you sure you want to remove this limit?'),
+          backgroundColor: AppConfig.popupBKColor,
+          title: Text('Remove Limit', style: TextStyle(color: AppConfig.fontColor),),
+          content: Text('Are you sure you want to remove this limit?', style: AppConfig.fontStyle,),
           actions: [
             TextButton(
-              child: Text('Cancel'),
+              child: Text('Cancel', style: AppConfig.fontStyle,),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Delete'),
+              child: Text('Delete', style: AppConfig.fontStyle,),
               onPressed: () {
                 SharedService.instance.updateCategoryLimit(
                     widget.category.id, widget.category.limit.type, 0);
@@ -238,13 +239,13 @@ class _CategoryLimitState extends State<CategoryLimit> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextButton(
-              child: Text('Cancel'),
+              child: Text('Cancel', style: AppConfig.fontStyle,),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Update'),
+              child: Text('Update', style: AppConfig.fontStyle,),
               onPressed: () {
                 SharedService.instance.updateCategoryLimit(
                     widget.category.id, limitType, limitValue);

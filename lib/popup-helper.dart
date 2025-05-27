@@ -16,6 +16,7 @@ class PopupHelper {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return SimpleDialog(
+          backgroundColor: AppConfig.popupBKColor,
           contentPadding: EdgeInsets.all(AppConfig.popupRadius),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConfig.borderRadius)
