@@ -7,6 +7,7 @@ import 'package:money_manager_3/dto/user_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/filter.dart';
+import 'package:money_manager_3/service/database_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
 import 'package:money_manager_3/widget/account/account_page.dart';
@@ -116,6 +117,8 @@ class _HomePageState extends State<HomePage> {
                       leading: Icon(Icons.logout, color: Colors.red, size: AppConfig.iconSizeSmall),
                       title: Text('Logout', style: TextStyle(color: Colors.red, fontSize: AppConfig.fontSize)),
                       onTap: () {
+                        DatabaseService.instance.clearAll();
+                        // TODO [handle logout]
                         // Handle logout
                       },
                     ),

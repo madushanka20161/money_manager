@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/helper/config.dart';
+import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/state/app_state.dart';
+import 'package:money_manager_3/widget/account/create_account.dart';
 import 'package:provider/provider.dart';
 
 class AccountSelectionDropdown extends StatefulWidget {
@@ -39,6 +41,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
   int? _mode;
   Map<String, AccountDto> accounts = {};
   List<AccountDto> accountList = [];
+  Color backgroundColor = AppConfig.popupBKColor;
 
   @override
   void initState() {
@@ -56,13 +59,39 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
+          backgroundColor: backgroundColor,
           children: [
             if (_mode == 1) _buildAllAccountOption(context),
             ...accountList.map((AccountDto account) => _buildDialogOption(context, account)),
-            // TODO [need to add create account option]
+            createAccountButton()
           ],
         );
       },
+    );
+  }
+
+  Widget createAccountButton() {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: backgroundColor,
+        padding: EdgeInsets.all(AppConfig.padding),
+        textStyle: TextStyle(fontSize: AppConfig.fontSize,),
+        elevation: 0,
+        minimumSize: Size(double.infinity, 50),
+      ),
+      child: Row(children: [
+        Icon(Icons.add, size: AppConfig.iconSize * .6, color: AppConfig.fontColor,),
+        Text('Create Account', style: AppConfig.fontStyle),
+      ],),
+      onPressed: () async {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CreateAccount()),
+        );
+
+        // TODO [V2 - need to update account list instoded of closin g popup]
+        Navigator.pop(context);
+      }
     );
   }
 
@@ -81,7 +110,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text("All Account"),
+        child: Text("All Account", style: AppConfig.fontStyle),
       ),
     );
   }
@@ -90,7 +119,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
     return SimpleDialogOption(
       onPressed: () {
         setState(() {
-          _selectedAccount = account.name;
+          _selectedAccount = capitalizeFirstLetter(account.name);
         });
 
         if (widget.onAccountSelect != null) {
@@ -101,7 +130,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(account.name),
+        child: Text(capitalizeFirstLetter(account.name), style: AppConfig.fontStyle)
       ),
     );
   }
@@ -119,18 +148,10 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
         width: 150,
         child: Column(
           children: [
-            ElevatedButton.icon(
+            ElevatedButton(
               onPressed: () {
                 _showPopup(context);
-              }, 
-              icon: Icon(Icons.arrow_drop_down, size: AppConfig.iconSize, color: AppConfig.fontColor,),
-              label: Text(
-                _selectedAccount ?? "All Account", 
-                style: TextStyle(color: AppConfig.fontColor),
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-              ),
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(34, 255, 255, 255),
                 padding: EdgeInsets.all(AppConfig.padding),
@@ -140,6 +161,20 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
                 ),
                 minimumSize: Size(double.infinity, 50),
               ),
+              child: Row(
+                children: [
+                  Icon(Icons.arrow_drop_down, size: AppConfig.iconSize, color: AppConfig.fontColor,),
+                  Expanded(
+                    child: Text(
+                      _selectedAccount ?? "All Account", 
+                      style: TextStyle(color: AppConfig.fontColor),
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      maxLines: 1,
+                    ),
+                  ),
+                ],
+              )
             ),
           ],
         ),

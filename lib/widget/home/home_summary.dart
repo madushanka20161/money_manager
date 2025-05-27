@@ -76,36 +76,26 @@ class _HomeSummaryState extends State<HomeSummary> {
         builder: (BuildContext context, Widget? child) {
           return Theme(
             data: ThemeData(
-              // primaryColor: Colors.blue, // ✅ Primary theme color
-              // hintColor: Colors.green, // ✅ Text field underline color
-              // scaffoldBackgroundColor: Colors.black, // ✅ Background color
-              // dialogBackgroundColor: Colors.green, // ✅ Date picker background color
-              // canvasColor: Colors.red,
-              // textTheme: TextTheme(
-              //   bodyLarge: TextStyle(color: Colors.white), // ✅ Large text color
-              //   bodyMedium: TextStyle(color: Colors.white), // ✅ Medium text color
-              // ),
-              // textButtonTheme: TextButtonThemeData(
-              //   style: ButtonStyle(
-              //     foregroundColor: MaterialStateProperty.all(Colors.red), // Text color
-              //   ),
-              // ),
+              colorScheme: ColorScheme.light(
+                primary: Colors.white,
+                onPrimary: Colors.black,
+                surface: AppConfig.popupBKColor,
+                onSurface: Colors.white,
+                secondary: Colors.white.withOpacity(0.5),
+              ),
+              textTheme: TextTheme(
+                // bodyLarge: TextStyle(color: Colors.black),
+                bodyMedium: TextStyle(color: Colors.white),
+              ),
             ),
             child: Center(
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
-                height: MediaQuery.of(context).size.height * 0.6,
+                height: 520,
                 child: child,
               ),
             ),
           );
-          // return Center(
-          //   child: Container(
-          //     width: MediaQuery.of(context).size.width * 0.8,
-          //     height: MediaQuery.of(context).size.height * 0.6,
-          //     child: child,
-          //   ),
-          // );
         },
       ).then((pickedDateRange) {
         if (pickedDateRange != null) {
@@ -141,10 +131,10 @@ class _HomeSummaryState extends State<HomeSummary> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.black26, // 20% transparent black
+        color: Colors.black26,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(25), // Curve bottom-left
-          bottomRight: Radius.circular(25), // Curve bottom-right
+          bottomLeft: Radius.circular(25),
+          bottomRight: Radius.circular(25),
         ),
       ),
       child: Padding(

@@ -27,6 +27,7 @@ class AppConfig {
   static BorderRadius borderRadiusAll = BorderRadius.all(Radius.circular(AppConfig.borderRadius));
   // popup
   static double popupRadius = borderRadius;
+  static Color popupBKColor = Color.fromARGB(255, 18, 73, 128);
   // radio button
   static Color activeColor = Colors.white;
   // tool tip
