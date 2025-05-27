@@ -165,6 +165,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                 isError: state.hasError,
                 errorMessage: state.errorText,
                 mode: 2,
+                selectedAccountId: _selectedAccount,
                 onAccountSelect: (String id) {
                   _selectedAccount = id;
                   state.didChange(id);
@@ -386,6 +387,20 @@ class _CreateTransactionState extends State<CreateTransaction> {
                         initialDate: DateTime.now(),
                         firstDate: DateTime(2000),
                         lastDate: DateTime(2100),
+                        builder: (context, child) {
+                          return Theme(
+                            data: ThemeData(
+                              colorScheme: ColorScheme.light(
+                                primary: Colors.white,
+                                onPrimary: Colors.black,
+                                surface: AppConfig.popupBKColor,
+                                onSurface: Colors.white,
+                                secondary: Colors.white.withOpacity(0.5),
+                              ),
+                            ),
+                            child: child!,
+                          );
+                        }
                       );
                       if (selectedDate != null) {
                         setState(() {

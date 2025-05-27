@@ -11,7 +11,7 @@ class AccountSelectionDropdown extends StatefulWidget {
   final List<String>? excludedAccountsId;
   final bool? isError;
   final String? errorMessage;
-  final String? selectedAccount;
+  final String? selectedAccountId;
   final double? width;
   final bool? isCreateAccountOptionEnable;
   /*
@@ -28,7 +28,7 @@ class AccountSelectionDropdown extends StatefulWidget {
     this.excludedAccountsId,
     this.isError,
     this.errorMessage,
-    this.selectedAccount,
+    this.selectedAccountId,
     this.mode,
     this.width,
     this.isCreateAccountOptionEnable,
@@ -50,9 +50,12 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
   void initState() {
     super.initState();
 
-    if (widget.selectedAccount != null) {
-      _selectedAccount = widget.selectedAccount;
-    }
+    // if (widget.selectedAccountId != null) {
+    //   print('111-----------------');
+    //   print(widget.selectedAccountId);
+    //   print(accountList);
+    //   _selectedAccount = widget.selectedAccountId;
+    // }
 
     _mode = widget.mode ?? 1;
     isCreateAccountOptionEnable = widget.isCreateAccountOptionEnable ?? false;
@@ -147,6 +150,12 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
       return widget.excludedAccountsId == null || !widget.excludedAccountsId!.contains(account.id);
     }).toList();
 
+    if (widget.selectedAccountId != null) {
+      _selectedAccount = accountList.firstWhere((account) {
+        return widget.selectedAccountId == account.id;
+      }).name;
+    }
+
     if (_mode == 1) {
       return SizedBox(
         width: 150,
@@ -170,7 +179,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
                   Icon(Icons.arrow_drop_down, size: AppConfig.iconSize, color: AppConfig.fontColor,),
                   Expanded(
                     child: Text(
-                      _selectedAccount ?? "All Account", 
+                      capitalizeFirstLetter(_selectedAccount ?? "All Account"), 
                       style: TextStyle(color: AppConfig.fontColor),
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
@@ -207,7 +216,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
                   Expanded(
                     flex: 3,
                     child: Text(
-                      _selectedAccount ?? "Select Account", 
+                      capitalizeFirstLetter(_selectedAccount ?? "Select Account"), 
                       style: TextStyle(color: AppConfig.fontColor),
                       overflow: TextOverflow.fade,
                       softWrap: false,
