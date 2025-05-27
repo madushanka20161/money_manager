@@ -13,6 +13,7 @@ class AccountSelectionDropdown extends StatefulWidget {
   final String? errorMessage;
   final String? selectedAccount;
   final double? width;
+  final bool? isCreateAccountOptionEnable;
   /*
     values for mode 1, 2
     defaulr value is 1
@@ -30,6 +31,7 @@ class AccountSelectionDropdown extends StatefulWidget {
     this.selectedAccount,
     this.mode,
     this.width,
+    this.isCreateAccountOptionEnable,
   });
 
   @override
@@ -42,6 +44,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
   Map<String, AccountDto> accounts = {};
   List<AccountDto> accountList = [];
   Color backgroundColor = AppConfig.popupBKColor;
+  bool? isCreateAccountOptionEnable;
 
   @override
   void initState() {
@@ -52,6 +55,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
     }
 
     _mode = widget.mode ?? 1;
+    isCreateAccountOptionEnable = widget.isCreateAccountOptionEnable ?? false;
   }
 
   void _showPopup(BuildContext context) async {
@@ -63,7 +67,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
           children: [
             if (_mode == 1) _buildAllAccountOption(context),
             ...accountList.map((AccountDto account) => _buildDialogOption(context, account)),
-            createAccountButton()
+            if (isCreateAccountOptionEnable! && accountList.isEmpty) createAccountButton(),
           ],
         );
       },
@@ -89,7 +93,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
           MaterialPageRoute(builder: (context) => CreateAccount()),
         );
 
-        // TODO [V2 - need to update account list instoded of closin g popup]
+        // TODO [V2 - need to update account list insted of closin popup]
         Navigator.pop(context);
       }
     );

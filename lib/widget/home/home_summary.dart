@@ -148,6 +148,7 @@ class _HomeSummaryState extends State<HomeSummary> {
                 Text("Total Balance", style: TextStyle(fontSize: AppConfig.fontSize, color: AppConfig.fontColor),),
                 AccountSelectionDropdown(
                   onAccountSelect: _onAccountChange,
+                  isCreateAccountOptionEnable: true,
                 ),
               ],
             ),
