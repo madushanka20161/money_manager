@@ -21,15 +21,31 @@ class _DateInputState extends State<DateInput> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData(
+            colorScheme: ColorScheme.light(
+              primary: Colors.white,
+              onPrimary: Colors.black,
+              surface: AppConfig.popupBKColor,
+              onSurface: Colors.white,
+              secondary: Colors.white.withOpacity(0.5),
+            ),
+          ),
+          child: child!,
+        );
+      }
     );
 
+    if (pickedDate == null) return;
+
     setState(() {
-      widget.dateController.text = "${pickedDate?.year}-${pickedDate?.month.toString().padLeft(2, '0')}-${pickedDate?.day.toString().padLeft(2, '0')}";
+      widget.dateController.text = "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
     });
 
     widget.onChange(pickedDate);
-    }
+  }
 
   void _formatDate(String value) {
     String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
@@ -63,14 +79,28 @@ class _DateInputState extends State<DateInput> {
         _formatDate(value);
       },
       validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter a date';
+        }
+
+        if (value.length != 10) {
+          return 'Please enter a valid date';
+        }
+
+        final date = DateTime.parse(value);
+        if (date.isAfter(DateTime.now())) {
+          return 'Date cannot be in the future';
+        }
+      
         return null;
       },
       hintText: "YYYY-MM-DD",
       inputType: TextInputType.datetime,
-        suffixIcon: IconButton(
+      suffixIcon: IconButton(
         icon: Icon(Icons.calendar_today, color: AppConfig.fontColor),
         onPressed: () => _selectDate(context),
       ),
+      onTap: () => _selectDate(context),
     );
   }
 }

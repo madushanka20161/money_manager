@@ -215,7 +215,7 @@ class _CreateAccountTransactionState extends State<CreateAccountTransaction> {
         Expanded(
           flex: 1,
           child: Container(
-            // [TODO] - this is tempory solution need to find proper one to make widget center
+            // TODO - [this is tempory solution need to find proper one to make widget center]
             height: 65,
             padding: EdgeInsets.only(top: AppConfig.padding),
             child: Center(

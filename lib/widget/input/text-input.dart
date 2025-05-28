@@ -11,6 +11,7 @@ class TextInput extends StatefulWidget {
   final IconButton? suffixIcon;
   final bool? forceValidate;
   final double? topPadding;
+  final Function? onTap;
 
   const TextInput({
     super.key,
@@ -23,6 +24,7 @@ class TextInput extends StatefulWidget {
     this.suffixIcon,
     this.forceValidate,
     this.topPadding,
+    this.onTap,
   });
   
   @override
@@ -53,6 +55,7 @@ class _CreateTextInput extends State<TextInput> {
             Container(
               padding: EdgeInsets.only(top: widget.topPadding ?? AppConfig.padding),
               child: TextFormField(
+                onTap: widget.onTap as GestureTapCallback?,
                 controller: widget.inputController,
                 style: TextStyle(
                   color: AppConfig.fontColor, 
@@ -87,7 +90,7 @@ class _CreateTextInput extends State<TextInput> {
                     state.didChange(value);
                     state.validate();
                   });
-                },
+                },                
               ),
             ),
             if (state.hasError)
