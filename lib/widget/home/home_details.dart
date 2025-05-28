@@ -118,6 +118,8 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
         ),
         Expanded(
           child: TabBarView(
+            // TODO [V2 - need to enable tab changes using swaping]
+            physics: NeverScrollableScrollPhysics(),
             controller: _tabController,
             children: [
               _buildListView(
