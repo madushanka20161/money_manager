@@ -116,8 +116,23 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
         Navigator.pop(context);
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text("All Account", style: AppConfig.fontStyle),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+        child: Row(
+          children: [
+            Padding(
+                padding: EdgeInsets.only(right: AppConfig.padding),
+                child: Icon(
+                  'All Account' == _selectedAccount
+                      ? Icons.circle
+                      : Icons.circle_outlined,
+                  color: AppConfig.fontColor,
+                  size: 15,
+                ),
+              ),
+            Text("All Account", style: AppConfig.fontStyle)
+          ],
+        )
+        // child: Text("All Account", style: AppConfig.fontStyle),
       ),
     );
   }
@@ -136,8 +151,22 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
         Navigator.pop(context);
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(capitalizeFirstLetter(account.name), style: AppConfig.fontStyle)
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+        child: Row(
+          children: [
+            Padding(
+                padding: EdgeInsets.only(right: AppConfig.padding),
+                child: Icon(
+                  capitalizeFirstLetter(account.name) == capitalizeFirstLetter(_selectedAccount ?? '')
+                      ? Icons.circle
+                      : Icons.circle_outlined,
+                  color: AppConfig.fontColor,
+                  size: 15,
+                ),
+              ),
+            Text(capitalizeFirstLetter(account.name), style: AppConfig.fontStyle),
+          ],
+        )
       ),
     );
   }
