@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
@@ -24,13 +25,41 @@ class AuthService {
     _appState = appState;
     _userState = userState;
     String? storeUser = await DatabaseService.instance.getData('user');
-    final signInUser = await _googleSignIn.signInSilently();
 
-    if (storeUser == null && signInUser != null) {
-      signOut();
+    if (storeUser == null) {
+      signIn();
+    } else {
+      var userDecode = jsonDecode(storeUser);
+      UserDTO userDTO = UserDTO(
+        id: userDecode['id'],
+        email: userDecode['email'],
+        name: userDecode['name'],
+        photoUrl: userDecode['photoUrl'],
+      );
+
+      _userState.setUser(userDTO);
     }
-    
-    signIn();
+
+    String defaultTimePeriod = await DatabaseService.instance.getData('defaultTimePeriod') ?? 'month';
+    List<DateTime> dateRange = getDateRange(defaultTimePeriod, null);
+    UserStateService.instance.init(defaultTimePeriod);
+    _userState.setDefaultTimePeriod(defaultTimePeriod);
+    _appState.setIsLoading(false);
+    _appState.setDateRange(dateRange[0], dateRange[1]);
+    // TODO: Need to send api request
+    loadStoredData();
+
+    // // throw Exception("Something went wrong:");
+    // final signInUser = await _googleSignIn.signInSilently();
+    // print('33333333333333333333333333333');
+    // print(storeUser);
+    // print(signInUser);
+    // print('444444444444444444444444444');
+    // throw Exception("Something went wrong:");
+    // if (storeUser == null && signInUser != null) {
+    //   signOut();
+    // }
+    // signIn();
   }
 
   Future<void> signOut() async {
@@ -38,7 +67,6 @@ class AuthService {
       await _googleSignIn.signOut();
       DatabaseService.instance.deleteData('user');
       // TODO: Need to clear storage (data, accounts)
-      print("User signed out");
     } catch (error) {
       print("Error signing out: $error");
     }
@@ -58,59 +86,53 @@ class AuthService {
 
       String jsonString = jsonEncode(userDTO);
       DatabaseService.instance.saveData('user', jsonString);
-
-      String defaultTimePeriod = await DatabaseService.instance.getData('defaultTimePeriod') ?? 'month';
-      List<DateTime> dateRange = getDateRange(defaultTimePeriod, null);
-      UserStateService.instance.init(defaultTimePeriod);
-      _userState.setDefaultTimePeriod(defaultTimePeriod);
-      _appState.setIsLoading(false);
-      _appState.setDateRange(dateRange[0], dateRange[1]);
-      // TODO: Need to send api request
-
-      String? categoriesString = DatabaseService.instance.getData('category');
-      String? accountsString = DatabaseService.instance.getData('account');
-      String? transactionsString = DatabaseService.instance.getData('transaction');
-      String? accountTransactionsString = DatabaseService.instance.getData('account-trnsaction');
-
-      if (categoriesString != null) {
-        Map<String, dynamic> categories = jsonDecode(categoriesString);
-        categories.forEach((id, category) {
-          CategoryDTO categoryDto = CategoryDTO.fromJson(category);
-          _appState.addCategory(categoryDto.id, categoryDto);
-        });
-      }
-      
-      if (accountsString != null) {
-        Map<String, dynamic> accounts = jsonDecode(accountsString);
-        accounts.forEach((id, account) {
-          AccountDto accountDto = AccountDto.fromJson(account);
-          _appState.addAccount(accountDto.id, accountDto);
-        });
-      }
-
-      if (transactionsString != null) {
-        Map<String, dynamic> transations = jsonDecode(transactionsString);
-        transations.forEach((id, transaction) {
-          transaction['account'] = _appState.accounts[transaction['account']];
-          transaction['category'] = _appState.categories[transaction['category']];
-          TransactionDto transactionDto = TransactionDto.fromJson(transaction);
-          _appState.addTransaction(transactionDto.id, transactionDto);
-        });
-      }
-      
-      if (accountTransactionsString != null) {
-        Map<String, dynamic> accountTransactions = jsonDecode(accountTransactionsString);
-        accountTransactions.forEach((id, accountTransaction) {
-          accountTransaction['fromAccount'] = _appState.accounts[accountTransaction['fromAccount']];
-          accountTransaction['toAccount'] = _appState.accounts[accountTransaction['toAccount']];
-          AccountTransactionDTO accountTransactionDto = AccountTransactionDTO.fromJson(accountTransaction);
-          _appState.addAccountTrnsaction(accountTransactionDto.id, accountTransactionDto);
-        });
-      }
       
     } else {
       // TODO [need to handle this part]
       print('222222222222222222222222222222222222222222');
+    }
+  }
+
+  void loadStoredData() {
+    String? categoriesString = DatabaseService.instance.getData('category');
+    String? accountsString = DatabaseService.instance.getData('account');
+    String? transactionsString = DatabaseService.instance.getData('transaction');
+    String? accountTransactionsString = DatabaseService.instance.getData('account-trnsaction');
+
+    if (categoriesString != null) {
+      Map<String, dynamic> categories = jsonDecode(categoriesString);
+      categories.forEach((id, category) {
+        CategoryDTO categoryDto = CategoryDTO.fromJson(category);
+        _appState.addCategory(categoryDto.id, categoryDto);
+      });
+    }
+      
+    if (accountsString != null) {
+      Map<String, dynamic> accounts = jsonDecode(accountsString);
+      accounts.forEach((id, account) {
+        AccountDto accountDto = AccountDto.fromJson(account);
+        _appState.addAccount(accountDto.id, accountDto);
+      });
+    }
+
+    if (transactionsString != null) {
+      Map<String, dynamic> transations = jsonDecode(transactionsString);
+      transations.forEach((id, transaction) {
+        transaction['account'] = _appState.accounts[transaction['account']];
+        transaction['category'] = _appState.categories[transaction['category']];
+        TransactionDto transactionDto = TransactionDto.fromJson(transaction);
+        _appState.addTransaction(transactionDto.id, transactionDto);
+      });
+    }
+      
+    if (accountTransactionsString != null) {
+      Map<String, dynamic> accountTransactions = jsonDecode(accountTransactionsString);
+      accountTransactions.forEach((id, accountTransaction) {
+        accountTransaction['fromAccount'] = _appState.accounts[accountTransaction['fromAccount']];
+        accountTransaction['toAccount'] = _appState.accounts[accountTransaction['toAccount']];
+        AccountTransactionDTO accountTransactionDto = AccountTransactionDTO.fromJson(accountTransaction);
+        _appState.addAccountTrnsaction(accountTransactionDto.id, accountTransactionDto);
+      });
     }
   }
 
