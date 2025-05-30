@@ -50,6 +50,7 @@ class AuthService {
 
       _userState.setUser(userDTO);
       _appState.setIsSignIn(true);
+      DatabaseService.instance.setUserId(userDTO.id);
     } else {
       _appState.setIsSignIn(false);
     }
@@ -92,7 +93,9 @@ class AuthService {
 
       String jsonString = jsonEncode(userDTO);
       DatabaseService.instance.saveData('user', jsonString);
+      DatabaseService.instance.setUserId(userDTO.id);
       
+      await loadStoredData();
       _appState.setIsSignIn(true);
     } else {
       // TODO [need to handle this part]
@@ -101,6 +104,8 @@ class AuthService {
   }
 
   Future<void> loadStoredData() async {
+    _appState.clearAll();
+
     String defaultTimePeriod = await DatabaseService.instance.getData('defaultTimePeriod') ?? 'month';
     List<DateTime> dateRange = getDateRange(defaultTimePeriod, null);
     UserStateService.instance.init(defaultTimePeriod);

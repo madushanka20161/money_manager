@@ -9,6 +9,7 @@ class DatabaseService {
 
   // Hive box (e.g., for general data storage)
   late Box _box;
+  String id = '0';
 
   /// Initialize Hive and open the box
   Future<void> init() async {
@@ -16,23 +17,35 @@ class DatabaseService {
     _box = await Hive.openBox('appBox');
   }
 
+  void setUserId(String newId) {
+    id = newId;
+  }
+
   /// Save data to Hive
   Future<void> saveData(String key, dynamic value) async {
-    await _box.put(key, value);
+    await _box.put(generateKey(key), value);
   }
 
   /// Retrieve data from Hive
   dynamic getData(String key) {
-    return _box.get(key);
+    return _box.get(generateKey(key));
   }
 
   /// Delete data from Hive
   Future<void> deleteData(String key) async {
-    await _box.delete(key);
+    await _box.delete(generateKey(key));
   }
 
   /// Clear all data in the box
   Future<void> clearAll() async {
     await _box.clear();
+  }
+
+  String generateKey(String key) {
+    if (key == 'user') {
+      return key;
+    }
+
+    return "${id}_$key";
   }
 }

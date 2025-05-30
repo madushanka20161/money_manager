@@ -28,6 +28,19 @@ class AppState with ChangeNotifier {
   TransactionType get selectedTransactionType => _selectedTransactionType;
   Map<String, AccountTransactionDTO> get accountTrnsactions => _accountTrnsactions;
 
+  void clearAll() {
+    _accounts.clear();
+    _transactions.clear();
+    _categories.clear();
+    _accountTrnsactions.clear();
+    _selectedAccountId = '';
+    _selectedTransactionType = TransactionType.expenses;
+    // _startDate;
+    // _endDate;
+    // _isLoading = true;
+    // _isSignIn = false;
+  }
+
   void addAccount(String id, AccountDto account) {
     _accounts[id] = account;
     notifyListeners();
