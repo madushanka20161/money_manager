@@ -1,0 +1,2 @@
+/Users/nimeshadilini/Documents/madushanka/money_manager/android/app/.cxx/Debug/4h52f2y4/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/nimeshadilini/Documents/madushanka/money_manager/android/app/.cxx/Debug/4h52f2y4/armeabi-v7a/CMakeFiles/rebuild_cache.dir
