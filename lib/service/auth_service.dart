@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
@@ -24,31 +23,6 @@ class AuthService {
     _googleSignIn = GoogleSignIn();
     _appState = appState;
     _userState = userState;
-    String? storeUser = await DatabaseService.instance.getData('user');
-
-    if (storeUser == null) {
-      signIn();
-    } else {
-      var userDecode = jsonDecode(storeUser);
-      UserDTO userDTO = UserDTO(
-        id: userDecode['id'],
-        email: userDecode['email'],
-        name: userDecode['name'],
-        photoUrl: userDecode['photoUrl'],
-      );
-
-      _userState.setUser(userDTO);
-    }
-
-    String defaultTimePeriod = await DatabaseService.instance.getData('defaultTimePeriod') ?? 'month';
-    List<DateTime> dateRange = getDateRange(defaultTimePeriod, null);
-    UserStateService.instance.init(defaultTimePeriod);
-    _userState.setDefaultTimePeriod(defaultTimePeriod);
-    _appState.setIsLoading(false);
-    _appState.setDateRange(dateRange[0], dateRange[1]);
-    // TODO: Need to send api request
-    loadStoredData();
-
     // // throw Exception("Something went wrong:");
     // final signInUser = await _googleSignIn.signInSilently();
     // print('33333333333333333333333333333');
@@ -62,18 +36,50 @@ class AuthService {
     // signIn();
   }
 
+  Future<void> checkAuth() async {
+    String? storeUser = await DatabaseService.instance.getData('user');
+
+    if (storeUser != null) {
+      var userDecode = jsonDecode(storeUser);
+      UserDTO userDTO = UserDTO(
+        id: userDecode['id'],
+        email: userDecode['email'],
+        name: userDecode['name'],
+        photoUrl: userDecode['photoUrl'],
+      );
+
+      _userState.setUser(userDTO);
+      _appState.setIsSignIn(true);
+    } else {
+      _appState.setIsSignIn(false);
+    }
+
+    _appState.setIsLoading(false);
+
+    await loadStoredData();
+  }
+
   Future<void> signOut() async {
     try {
       await _googleSignIn.signOut();
       DatabaseService.instance.deleteData('user');
-      // TODO: Need to clear storage (data, accounts)
+
+      _appState.setIsSignIn(false);
+      // TODO: [Need to clear storage (data, accounts)]
     } catch (error) {
-      print("Error signing out: $error");
+      throw Exception("Something went wrong. Please try again.");
     }
   }
 
   Future<void> signIn() async {
-    GoogleSignInAccount? user = await _googleSignIn.signIn();
+    GoogleSignInAccount? user;
+
+    try {
+      user = await _googleSignIn.signIn();
+    } catch (e) {
+      throw Exception("Something went wrong. Please try again.");
+    }
+
     if (user != null) {
       UserDTO userDTO = UserDTO(
         id: user.id,
@@ -87,13 +93,21 @@ class AuthService {
       String jsonString = jsonEncode(userDTO);
       DatabaseService.instance.saveData('user', jsonString);
       
+      _appState.setIsSignIn(true);
     } else {
       // TODO [need to handle this part]
-      print('222222222222222222222222222222222222222222');
+      throw Exception("Something went wrong. Please try again.");
     }
   }
 
-  void loadStoredData() {
+  Future<void> loadStoredData() async {
+    String defaultTimePeriod = await DatabaseService.instance.getData('defaultTimePeriod') ?? 'month';
+    List<DateTime> dateRange = getDateRange(defaultTimePeriod, null);
+    UserStateService.instance.init(defaultTimePeriod);
+    _userState.setDefaultTimePeriod(defaultTimePeriod);
+    _appState.setDateRange(dateRange[0], dateRange[1]);
+    // TODO: Need to send api request
+
     String? categoriesString = DatabaseService.instance.getData('category');
     String? accountsString = DatabaseService.instance.getData('account');
     String? transactionsString = DatabaseService.instance.getData('transaction');
@@ -134,9 +148,5 @@ class AuthService {
         _appState.addAccountTrnsaction(accountTransactionDto.id, accountTransactionDto);
       });
     }
-  }
-
-  Future<void> checkAuth() async {
-    // Check auth logic here
   }
 }

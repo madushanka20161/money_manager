@@ -59,6 +59,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
 
     _mode = widget.mode ?? 1;
     isCreateAccountOptionEnable = widget.isCreateAccountOptionEnable ?? false;
+    _selectedAccount = 'All Account';
   }
 
   void _showPopup(BuildContext context) async {

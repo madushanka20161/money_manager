@@ -14,6 +14,7 @@ class AppState with ChangeNotifier {
   late DateTime _startDate;
   late DateTime _endDate;
   bool _isLoading = true;
+  bool _isSignIn = false;
   final Map<String, AccountTransactionDTO> _accountTrnsactions = {};
 
   Map<String, AccountDto> get accounts => _accounts;
@@ -23,6 +24,7 @@ class AppState with ChangeNotifier {
   DateTime get startDate => _startDate;
   DateTime get endDate => _endDate;
   bool get isLoading => _isLoading;
+  bool get isSignIn => _isSignIn;
   TransactionType get selectedTransactionType => _selectedTransactionType;
   Map<String, AccountTransactionDTO> get accountTrnsactions => _accountTrnsactions;
 
@@ -63,6 +65,11 @@ class AppState with ChangeNotifier {
 
   void setIsLoading(bool isLoading) {
     _isLoading = isLoading;
+    notifyListeners();
+  }
+
+  void setIsSignIn(bool isSignIn) {
+    _isSignIn = isSignIn;
     notifyListeners();
   }
 
