@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/home_page.dart';
 import 'package:money_manager_3/service/auth_service.dart';
 import 'package:money_manager_3/service/database_service.dart';
@@ -65,6 +66,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppConfig.appTitleColor,
+          foregroundColor: AppConfig.fontColor,
+        )
       ),
       home: LandingScreen()
     );
