@@ -8,6 +8,7 @@ import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/filter.dart';
 import 'package:money_manager_3/service/auth_service.dart';
+import 'package:money_manager_3/service/database_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
 import 'package:money_manager_3/widget/account/account_page.dart';
@@ -122,6 +123,13 @@ class _HomePageState extends State<HomePage> {
                         // Handle logout
                       },
                     ),
+                    ListTile(
+                      leading: Icon(Icons.delete, color: Colors.red, size: AppConfig.iconSizeSmall),
+                      title: Text('Delete Account', style: TextStyle(color: Colors.red, fontSize: AppConfig.fontSize * 0.9)),
+                      onTap: () {
+                        onDeleteClick(context);
+                      },
+                    ),
                   ],
                 ),
               ],
@@ -184,6 +192,67 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  void onDeleteClick(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Confirm Account Deletion"),
+        content: RichText(
+          text: TextSpan(
+            style: TextStyle(color: Colors.black, fontSize: 14),
+            children: [
+              TextSpan(
+                  text:
+                      'Deleting your account will erase all data associated with it. Do you wish to proceed?'),
+              // TextSpan(
+              //   text: 'erase all data',
+              //   style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              // ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              showSecondConfirmationOnDelete(context);
+            },
+            child: Text("Yes"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("No"),
+          )
+        ],
+      ),
+    );
+  }
+
+  void showSecondConfirmationOnDelete(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Final Confirmation"),
+        content: Text(
+            'This will permanently delete your account and all related data. This action cannot be undone. Are you absolutely sure?'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await DatabaseService.instance.clearUserAllData();
+              Navigator.pop(context);
+              await AuthService.instance.signOut();
+            },
+            child: Text("Yes"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("No"),
+          )
         ],
       ),
     );
