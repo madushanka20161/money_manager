@@ -41,6 +41,13 @@ class DatabaseService {
     await _box.clear();
   }
 
+  Future<void> clearUserAllData() async {
+    final keysToDelete =
+        _box.keys.where((key) => key is String && key.startsWith(id)).toList();
+
+    await _box.deleteAll(keysToDelete);
+  }
+
   String generateKey(String key) {
     if (key == 'user') {
       return key;

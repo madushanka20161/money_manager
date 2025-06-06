@@ -52,6 +52,7 @@ class AuthService {
       _appState.setIsSignIn(true);
       DatabaseService.instance.setUserId(userDTO.id);
     } else {
+      await signOut();
       _appState.setIsSignIn(false);
     }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppConfig {
   static Color appBackgroundColor = Color.fromARGB(255, 18, 73, 128);
+  static Color appTitleColor = Color(0xFF242C3B);
   static int decimalPlace = 2;
 
   static double headerFontSize = 30.0;
