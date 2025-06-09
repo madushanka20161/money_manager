@@ -4,9 +4,11 @@ import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/dto/user_dto.dart';
+import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'dart:convert';
 import 'package:money_manager_3/service/database_service.dart';
+import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
@@ -114,6 +116,7 @@ class AuthService {
     _appState.setDateRange(dateRange[0], dateRange[1]);
     // TODO: Need to send api request
 
+// String? categoriesString = null;
     String? categoriesString = DatabaseService.instance.getData('category');
     String? accountsString = DatabaseService.instance.getData('account');
     String? transactionsString = DatabaseService.instance.getData('transaction');
@@ -124,6 +127,19 @@ class AuthService {
       categories.forEach((id, category) {
         CategoryDTO categoryDto = CategoryDTO.fromJson(category);
         _appState.addCategory(categoryDto.id, categoryDto);
+      });
+    } else {
+      List<String> categories = defaultCategories;
+      categories.forEach((data) {
+        List<String> parts = data.split('|');
+        SharedService.instance.createCategory(
+            parts[0],
+            iconMap[parts[1]]!,
+            colorMap[parts[2]]!,
+            parts[3] == 'income'
+                ? TransactionType.income
+                : TransactionType.expenses,
+            CategoryLimitDTO(type: CategoryLimitType.value, limit: 0));
       });
     }
       

@@ -14,3 +14,25 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+# Build
+
+flutter build apk --release
+
+this generate apk at build/app/outputs/flutter-apk/app-release.apk
+
+For app bundle
+
+flutter build appbundle --release
+
+this generate app bunddle at build/app/outputs/bundle/release/app-release.aab
+
+
+to get releae sh1 key
+
+keytool -list -v -keystore /Users/nimeshadilini/my-release-key.jks -alias my-key-alias   
+
+for debug sh1 key
+
+keytool -list -v -alias androiddebugkey -keystore ~/.android/debug.keystore

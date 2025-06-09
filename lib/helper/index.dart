@@ -64,7 +64,41 @@ const Map<String, IconData> iconMap = {
   'sailing': Icons.sailing,
   'abc_outlined': Icons.abc_outlined,
   'hail': Icons.hail,
+  'fastfood': Icons.fastfood,
+  'directions_car': Icons.directions_car,
+  'shopping_bag': Icons.shopping_bag,
+  'healing': Icons.healing,
+  'receipt_long': Icons.receipt_long,
+  'movie': Icons.movie,
+  'flight': Icons.flight,
+  'school': Icons.school,
+  'savings': Icons.savings,
+  'category': Icons.category,
+  'business_center': Icons.business_center,
+  'trending_up': Icons.trending_up,
+  'card_giftcard': Icons.card_giftcard,
+  'add_box': Icons.add_box,
 };
+
+const defaultCategories = [
+  // expenses
+  'Food|fastfood|orange|expenses',
+  'Transport|directions_car|blueGrey|expenses',
+  'Shopping|shopping_bag|purple|expenses',
+  'Health|healing|red|expenses',
+  'Bills|receipt_long|teal|expenses',
+  'Entertainment|movie|indigo|expenses',
+  'Travel|flight|deepPurple|expenses',
+  'Education|school|green|expenses',
+  'Savings|savings|lightGreen|expenses',
+  'Others|category|grey|expenses',
+  // income
+  'Salary|attach_money|green|income',
+  'Business|business_center|blue|income',
+  'Investments|trending_up|purple|income',
+  'Gifts|card_giftcard|pink|income',
+  'Others|add_box|grey|income',
+];
 
 const Map<String, IconData> accountIconMap = {
   'account_balance': Icons.account_balance,
@@ -76,13 +110,20 @@ const Map<String, IconData> accountIconMap = {
 
 const Map<String, Color> colorMap = {
   'blue': Colors.blue,
-  'black': Colors.black,
-  'green': Colors.green,
-  'yellow': Colors.yellow,
-  'orange': Colors.orange,
+  'lightBlueAccent': Colors.lightBlueAccent,
+  'blueGrey': Colors.blueGrey,
+  'indigo': Colors.indigo,
+  'deepPurple': Colors.deepPurple,
+  'purple': Colors.purple,
   'pink': Colors.pink,
   'red': Colors.red,
-  'lightBlueAccent': Colors.lightBlueAccent
+  'orange': Colors.orange,
+  'yellow': Colors.yellow,
+  'lightGreen': Colors.lightGreen,
+  'green': Colors.green,
+  'teal': Colors.teal,
+  'grey': Colors.grey,
+  'black': Colors.black,
 };
 
 const List<String> currencyList = ['RS', 'USD', 'EUR', 'GBP', 'JPY'];
