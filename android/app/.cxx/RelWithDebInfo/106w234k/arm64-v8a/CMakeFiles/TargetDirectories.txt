@@ -1,0 +1,2 @@
+/Users/nimeshadilini/Documents/madushanka/money_manager/android/app/.cxx/RelWithDebInfo/106w234k/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/nimeshadilini/Documents/madushanka/money_manager/android/app/.cxx/RelWithDebInfo/106w234k/arm64-v8a/CMakeFiles/rebuild_cache.dir

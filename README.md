@@ -1,4 +1,4 @@
-# money_manager_3
+# Money Mate
 
 A new Flutter project.
 
@@ -18,21 +18,23 @@ samples, guidance on mobile development, and a full API reference.
 
 # Build
 
-flutter build apk --release
+`flutter build apk --release`
+* this generate apk at `build/app/outputs/flutter-apk/app-release.apk`
 
-this generate apk at build/app/outputs/flutter-apk/app-release.apk
-
-For app bundle
-
-flutter build appbundle --release
-
-this generate app bunddle at build/app/outputs/bundle/release/app-release.aab
+`flutter build appbundle --release`
+* this generate app bunddle at `build/app/outputs/bundle/release/app-release.aab`
 
 
-to get releae sh1 key
+## SH1 key
 
-keytool -list -v -keystore /Users/nimeshadilini/my-release-key.jks -alias my-key-alias   
+* For production
+`keytool -list -v -keystore /Users/nimeshadilini/my-release-key.jks -alias my-key-alias`   
 
-for debug sh1 key
+* For debug sh1 key
+`keytool -list -v -alias androiddebugkey -keystore ~/.android/debug.keystore`
 
-keytool -list -v -alias androiddebugkey -keystore ~/.android/debug.keystore
+* For play store sh1 key
+
+## Remove appliation from app
+
+`adb uninstall com.mksddev.money_mate`
