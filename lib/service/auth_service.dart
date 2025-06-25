@@ -8,6 +8,7 @@ import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'dart:convert';
 import 'package:money_manager_3/service/database_service.dart';
+import 'package:money_manager_3/service/notification_service.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
@@ -93,6 +94,11 @@ class AuthService {
       );
       
       _userState.setUser(userDTO);
+
+      NotificationService.instance.showNotification(
+        'Welcome, ${userDTO.name}',
+        'We’re excited to have you on board. Explore and enjoy your journey with us!'
+      );
 
       String jsonString = jsonEncode(userDTO);
       DatabaseService.instance.saveData('user', jsonString);

@@ -3,6 +3,7 @@ import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/home_page.dart';
 import 'package:money_manager_3/service/auth_service.dart';
 import 'package:money_manager_3/service/database_service.dart';
+import 'package:money_manager_3/service/notification_service.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/sign_up.dart';
 import 'package:money_manager_3/state/app_state.dart';
@@ -14,6 +15,12 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   // debugPaintSizeEnabled = true;
   await DatabaseService.instance.init();
+  await NotificationService.instance.init();
+  
+  // nsures all the core bindings and services (like platform channels, 
+  // rendering, and asynchronous tasks) are initialized before you run 
+  // your app or execute any native plugin code.
+  WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
     MultiProvider(
