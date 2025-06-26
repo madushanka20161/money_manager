@@ -1,4 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
 
 class NotificationService {
   NotificationService._privateConstructor();
@@ -49,5 +51,14 @@ class NotificationService {
     }
 
     return false;
+  }
+
+  void enableNotification() {
+    if (Platform.isAndroid) {
+      const platform = MethodChannel('notification.settings.channel');
+      platform.invokeMethod('openSettings');
+    } else {
+      throw UnsupportedError('-----DEV-ERROR-PLATFORM-----, openNotificationSettings() is only implemented for Android.');
+    }
   }
 }

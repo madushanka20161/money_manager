@@ -38,3 +38,11 @@ samples, guidance on mobile development, and a full API reference.
 ## Remove appliation from app
 
 `adb uninstall com.mksddev.money_mate`
+
+
+
+# Platform specific implementation
+## enable notification 
+* this only test in android
+* notificationService -> enableNotification
+* mainActivity.kt
