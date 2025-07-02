@@ -54,14 +54,14 @@ class AuthService {
       _userState.setUser(userDTO);
       _appState.setIsSignIn(true);
       DatabaseService.instance.setUserId(userDTO.id);
+
+      await loadStoredData();
     } else {
       await signOut();
       _appState.setIsSignIn(false);
     }
 
     _appState.setIsLoading(false);
-
-    await loadStoredData();
   }
 
   Future<void> signOut() async {
@@ -122,20 +122,38 @@ class AuthService {
     _appState.setDateRange(dateRange[0], dateRange[1]);
     // TODO: Need to send api request
 
-// String? categoriesString = null;
+    // String? categoriesString = null;
     String? categoriesString = DatabaseService.instance.getData('category');
     String? accountsString = DatabaseService.instance.getData('account');
     String? transactionsString = DatabaseService.instance.getData('transaction');
     String? accountTransactionsString = DatabaseService.instance.getData('account-trnsaction');
 
     if (categoriesString != null) {
-      Map<String, dynamic> categories = jsonDecode(categoriesString);
-      categories.forEach((id, category) {
-        CategoryDTO categoryDto = CategoryDTO.fromJson(category);
-        _appState.addCategory(categoryDto.id, categoryDto);
-      });
+      Map<String, dynamic> categoriesObj = jsonDecode(categoriesString);
+      Map<String, dynamic> categories = {};
+      categoriesObj = _unBindVersionWithVersion(categoriesObj);
+
+      if (categoriesObj['version'] == 0) {
+        int start = 0;
+        categories = jsonDecode(categoriesObj['data']);
+        categories.forEach((id, category) {
+          category['index'] = start;
+          start += 1;
+
+          CategoryDTO categoryDto = CategoryDTO.fromJson(category);
+          _appState.addCategory(categoryDto.id, categoryDto);
+        });
+      } else {
+        categories = jsonDecode(categoriesObj['data']);
+
+        categories.forEach((id, category) {
+          CategoryDTO categoryDto = CategoryDTO.fromJson(category);
+          _appState.addCategory(categoryDto.id, categoryDto);
+        });
+      }
     } else {
       List<String> categories = defaultCategories;
+
       categories.forEach((data) {
         List<String> parts = data.split('|');
         SharedService.instance.createCategory(
@@ -145,12 +163,16 @@ class AuthService {
             parts[3] == 'income'
                 ? TransactionType.income
                 : TransactionType.expenses,
-            CategoryLimitDTO(type: CategoryLimitType.value, limit: 0));
+            CategoryLimitDTO(type: CategoryLimitType.value, limit: 0),
+            int.tryParse(parts[4])!
+        );
       });
     }
       
     if (accountsString != null) {
       Map<String, dynamic> accounts = jsonDecode(accountsString);
+      accounts = _unBindVersion(accounts);
+
       accounts.forEach((id, account) {
         AccountDto accountDto = AccountDto.fromJson(account);
         _appState.addAccount(accountDto.id, accountDto);
@@ -159,6 +181,8 @@ class AuthService {
 
     if (transactionsString != null) {
       Map<String, dynamic> transations = jsonDecode(transactionsString);
+      transations = _unBindVersion(transations);
+
       transations.forEach((id, transaction) {
         transaction['account'] = _appState.accounts[transaction['account']];
         transaction['category'] = _appState.categories[transaction['category']];
@@ -169,12 +193,33 @@ class AuthService {
       
     if (accountTransactionsString != null) {
       Map<String, dynamic> accountTransactions = jsonDecode(accountTransactionsString);
+      accountTransactions = _unBindVersion(accountTransactions);
+
       accountTransactions.forEach((id, accountTransaction) {
         accountTransaction['fromAccount'] = _appState.accounts[accountTransaction['fromAccount']];
         accountTransaction['toAccount'] = _appState.accounts[accountTransaction['toAccount']];
         AccountTransactionDTO accountTransactionDto = AccountTransactionDTO.fromJson(accountTransaction);
         _appState.addAccountTrnsaction(accountTransactionDto.id, accountTransactionDto);
       });
+    }
+  }
+
+  Map<String, dynamic> _unBindVersionWithVersion(Map<String, dynamic> data) {
+    if (data['version'] == null) {
+      return {
+        'version': 0,
+        'data': jsonEncode(data)
+      };
+    } else {
+      return data;
+    }
+  }
+
+  Map<String, dynamic> _unBindVersion(Map<String, dynamic> data) {
+    if (data['version'] == null) {
+      return data;
+    } else {
+      return jsonDecode(data['data']);
     }
   }
 }

@@ -55,6 +55,13 @@ List<CategoryDTO> getCategoryByType(Map<String, CategoryDTO> categories, Transac
   return categories.values.where((CategoryDTO category) => category.type == type).toList();
 }
 
+List<CategoryDTO> getCategoryByTypeOrderByIndex(Map<String, CategoryDTO> categories, TransactionType type) {
+  List<CategoryDTO> categoryList = getCategoryByType(categories, type);
+  categoryList.sort((a, b) => a.index.compareTo(b.index));
+
+  return categoryList;
+}
+
 const Map<String, IconData> iconMap = {
   'attach_money': Icons.attach_money,
   'shopping_cart': Icons.shopping_cart,
@@ -82,22 +89,22 @@ const Map<String, IconData> iconMap = {
 
 const defaultCategories = [
   // expenses
-  'Food|fastfood|orange|expenses',
-  'Transport|directions_car|blueGrey|expenses',
-  'Shopping|shopping_bag|purple|expenses',
-  'Health|healing|red|expenses',
-  'Bills|receipt_long|teal|expenses',
-  'Entertainment|movie|indigo|expenses',
-  'Travel|flight|deepPurple|expenses',
-  'Education|school|green|expenses',
-  'Savings|savings|lightGreen|expenses',
-  'Others|category|grey|expenses',
+  'Food|fastfood|orange|expenses|0',
+  'Transport|directions_car|blueGrey|expenses|1',
+  'Shopping|shopping_bag|purple|expenses|2',
+  'Health|healing|red|expenses|3',
+  'Bills|receipt_long|teal|expenses|4',
+  'Entertainment|movie|indigo|expenses|5',
+  'Travel|flight|deepPurple|expenses|6',
+  'Education|school|green|expenses|7',
+  'Savings|savings|lightGreen|expenses|8',
+  'Others|category|grey|expenses|9',
   // income
-  'Salary|attach_money|green|income',
-  'Business|business_center|blue|income',
-  'Investments|trending_up|purple|income',
-  'Gifts|card_giftcard|pink|income',
-  'Others|add_box|grey|income',
+  'Salary|attach_money|green|income|10',
+  'Business|business_center|blue|income|11',
+  'Investments|trending_up|purple|income|12',
+  'Gifts|card_giftcard|pink|income|13',
+  'Others|add_box|grey|income|14',
 ];
 
 const Map<String, IconData> accountIconMap = {

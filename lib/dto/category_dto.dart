@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/index.dart';
 
-// id|name|type|icon|iconColor|limit
+// id|name|type|icon|iconColor|limit|index
 
 class CategoryDTO {
   final String id;
@@ -11,6 +11,7 @@ class CategoryDTO {
   final IconData icon;
   final Color iconColor;
   final CategoryLimitDTO limit;
+  final int index; // this is used for make orders
 
   CategoryDTO({
     required this.id,
@@ -19,6 +20,7 @@ class CategoryDTO {
     required this.icon,
     this.iconColor = Colors.blue,
     required this.limit,
+    required this.index
   });
 
   factory CategoryDTO.fromJson(Map<String, dynamic> json) {
@@ -28,7 +30,8 @@ class CategoryDTO {
       type: json['type'] == 'income' ? TransactionType.income : TransactionType.expenses,
       icon: iconMap[json['icon']] ?? Icons.error,
       iconColor: colorMap[json['iconColor']] ?? Colors.blue,
-      limit: CategoryLimitDTO.fromJson(json['limit'])
+      limit: CategoryLimitDTO.fromJson(json['limit']),
+      index: json['index']
     );
   }
 
@@ -40,6 +43,7 @@ class CategoryDTO {
       'icon': iconToString(icon),
       'iconColor': colorToString(iconColor),
       'limit': limit.toJson(),
+      'index': index
     };
   }
 

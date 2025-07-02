@@ -27,6 +27,8 @@ class AppState with ChangeNotifier {
   bool get isSignIn => _isSignIn;
   TransactionType get selectedTransactionType => _selectedTransactionType;
   Map<String, AccountTransactionDTO> get accountTrnsactions => _accountTrnsactions;
+  // to maintain a version for persisten data (user, category, trnsaction)
+  int get userDataVersion => 1;
 
   void clearAll() {
     _accounts.clear();

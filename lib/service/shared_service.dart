@@ -51,7 +51,7 @@ class SharedService {
     return uniqueKey;
   }
 
-  void createCategory(String name, IconData icon, Color iconColor, TransactionType type, CategoryLimitDTO limit) {
+  void createCategory(String name, IconData icon, Color iconColor, TransactionType type, CategoryLimitDTO limit, [int index = -1]) {
     CategoryDTO category = CategoryDTO(
       id: generateUniqueId('CA'), 
       name: name, 
@@ -59,10 +59,15 @@ class SharedService {
       icon: icon,
       iconColor: iconColor,
       limit: limit,
+      index: index == -1 ? _generateCategoryIndex() : index
     );
     
     appState!.addCategory(category.id, category);
     _updateCategoryStore();
+  }
+
+  int _generateCategoryIndex() {
+    return 0;
   }
 
   void updateCategoryLimit(String categoryId, CategoryLimitType limitType, double limit) {
@@ -188,21 +193,34 @@ class SharedService {
 
   void _updateCategoryStore() {
     String categoryString = jsonEncode(appState!.categories);
+    categoryString = _bindVersionInToData(categoryString);
     databaseService!.saveData('category', categoryString);
   }
 
   void _updateAccountStore() {
     String accountsString = jsonEncode(appState!.accounts);
+    accountsString = _bindVersionInToData(accountsString);
     databaseService!.saveData('account', accountsString);
   }
 
   void _updateTransactionStore() {
     String transactionString = jsonEncode(appState!.transactions);
+    transactionString = _bindVersionInToData(transactionString);
     databaseService!.saveData('transaction', transactionString);
   }
 
   void _updateAccountTransactionStore() {
     String accountTransactionString = jsonEncode(appState!.accountTrnsactions);
+    accountTransactionString = _bindVersionInToData(accountTransactionString);
     databaseService!.saveData('account-trnsaction', accountTransactionString);
+  }
+
+  String _bindVersionInToData(String data) {
+    final object = {
+      'version': appState!.userDataVersion,
+      'data': data
+    };
+
+    return jsonEncode(object);
   }
 }

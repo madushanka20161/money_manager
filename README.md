@@ -46,3 +46,26 @@ samples, guidance on mobile development, and a full API reference.
 * this only test in android
 * notificationService -> enableNotification
 * mainActivity.kt
+
+
+# Data arranged version
+## Category
+### no version (0)
+```
+  final String id;
+  final String name;
+  final TransactionType type;
+  final IconData icon;
+  final Color iconColor;
+  final CategoryLimitDTO limit;
+```
+### Version 01
+```
+  final String id;
+  final String name;
+  final TransactionType type;
+  final IconData icon;
+  final Color iconColor;
+  final CategoryLimitDTO limit;
+  final int index; // new variable (introduce for make order)
+```
