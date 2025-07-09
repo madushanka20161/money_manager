@@ -11,7 +11,7 @@ class CategoryDTO {
   final IconData icon;
   final Color iconColor;
   final CategoryLimitDTO limit;
-  final int index; // this is used for make orders
+  int index; // this is used for make orders
 
   CategoryDTO({
     required this.id,

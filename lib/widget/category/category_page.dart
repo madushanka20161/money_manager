@@ -93,26 +93,102 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   List<Widget> renderCategoryList(BuildContext context) {
-    double categoryButtonWidth = (MediaQuery.of(context).size.width - AppConfig.padding * 2 - 10*3) / 4;
+    double categoryButtonWidth =
+        (MediaQuery.of(context).size.width - AppConfig.padding * 2 - 10 * 3) /
+            4;
     double categoryButtonHeight = 80;
-    List<CategoryDTO> categoryList = getCategoryByType(categories, type);
+
+    List<CategoryDTO> categoryList =
+        getCategoryByTypeOrderByIndex(categories, type);
     List<Widget> widgetList = [];
-    
-    for (CategoryDTO category in categoryList) {
+
+    for (int index = 0; index < categoryList.length; index++) {
+      final category = categoryList[index];
+      final widget = CategoryWidget(
+        width: categoryButtonWidth,
+        height: categoryButtonHeight,
+        icon: category.icon,
+        text: category.name,
+        iconColor: category.iconColor,
+        iconColorOpacity: 0.8,
+        fontSize: AppConfig.fontSize,
+        isTooltip: false,
+      );
+
       widgetList.add(
-        ElevatedButton(
-          onPressed: () {},
-          style: AppConfig.elevatedButtonStyle,
-          child: CategoryWidget(
-            width: categoryButtonWidth,
-            height: categoryButtonHeight,
-            icon: category.icon, 
-            text: category.name,
-            iconColor: category.iconColor,
-            iconColorOpacity: 0.8,
-            fontSize: AppConfig.fontSize,
-            isTooltip: true,
-          )
+        DragTarget<int>(
+          onAcceptWithDetails: (DragTargetDetails<int> details) {
+            // details.data is from index
+            // index is to index
+            if (index < details.data) {
+              int firstIndex = categoryList[index].index;
+
+              for (int i = index; i < details.data; i++) {
+                categoryList[i].index = categoryList[i + 1].index;
+              }
+
+              categoryList[details.data].index = firstIndex;
+            } else {
+              int firstIndex = categoryList[index].index;
+
+              for (int i = index; i > details.data; i--) {
+                categoryList[i].index = categoryList[i - 1].index;
+              }
+
+              categoryList[details.data].index = firstIndex;
+            }
+
+            setState(() {});
+          },
+          onWillAcceptWithDetails: (DragTargetDetails<int> details) {
+            // TODO [Need to complete thid part]
+
+            // if (index < details.data) {
+            //   int firstIndex = categoryList[index].index;
+            //   for (int i = index; i < details.data; i++) {
+            //     categoryList[i].index = categoryList[i+1].index;
+            //   }
+            //   categoryList[details.data].index = firstIndex;
+            // } else {
+            //   int firstIndex = categoryList[index].index;
+            //   print('first index');
+            //   print(categoryList[index].name);
+            //   print(firstIndex);
+            //   // categoryList[details.data].index = categoryList[index].index;
+            //   // for (int i = details.data; i < index; i++) {
+            //   for (int i = index; i > details.data; i--) {
+            //     print('00--=======');
+            //     print(categoryList[i].name);
+            //     print(categoryList[i].index);
+            //     categoryList[i].index = categoryList[i-1].index;
+            //     print(categoryList[i].name);
+            //     print(categoryList[i].index);
+            //   }
+            //   print(categoryList[details.data].name);
+            //   print(categoryList[details.data].index);
+            //   categoryList[details.data].index = firstIndex;
+            //   print(categoryList[details.data].name);
+            //   print(categoryList[details.data].index);
+            // }
+            // // categoryList[1].index = 2;
+            // setState(() {});
+
+            return details.data != index;
+          },
+          builder: (context, candidateData, rejectedData) {
+            return LongPressDraggable<int>(
+              data: index,
+              feedback: Opacity(
+                opacity: 0.7,
+                child: widget,
+              ),
+              childWhenDragging: SizedBox(
+                width: categoryButtonWidth,
+                height: categoryButtonHeight,
+              ),
+              child: widget,
+            );
+          },
         ),
       );
     }
