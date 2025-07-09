@@ -67,7 +67,11 @@ class SharedService {
   }
 
   int _generateCategoryIndex() {
-    return 0;
+    int lastIndex = appState!.categories.entries
+        .map((entry) => entry.value.index)
+        .reduce((a, b) => a > b ? a : b);
+        
+    return lastIndex + 1;
   }
 
   void updateCategoryLimit(String categoryId, CategoryLimitType limitType, double limit) {
