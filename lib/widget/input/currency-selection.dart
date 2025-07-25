@@ -33,7 +33,10 @@ class _CreateCurrencySelection extends State<CurrencySelection> {
     }
   }
   
-  Widget _buildOption(BuildContext context, String currency) {
+  Widget _buildOption(BuildContext context, Map<String, String> currencyObj) {
+    String currency = currencyObj['code']!;
+    String countryName = currencyObj['country']!;
+
     return SimpleDialogOption(
       onPressed: () {
         setState(() {
@@ -46,11 +49,32 @@ class _CreateCurrencySelection extends State<CurrencySelection> {
 
         Navigator.pop(context);
       },
-      child: Padding(
+      child: Container(
+        color: _selectedCurrency == currency ? AppConfig.buttonSelectedColor : Colors.transparent,
         padding: const EdgeInsets.all(8.0),
-        child: Text(
-          currency,
-          style: TextStyle(backgroundColor: _selectedCurrency == currency ? Colors.red : Colors.white),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Text(
+                countryName,
+                style: AppConfig.fontStyle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Text(
+                currency,
+                style: AppConfig.fontStyle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.end,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -58,8 +82,25 @@ class _CreateCurrencySelection extends State<CurrencySelection> {
 
   Widget _showPopup(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        ...currencyList.map((String currency) => _buildOption(context, currency))
+        Text(
+          "Select a currency",
+          style: AppConfig.fontStyle,
+        ),
+        SizedBox(height: 12),
+
+        SizedBox(
+          height:  MediaQuery.of(context).size.height - 12,
+          child: SingleChildScrollView(
+            child: Column(
+              children: currencyList
+                  .map((Map<String, String> currencyObj) =>
+                      _buildOption(context, currencyObj))
+                  .toList(),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -75,7 +116,7 @@ class _CreateCurrencySelection extends State<CurrencySelection> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  PopupHelper.showPopup(context, [_showPopup(context)]);
+                  PopupHelper.showPopup(context, [_showPopup(context)], isFullWidth: true);
                 }, 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConfig.buttonSelectedColor,
