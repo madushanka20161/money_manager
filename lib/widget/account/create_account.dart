@@ -5,7 +5,7 @@ import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/widget/common/color_selection.dart';
-import 'package:money_manager_3/widget/input/currency-selection.dart';
+import 'package:money_manager_3/widget/input/currency_selection.dart';
 import 'package:money_manager_3/widget/input/text-input.dart';
 
 class CreateAccount extends StatefulWidget {

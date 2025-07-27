@@ -133,8 +133,8 @@ const Map<String, Color> colorMap = {
   'black': Colors.black,
 };
 
-const List<Map<String, String>> currencyList = [
-  {"country": "United States dollar", "code": "USD"},
+final List<Map<String, String>> currencyList = [
+  {"country": "United States dollar", "code": "USD", "displayLabel": "\$"},
   {"country": "Euro", "code": "EUR"},
   {"country": "Japanese yen", "code": "JPY"},
   {"country": "Pound sterling", "code": "GBP"},
@@ -145,7 +145,7 @@ const List<Map<String, String>> currencyList = [
   {"country": "Netherlands Antillean guilder", "code": "ANG"},
   {"country": "Angolan kwanza", "code": "AOA"},
   {"country": "Argentine peso", "code": "ARS"},
-  {"country": "Australian dollar", "code": "AUD"},
+  {"country": "Australian dollar", "code": "AUD", "displayLabel": "A\$"},
   {"country": "Aruban florin", "code": "AWG"},
   {"country": "Azerbaijani manat", "code": "AZN"},
   {"country": "Bosnia and Herzegovina convertible mark", "code": "BAM"},
@@ -211,7 +211,7 @@ const List<Map<String, String>> currencyList = [
   {"country": "Cambodian riel", "code": "KHR"},
   {"country": "Kazakhstani tenge", "code": "KZT"},
   {"country": "Lebanese pound", "code": "LBP"},
-  {"country": "Sri Lankan rupee", "code": "LKR"},
+  {"country": "Sri Lankan rupee", "code": "LKR", "displayLabel": "RS"},
   {"country": "Liberian dollar", "code": "LRD"},
   {"country": "Lesotho loti", "code": "LSL"},
   {"country": "Libyan dinar", "code": "LYD"},
@@ -302,4 +302,4 @@ const Map<String, double> currencyMap = {
 };
 
 // TODO: [need to get this from user]
-const defaultCurrency = 'RS';
+const defaultCurrency = 'USD';
