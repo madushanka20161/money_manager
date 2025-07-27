@@ -47,6 +47,16 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Money Mate'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.ads_click_sharp), // You can change this to any icon
+            onPressed: () {
+              myAd.showAd();
+              // Your logic here (e.g., show ad or navigate)
+              print('Ad icon tapped');
+            },
+          ),
+        ],
       ),
       drawer: Drawer(
         child: Stack(
@@ -227,9 +237,8 @@ class _HomePageState extends State<HomePage> {
         actions: [
           TextButton(
             onPressed: () {
-              myAd.showAd();
-              // Navigator.pop(context);
-              // showSecondConfirmationOnDelete(context);
+              Navigator.pop(context);
+              showSecondConfirmationOnDelete(context);
             },
             child: Text("Yes"),
           ),
