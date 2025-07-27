@@ -6,6 +6,9 @@
         <meta-data
             android:name="com.google.android.gms.client_id"
             android:value=" 938529681325-uh70urnuqahgpirpuvduh6ush55mh3oe.apps.googleusercontent.com" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4832836209041723~1271753405"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
