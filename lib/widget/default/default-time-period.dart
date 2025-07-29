@@ -52,18 +52,7 @@ class _DefaultTimePeriodState extends State<DefaultTimePeriod> {
             onChanged: (String value) {
               widget.onChanged(value);
             }),
-        rednerHorizontalLine(),
       ],
-    );
-  }
-
-  Widget rednerHorizontalLine() {
-    return Container(
-      margin: EdgeInsets.only(right: 10, left: 10),
-      child: Divider(
-        color: Colors.grey,
-        thickness: 1,
-      ),
     );
   }
 }

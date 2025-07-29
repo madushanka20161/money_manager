@@ -209,6 +209,11 @@ class SharedService {
     _updateDefaultStore();
   }
 
+  void updateDefaultDecimalPlaces(String decimalPlaces) {
+    UserStateService.instance.setDefaultDecimalPlaces(decimalPlaces);
+    _updateDefaultStore();
+  }
+
   void _updateCategoryStore() {
     String categoryString = jsonEncode(appState!.categories);
     categoryString = _bindVersionInToData(categoryString);

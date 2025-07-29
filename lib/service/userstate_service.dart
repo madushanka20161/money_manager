@@ -28,6 +28,10 @@ class UserStateService {
     _defaultTimePeriod = timePeriod;
   }
 
+  void setDefaultDecimalPlaces(String decimalPlaces) {
+    _defaultDecimalPlace = int.parse(decimalPlaces);
+  }
+
   String? get defaultTimePeriod => _defaultTimePeriod;
   String? get defaultCurrency => _defaultCurrency;
   String? get defaultNumberSeperationStyle => _defaultNumberSeperationStyle;

@@ -137,7 +137,7 @@ class AuthService {
     } else {
       defaultTimePeriod = TimePeriod.month.displayName;
       defaultCurrency = 'USD';
-      defaultDecimalPlace = '3';
+      defaultDecimalPlace = '2';
       defaultNumberSeperationStyle = NumberSelectionStyleType.comma.displayName;
     }
 

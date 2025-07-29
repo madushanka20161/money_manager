@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
+import 'package:money_manager_3/widget/default/default-decimal-places.dart';
 import 'package:money_manager_3/widget/default/default-time-period.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ class DefaultConfig extends StatefulWidget {
 
 class _DefaultConfigState extends State<DefaultConfig> {
   String? selectedTimePeriod;
+  String? selectedDecimalPlaces;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,11 @@ class _DefaultConfigState extends State<DefaultConfig> {
                 onChanged: (String value) {
                   selectedTimePeriod = value;
                 },
-              )
+              ),
+              rednerHorizontalLine(),
+              DefaultDecimalPlaces(onChanged: (String value) {
+                selectedDecimalPlaces = value;
+              })
             ],
           )),
       bottomNavigationBar: SafeArea(
@@ -63,7 +69,13 @@ class _DefaultConfigState extends State<DefaultConfig> {
                   Navigator.pop(context);
 
                   if (selectedTimePeriod != null) {
-                    SharedService.instance.updateDefaultTimePeriod(selectedTimePeriod!);
+                    SharedService.instance
+                        .updateDefaultTimePeriod(selectedTimePeriod!);
+                  }
+
+                  if (selectedDecimalPlaces != null) {
+                    SharedService.instance
+                        .updateDefaultDecimalPlaces(selectedDecimalPlaces!);
                   }
 
                   appState.setIsFirstLogin(false);
@@ -76,6 +88,16 @@ class _DefaultConfigState extends State<DefaultConfig> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget rednerHorizontalLine() {
+    return Container(
+      margin: EdgeInsets.only(right: 10, left: 10),
+      child: Divider(
+        color: Colors.grey,
+        thickness: 1,
       ),
     );
   }
