@@ -4,7 +4,7 @@ import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
-import 'package:money_manager_3/helper/index.dart';
+import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
 import 'package:money_manager_3/widget/transaction/transaction_list.dart';
@@ -242,7 +242,7 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
                               children: [
                                 Flexible(
                                   child: Text(
-                                    '$defaultCurrency: ${data['total']}',
+                                    '${UserStateService.instance.defaultCurrency!}: ${data['total']}',
                                     style: TextStyle(
                                         fontSize: AppConfig.fontSize,
                                         color: AppConfig.fontColor),

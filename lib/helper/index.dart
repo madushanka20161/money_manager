@@ -300,6 +300,3 @@ const Map<String, double> currencyMap = {
   'JPY': 2.0,
   'RS' : 290,
 };
-
-// TODO: [need to get this from user]
-const defaultCurrency = 'USD';

@@ -5,6 +5,7 @@ import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/popup-helper.dart';
 import 'package:money_manager_3/service/shared_service.dart';
+import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/widget/input/limit_input.dart';
 
 class CategoryLimit extends StatefulWidget {
@@ -65,7 +66,7 @@ class _CategoryLimitState extends State<CategoryLimit> {
                               ? '--'
                               : widget.category.limit.type ==
                                       CategoryLimitType.value
-                                  ? '$defaultCurrency : ${widget.category.limit.limit.toString()}'
+                                  ? '${UserStateService.instance.defaultCurrency!} : ${widget.category.limit.limit.toString()}'
                                   : '${widget.category.limit.limit.toString()} %',
                           style: AppConfig.fontStyle),
                     ),

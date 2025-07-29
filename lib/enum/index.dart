@@ -54,3 +54,22 @@ extension CategoryLimitTypeExtension on CategoryLimitType {
     }
   }
 }
+
+enum NumberSelectionStyleType {
+  none,
+  comma,
+  dot,
+}
+
+extension NumberSelectionStyleTypeExtension on NumberSelectionStyleType {
+  String get displayName {
+    switch (this) {
+      case NumberSelectionStyleType.none:
+        return 'none';
+      case NumberSelectionStyleType.comma:
+        return 'comma';
+      case NumberSelectionStyleType.dot:
+        return 'dot';
+    }
+  }
+}

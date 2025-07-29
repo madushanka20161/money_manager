@@ -2,6 +2,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
+import 'package:money_manager_3/dto/default_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/dto/user_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
@@ -86,6 +87,10 @@ class AuthService {
     }
 
     if (user != null) {
+      // TODO [need to send request and check first login or not]
+      // _appState.setIsFirstLogin(true);
+      // 
+
       UserDTO userDTO = UserDTO(
         id: user.id,
         email: user.email,
@@ -115,11 +120,39 @@ class AuthService {
   Future<void> loadStoredData() async {
     _appState.clearAll();
 
-    String defaultTimePeriod = await DatabaseService.instance.getData('defaultTimePeriod') ?? 'month';
+    String? defaultString = DatabaseService.instance.getData('default');
+    late String defaultTimePeriod;
+    late String defaultCurrency;
+    late String defaultDecimalPlace;
+    late String defaultNumberSeperationStyle;
+
+    if (defaultString != null) {
+      Map<String, dynamic> defaultObj = jsonDecode(defaultString);
+      defaultObj = _unBindVersion(defaultObj);
+
+      defaultTimePeriod = defaultObj['defaultTimePeriod'];
+      defaultCurrency = defaultObj['defaultCurrency'];
+      defaultDecimalPlace = defaultObj['defaultDecimalPlace'].toString();
+      defaultNumberSeperationStyle = defaultObj['defaultNumberSeperationStyle'];
+    } else {
+      defaultTimePeriod = TimePeriod.month.displayName;
+      defaultCurrency = 'USD';
+      defaultDecimalPlace = '3';
+      defaultNumberSeperationStyle = NumberSelectionStyleType.comma.displayName;
+    }
+
+    DefaultDto defaultDto = DefaultDto(
+      defaultTimePeriod: defaultTimePeriod, 
+      defaultCurrency: defaultCurrency, 
+      defaultDecimalPlace: int.parse(defaultDecimalPlace), 
+      defaultNumberSeperationStyle: defaultNumberSeperationStyle
+    );
+
     List<DateTime> dateRange = getDateRange(defaultTimePeriod, null);
-    UserStateService.instance.init(defaultTimePeriod);
+    UserStateService.instance.init(defaultDto);
     _userState.setDefaultTimePeriod(defaultTimePeriod);
     _appState.setDateRange(dateRange[0], dateRange[1]);
+    SharedService.instance.updateDefaultConfig();
     // TODO: Need to send api request
 
     // String? categoriesString = null;

@@ -1,3 +1,5 @@
+import 'package:money_manager_3/dto/default_dto.dart';
+
 class UserStateService {
   // Private constructor
   UserStateService._privateConstructor();
@@ -6,10 +8,30 @@ class UserStateService {
   static final UserStateService instance = UserStateService._privateConstructor();
 
   String? _defaultTimePeriod;
+  int? _defaultDecimalPlace;
+  String? _defaultCurrency;
+  String? _defaultNumberSeperationStyle;
 
-  Future<void> init(String timePeriod) async {
-    _defaultTimePeriod = timePeriod;
+
+  void init(DefaultDto defaultDto) {
+    _defaultTimePeriod = defaultDto.defaultTimePeriod;
+    _defaultDecimalPlace = defaultDto.defaultDecimalPlace;
+    _defaultCurrency = defaultDto.defaultCurrency;
+    _defaultNumberSeperationStyle = defaultDto.defaultNumberSeperationStyle;
+  }
+
+  void setDefaultCurrency(String currency) {
+    _defaultCurrency = currency;
   }
 
   String? get defaultTimePeriod => _defaultTimePeriod;
+  String? get defaultCurrency => _defaultCurrency;
+  String? get defaultNumberSeperationStyle => _defaultNumberSeperationStyle;
+  int? get defaultDecimalPlace => _defaultDecimalPlace;
+  DefaultDto get defaultDto => DefaultDto(
+    defaultTimePeriod: _defaultTimePeriod!, 
+    defaultCurrency: defaultCurrency!, 
+    defaultDecimalPlace: defaultDecimalPlace!, 
+    defaultNumberSeperationStyle: defaultNumberSeperationStyle!
+  );
 }

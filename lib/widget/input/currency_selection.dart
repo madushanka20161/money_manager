@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/index.dart';
+import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/widget/input/text-input.dart';
 
 class CurrencySelection extends StatefulWidget {
@@ -22,7 +23,7 @@ class CurrencySelection extends StatefulWidget {
 }
 
 class _CurrencySelection extends State<CurrencySelection> {
-  String _selectedCurrency = defaultCurrency;
+  String _selectedCurrency = UserStateService.instance.defaultCurrency!;
 
   @override
   void initState() {
@@ -93,19 +94,38 @@ class _CurrencySelection extends State<CurrencySelection> {
 
 class CurrencySelectionList extends StatefulWidget {
   final Function? onCurrencyChange;
+  final double? topPadding;
+  final bool? isNavigatorPopDisbale;
 
-  const CurrencySelectionList({super.key, this.onCurrencyChange});
+  const CurrencySelectionList({super.key, this.onCurrencyChange, this.topPadding, this.isNavigatorPopDisbale});
 
   @override
   _CurrencySelectionListState createState() => _CurrencySelectionListState();
 }
 
 class _CurrencySelectionListState extends State<CurrencySelectionList> {
-  String _selectedCurrency = defaultCurrency;
+  late double topPadding;
+  bool isNavigatorPopDisbale = false;
+  String _selectedCurrency = UserStateService.instance.defaultCurrency!;
   final TextEditingController _searchCurrencyController =
       TextEditingController();
   final double currencySearchBoxHeight = 86;
   List<Map<String, String>> displayCurrencyList = currencyList;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.isNavigatorPopDisbale != null) {
+      isNavigatorPopDisbale = true;
+    }
+
+    if (widget.topPadding == null) {
+      topPadding = 40;
+    } else {
+      topPadding = widget.topPadding!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +137,7 @@ class _CurrencySelectionListState extends State<CurrencySelectionList> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 40),
+                  SizedBox(height: topPadding),
                   renderSearchBox(),
                   Expanded(
                     child: SingleChildScrollView(
@@ -141,6 +161,9 @@ class _CurrencySelectionListState extends State<CurrencySelectionList> {
         padding: EdgeInsets.only(
             left: AppConfig.padding2XLarge, right: AppConfig.padding2XLarge),
         child: TextInput(
+          validator: (value){
+            return null;
+          },
             inputController: _searchCurrencyController,
             label: 'Search Currency',
             onChange: (value) {
@@ -156,6 +179,7 @@ class _CurrencySelectionListState extends State<CurrencySelectionList> {
                 displayCurrencyList = searchResult;
               });
             }),
+            
       ),
     );
   }
@@ -175,7 +199,9 @@ class _CurrencySelectionListState extends State<CurrencySelectionList> {
           widget.onCurrencyChange?.call(currency);
         }
 
-        Navigator.pop(context);
+        if (!isNavigatorPopDisbale) {
+          Navigator.pop(context);
+        }
       },
       child: Container(
         decoration: BoxDecoration(

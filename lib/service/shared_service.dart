@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
@@ -7,6 +6,7 @@ import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/service/database_service.dart';
+import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:uuid/uuid.dart';
 
@@ -195,6 +195,15 @@ class SharedService {
     }
   }
 
+  void updateDefaultConfig() {
+    _updateDefaultStore();
+  }
+
+  void updateDefaultCurrency(String currency) {
+    UserStateService.instance.setDefaultCurrency(currency);
+    _updateDefaultStore();
+  }
+
   void _updateCategoryStore() {
     String categoryString = jsonEncode(appState!.categories);
     categoryString = _bindVersionInToData(categoryString);
@@ -217,6 +226,12 @@ class SharedService {
     String accountTransactionString = jsonEncode(appState!.accountTrnsactions);
     accountTransactionString = _bindVersionInToData(accountTransactionString);
     databaseService!.saveData('account-trnsaction', accountTransactionString);
+  }
+
+  void _updateDefaultStore() {
+    String defaultString = jsonEncode(UserStateService.instance.defaultDto);
+    defaultString = _bindVersionInToData(defaultString);
+    databaseService!.saveData('default', defaultString);
   }
 
   String _bindVersionInToData(String data) {

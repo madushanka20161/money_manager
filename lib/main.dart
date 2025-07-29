@@ -8,6 +8,7 @@ import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/sign_up.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
+import 'package:money_manager_3/widget/default/default-currency.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -95,15 +96,18 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     final isLoading = context.watch<AppState>().isLoading;
     final isSignIn = context.watch<AppState>().isSignIn;
+    final isFirstLogin = context.watch<AppState>().isFirstLogin;
     
     return isLoading
-      ? Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      )
-      : isSignIn
-        ? HomePage()
-        : SignUpPage();
+        ? Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        : isSignIn
+            ? isFirstLogin
+                ? DefaultCurrency()
+                : HomePage()
+            : SignUpPage();
   }
 }

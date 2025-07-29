@@ -154,7 +154,7 @@ class _HomeSummaryState extends State<HomeSummary> {
             ),
             Row(
               children: [
-                Text('$defaultCurrency ${totalBalance.toStringAsFixed(2)}',
+                Text('${UserStateService.instance.defaultCurrency!} ${totalBalance.toStringAsFixed(2)}',
                   style: TextStyle(fontSize: AppConfig.headerFontSize, fontWeight: FontWeight.bold, color: AppConfig.fontColor),
                 ),
               ],
@@ -166,14 +166,14 @@ class _HomeSummaryState extends State<HomeSummary> {
                   children: [
                     Icon(Icons.arrow_upward, color: Colors.green, size: AppConfig.iconSize,),
                     SizedBox(width: 10,),
-                    Text('$defaultCurrency. $totalIncome', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
+                    Text('${UserStateService.instance.defaultCurrency!}. $totalIncome', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
                   ],
                 ),
                 Row(
                   children: [
                     Icon(Icons.arrow_downward, color: Colors.red, size: AppConfig.iconSize,),
                     SizedBox(width: 10,),
-                    Text('$defaultCurrency. $totalExpenses', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
+                    Text('${UserStateService.instance.defaultCurrency!}. $totalExpenses', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
                   ],
                 ),
               ],
