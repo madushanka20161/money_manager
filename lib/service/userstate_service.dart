@@ -24,6 +24,10 @@ class UserStateService {
     _defaultCurrency = currency;
   }
 
+  void setDefaultTimePeriod(String timePeriod) {
+    _defaultTimePeriod = timePeriod;
+  }
+
   String? get defaultTimePeriod => _defaultTimePeriod;
   String? get defaultCurrency => _defaultCurrency;
   String? get defaultNumberSeperationStyle => _defaultNumberSeperationStyle;

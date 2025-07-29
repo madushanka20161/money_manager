@@ -204,6 +204,11 @@ class SharedService {
     _updateDefaultStore();
   }
 
+  void updateDefaultTimePeriod(String timePeriod) {
+    UserStateService.instance.setDefaultTimePeriod(timePeriod);
+    _updateDefaultStore();
+  }
+
   void _updateCategoryStore() {
     String categoryString = jsonEncode(appState!.categories);
     categoryString = _bindVersionInToData(categoryString);

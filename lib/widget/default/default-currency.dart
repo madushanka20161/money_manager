@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
+import 'package:money_manager_3/widget/default/default-config.dart';
 import 'package:money_manager_3/widget/input/currency_selection.dart';
 import 'package:provider/provider.dart';
 
@@ -61,12 +62,12 @@ class _DefaultCurrencyState extends State<DefaultCurrency> {
               ElevatedButton(
                 style: AppConfig.elevatedButtonStyle,
                 onPressed: () {
-                  appState.setIsFirstLogin(false);
-
                   if (selectedCurrency != null) {
                     SharedService.instance
                         .updateDefaultCurrency(selectedCurrency!);
                   }
+
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => DefaultConfig()));
                 },
                 child: Text(
                   'Next',
