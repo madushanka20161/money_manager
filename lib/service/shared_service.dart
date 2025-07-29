@@ -214,6 +214,11 @@ class SharedService {
     _updateDefaultStore();
   }
 
+  void updateDefaultNumberFormatStyle(String numberFormat) {
+    UserStateService.instance.setDefaultNumberFormatStyle(numberFormat);
+    _updateDefaultStore();
+  }
+
   void _updateCategoryStore() {
     String categoryString = jsonEncode(appState!.categories);
     categoryString = _bindVersionInToData(categoryString);

@@ -32,6 +32,10 @@ class UserStateService {
     _defaultDecimalPlace = int.parse(decimalPlaces);
   }
 
+  void setDefaultNumberFormatStyle(String numberFormat) {
+    _defaultNumberSeperationStyle = numberFormat;
+  }
+
   String? get defaultTimePeriod => _defaultTimePeriod;
   String? get defaultCurrency => _defaultCurrency;
   String? get defaultNumberSeperationStyle => _defaultNumberSeperationStyle;

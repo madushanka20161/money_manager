@@ -138,7 +138,7 @@ class AuthService {
       defaultTimePeriod = TimePeriod.month.displayName;
       defaultCurrency = 'USD';
       defaultDecimalPlace = '2';
-      defaultNumberSeperationStyle = NumberSelectionStyleType.comma.displayName;
+      defaultNumberSeperationStyle = NumberSelectionStyleType.us.toString();
     }
 
     DefaultDto defaultDto = DefaultDto(

@@ -56,20 +56,20 @@ extension CategoryLimitTypeExtension on CategoryLimitType {
 }
 
 enum NumberSelectionStyleType {
-  none,
-  comma,
-  dot,
+  plane,
+  us,
+  eu,
 }
 
 extension NumberSelectionStyleTypeExtension on NumberSelectionStyleType {
   String get displayName {
     switch (this) {
-      case NumberSelectionStyleType.none:
-        return 'none';
-      case NumberSelectionStyleType.comma:
-        return 'comma';
-      case NumberSelectionStyleType.dot:
-        return 'dot';
+      case NumberSelectionStyleType.plane:
+        return '1000 (Plain)';
+      case NumberSelectionStyleType.us:
+        return '1,000.00 (US Style)';
+      case NumberSelectionStyleType.eu:
+        return '1.000.00 (EU Style)';
     }
   }
 }
