@@ -33,6 +33,7 @@ class _TransactionListState extends State<TransactionList> {
     // final Map<String, AccountDto> accounts = context.watch<AppState>().accounts;
     List<List<TransactionDto>> filterTrnsactions = filterTrnsaction(context.watch<AppState>(), widget.category);
     transactions = widget.trnsactionType == TransactionType.income ? filterTrnsactions[0] : filterTrnsactions[1];
+    transactions = transactions.reversed.toList();
 
     return Scaffold(
       appBar: AppBar(

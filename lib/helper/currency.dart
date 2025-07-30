@@ -1,4 +1,6 @@
 import 'package:money_manager_3/exception/general-exception.dart';
+import 'package:money_manager_3/service/shared_service.dart';
+import 'package:money_manager_3/service/userstate_service.dart';
 
 double convertCurrency(String fromCurrency, String toCurrency, double amount) {
   String from = fromCurrency.toUpperCase();
@@ -17,6 +19,14 @@ double convertCurrency(String fromCurrency, String toCurrency, double amount) {
   }
 
   return (currencyRatesMap[to]! / currencyRatesMap[from]!) * amount;
+}
+
+String getDisplayCurrency(String id) {
+  if (id.isEmpty) {
+    return UserStateService.instance.defaultCurrency!;
+  } else {
+    return SharedService.instance.getAccountFromId(id).currency;
+  }
 }
 
 // thisd map containg values relative to USD

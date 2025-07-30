@@ -5,8 +5,7 @@ import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/currency.dart';
 import 'package:money_manager_3/helper/index.dart';
-import 'package:money_manager_3/helper/number-format.dart' as numberFormat;
-import 'package:money_manager_3/service/shared_service.dart';
+import 'package:money_manager_3/helper/number-format.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
@@ -43,11 +42,7 @@ class _HomeSummaryState extends State<HomeSummary> {
   }
 
   void _onAccountChange(String id) {
-    if (id.isEmpty) {
-      displayCurrency = UserStateService.instance.defaultCurrency!;
-    } else {
-      displayCurrency = SharedService.instance.getAccountFromId(id).currency;
-    }
+    displayCurrency = getDisplayCurrency(id);
     
     setState(() {
       appState.setSelectedAccountId(id.toString());
@@ -177,7 +172,7 @@ class _HomeSummaryState extends State<HomeSummary> {
             ),
             Row(
               children: [
-                Text('$displayCurrency ${numberFormat.formatNumber(totalBalance)}',
+                Text('$displayCurrency ${formatNumber(totalBalance)}',
                   style: TextStyle(fontSize: AppConfig.headerFontSize, fontWeight: FontWeight.bold, color: AppConfig.fontColor),
                 ),
               ],
@@ -189,14 +184,14 @@ class _HomeSummaryState extends State<HomeSummary> {
                   children: [
                     Icon(Icons.arrow_upward, color: Colors.green, size: AppConfig.iconSize,),
                     SizedBox(width: 10,),
-                    Text('$displayCurrency ${numberFormat.formatNumber(totalIncome)}', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
+                    Text('$displayCurrency ${formatNumber(totalIncome)}', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
                   ],
                 ),
                 Row(
                   children: [
                     Icon(Icons.arrow_downward, color: Colors.red, size: AppConfig.iconSize,),
                     SizedBox(width: 10,),
-                    Text('$displayCurrency ${numberFormat.formatNumber(totalExpenses)}', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
+                    Text('$displayCurrency ${formatNumber(totalExpenses)}', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
                   ],
                 ),
               ],

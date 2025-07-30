@@ -4,6 +4,8 @@ import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
+import 'package:money_manager_3/helper/currency.dart';
+import 'package:money_manager_3/helper/number-format.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
@@ -30,6 +32,7 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
   TransactionType selectedTab = TransactionType.expenses;
   Function? setSelectedTransactionType;
   String timePeriod = '';
+  String displayCurrency = UserStateService.instance.defaultCurrency!;
 
   @override
   void initState() {
@@ -49,15 +52,17 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
     total = 0;
 
     for (var transaction in collection) {
-      total = total + transaction.amount;
+      // convert amount to display currency
+      double convertedAmount = convertCurrency(transaction.account.currency, displayCurrency, transaction.amount);
+      total = total + convertedAmount;
 
       if (transactionByCategory[transaction.category.id] == null) {
         transactionByCategory[transaction.category.id] = {
-          'total': transaction.amount,
+          'total': convertedAmount,
           'transaction': [transaction]
         };
       } else {
-        transactionByCategory[transaction.category.id]['total'] = transactionByCategory[transaction.category.id]['total'] + transaction.amount;
+        transactionByCategory[transaction.category.id]['total'] = transactionByCategory[transaction.category.id]['total'] + convertedAmount;
         transactionByCategory[transaction.category.id]['transaction'].add(transaction);
       }
     }
@@ -87,8 +92,10 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
     generateTransactionByCategory();
     final accounts = context.watch<AppState>().accounts;
     final category = context.watch<AppState>().categories;
+    final selectedAccountId = context.watch<AppState>().selectedAccountId;
     setSelectedTransactionType = context.watch<AppState>().setSelectedTransactionType;
     timePeriod = context.watch<UserState>().defaultTimePeriod!;
+    displayCurrency = getDisplayCurrency(selectedAccountId);
 
     return Column(
       children: [
@@ -199,12 +206,12 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.only(left: AppConfig.padding, right: AppConfig.padding),
                 child: Row(
                   children: [
                     Container(
-                      width: 45, // ✅ Background circle size
-                      height: 45,
+                      width: 35, // ✅ Background circle size
+                      height: 35,
                       decoration: BoxDecoration(
                         color: categories[keyList[index]]!
                             .iconColor
@@ -213,7 +220,7 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
                       ),
                       child: Center(
                         child: Icon(categories[keyList[index]]!.icon,
-                            size: 30, color: Colors.white),
+                            size: 20, color: Colors.white),
                       ),
                     ),
                     Flexible(
@@ -239,10 +246,11 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
                             width: MediaQuery.of(context).size.width / 3,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Flexible(
                                   child: Text(
-                                    '${UserStateService.instance.defaultCurrency!}: ${data['total']}',
+                                    '$displayCurrency: ${formatNumber(data['total'])}',
                                     style: TextStyle(
                                         fontSize: AppConfig.fontSize,
                                         color: AppConfig.fontColor),

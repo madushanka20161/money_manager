@@ -42,12 +42,6 @@ String capitalizeFirstLetter(String input) {
   return input[0].toUpperCase() + input.substring(1);
 }
 
-String formatNumber(double value) {
-  // return value.toStringAsFixed(AppConfig.decimalPlace);
-  // TODO [need to remove this function]
-  return '---------------';
-}
-
 String formatDate(DateTime value) {
   return DateFormat('yyyy-MM-dd').format(value);
 }
@@ -110,10 +104,23 @@ const defaultCategories = [
 
 const Map<String, IconData> accountIconMap = {
   'account_balance': Icons.account_balance,
-  'account_balance_outlined': Icons.account_balance_outlined,
-  'account_balance_rounded': Icons.account_balance_rounded,
-  'account_balance_sharp': Icons.account_balance_sharp,
+  // 'account_balance_outlined': Icons.account_balance_outlined,
+  // 'account_balance_rounded': Icons.account_balance_rounded,
+  // 'account_balance_sharp': Icons.account_balance_sharp,
   'account_balance_wallet_rounded': Icons.account_balance_wallet_rounded,
+  // 'account_balance_wallet': Icons.account_balance_wallet,
+  'attach_money': Icons.attach_money,
+  'money': Icons.money,
+  'credit_card': Icons.credit_card,
+  // 'trending_up': Icons.trending_up,
+  'show_chart': Icons.show_chart,
+  'money_off': Icons.money_off,
+  'savings': Icons.savings,
+  'business_center': Icons.business_center,
+  'currency_bitcoin': Icons.currency_bitcoin,
+  'payment': Icons.payment,
+  'account_circle': Icons.account_circle,
+  // 'folder': Icons.folder,
 };
 
 const Map<String, Color> colorMap = {

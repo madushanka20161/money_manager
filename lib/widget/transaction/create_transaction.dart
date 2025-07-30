@@ -5,8 +5,10 @@ import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
+import 'package:money_manager_3/helper/currency.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/shared_service.dart';
+import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/widget/account/accoun_selection_dropdown.dart';
 import 'package:money_manager_3/widget/category/category_widget.dart';
@@ -19,6 +21,7 @@ class CreateTransaction extends StatefulWidget {
   final TransactionDto? transaction;
   final bool? isTrnsactionEdit;
   final bool? isTrnsactionCopy;
+  final AccountDto? account;
 
   CreateTransaction({
     this.transactionType,
@@ -26,6 +29,7 @@ class CreateTransaction extends StatefulWidget {
     this.transaction,
     this.isTrnsactionEdit,
     this.isTrnsactionCopy,
+    this.account,
   });
 
   @override
@@ -35,7 +39,7 @@ class CreateTransaction extends StatefulWidget {
 class _CreateTransactionState extends State<CreateTransaction> {
   DateTime today = DateTime.now();
   Map<String, CategoryDTO> categories = {};
-  
+  String displayCurrency = UserStateService.instance.defaultCurrency!;
   TransactionType? _selectedtransactionType;
   final _formKey = GlobalKey<FormState>();
   String? _selectedAccount;
@@ -86,8 +90,17 @@ class _CreateTransactionState extends State<CreateTransaction> {
   @override
   Widget build(BuildContext context) {
     final accounts = context.watch<AppState>().accounts;
+    final selectedAccount = context.watch<AppState>().selectedAccountId;
     categories = context.watch<AppState>().categories;
     final List<AccountDto> accountList = accounts.values.toList();
+    
+    if (_selectedAccount == null && selectedAccount.isNotEmpty) {
+      _selectedAccount = selectedAccount;
+    }
+
+    if (_selectedAccount != null) {
+      displayCurrency = getDisplayCurrency(_selectedAccount!);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -199,6 +212,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                 style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),
                 decoration: InputDecoration(
                   labelText: 'Amount',
+                  prefix: Text('$displayCurrency  ', style: AppConfig.fontStyle,),
                   labelStyle: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   border: OutlineInputBorder(

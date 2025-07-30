@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/custom_painter.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/helper/config.dart';
+import 'package:money_manager_3/helper/number-format.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/widget/account/create_account_transaction.dart';
