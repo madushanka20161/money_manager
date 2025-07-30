@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
+import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
+import 'package:money_manager_3/helper/currency.dart';
 import 'package:money_manager_3/helper/index.dart';
+import 'package:money_manager_3/helper/number-format.dart' as numberFormat;
+import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
@@ -26,8 +30,11 @@ class HomeSummary extends StatefulWidget {
 class _HomeSummaryState extends State<HomeSummary> {
   AppState appState = AppState();
   String? defaultTimePeriod = UserStateService.instance.defaultTimePeriod;
-  List<String> periods = ['day', 'week', 'month', 'year', 'custom'];
+  List<String> periods = TimePeriod.values.map((e) => e.displayName).cast<String>().toList();
   List<bool> isSelectedToggleButton = [false, false, false, false, false];
+  /* if all account select display currency = default currency, 
+  if account select display currency is the currency of that account */
+  String displayCurrency = UserStateService.instance.defaultCurrency!;
   
   @override
   void initState() {
@@ -36,6 +43,12 @@ class _HomeSummaryState extends State<HomeSummary> {
   }
 
   void _onAccountChange(String id) {
+    if (id.isEmpty) {
+      displayCurrency = UserStateService.instance.defaultCurrency!;
+    } else {
+      displayCurrency = SharedService.instance.getAccountFromId(id).currency;
+    }
+    
     setState(() {
       appState.setSelectedAccountId(id.toString());
     });
@@ -55,13 +68,23 @@ class _HomeSummaryState extends State<HomeSummary> {
     if (selectedAccountId == '') {
       totalBalance = accounts.values
         .where((account) => account.isAddToTotal == true)
-        .fold(0.0, (double sum, account) => sum + account.balance);
+        .fold(0.0, (double sum, account) {
+          return sum + convertCurrency(account.currency, displayCurrency, account.balance);
+        });
     } else {
       totalBalance = accounts[selectedAccountId]?.balance ?? 0.0;
     }
 
-    double totalIncome = widget.income.fold(0.0, (double sum, transaction) => sum + transaction.amount);
-    double totalExpenses = widget.expenses.fold(0.0, (double sum, transaction) => sum + transaction.amount);
+    double totalIncome = widget.income.fold(0.0, (double sum, transaction) {
+      return sum +
+          convertCurrency(transaction.account.currency, displayCurrency,
+              transaction.amount);
+    });
+    double totalExpenses = widget.expenses.fold(0.0, (double sum, transaction) {
+      return sum +
+          convertCurrency(transaction.account.currency, displayCurrency,
+              transaction.amount);
+    });
 
     Future<void> showDateTimePicker() async {
       late DateTime startDate;
@@ -154,7 +177,7 @@ class _HomeSummaryState extends State<HomeSummary> {
             ),
             Row(
               children: [
-                Text('${UserStateService.instance.defaultCurrency!} ${totalBalance.toStringAsFixed(2)}',
+                Text('$displayCurrency ${numberFormat.formatNumber(totalBalance)}',
                   style: TextStyle(fontSize: AppConfig.headerFontSize, fontWeight: FontWeight.bold, color: AppConfig.fontColor),
                 ),
               ],
@@ -166,14 +189,14 @@ class _HomeSummaryState extends State<HomeSummary> {
                   children: [
                     Icon(Icons.arrow_upward, color: Colors.green, size: AppConfig.iconSize,),
                     SizedBox(width: 10,),
-                    Text('${UserStateService.instance.defaultCurrency!}. $totalIncome', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
+                    Text('$displayCurrency ${numberFormat.formatNumber(totalIncome)}', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
                   ],
                 ),
                 Row(
                   children: [
                     Icon(Icons.arrow_downward, color: Colors.red, size: AppConfig.iconSize,),
                     SizedBox(width: 10,),
-                    Text('${UserStateService.instance.defaultCurrency!}. $totalExpenses', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
+                    Text('$displayCurrency ${numberFormat.formatNumber(totalExpenses)}', style: TextStyle(color: AppConfig.fontColor, fontSize: AppConfig.fontSize),),
                   ],
                 ),
               ],

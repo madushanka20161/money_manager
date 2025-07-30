@@ -5,6 +5,7 @@ import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
+import 'package:money_manager_3/exception/general-exception.dart';
 import 'package:money_manager_3/service/database_service.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
@@ -256,5 +257,15 @@ class SharedService {
     };
 
     return jsonEncode(object);
+  }
+
+  AccountDto getAccountFromId(String? id) {
+    if (id?.isEmpty ?? false) {
+      throw GeneralException("Account id cannot be null or empty -> id: $id", 'Shared service -> getAccountFromId');
+    } else if (appState!.accounts[id] == null) {
+      throw GeneralException("No account for account id $id", 'Shared service -> getAccountFromId');
+    } else {
+      return appState!.accounts[id]!;
+    }
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
-import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/state/app_state.dart';
 
 List<DateTime> getDateRange(String period, AppState? appState) {
@@ -44,7 +43,9 @@ String capitalizeFirstLetter(String input) {
 }
 
 String formatNumber(double value) {
-  return value.toStringAsFixed(AppConfig.decimalPlace);
+  // return value.toStringAsFixed(AppConfig.decimalPlace);
+  // TODO [need to remove this function]
+  return '---------------';
 }
 
 String formatDate(DateTime value) {
@@ -133,11 +134,10 @@ const Map<String, Color> colorMap = {
   'black': Colors.black,
 };
 
+// TODO [ISSUE - 34]
 final List<Map<String, String>> currencyList = [
-  {"country": "United States dollar", "code": "USD", "displayLabel": "\$"},
+  {"country": "United States dollar", "code": "USD", "displayLabel": "\$"}, //aa
   {"country": "Euro", "code": "EUR"},
-  {"country": "Japanese yen", "code": "JPY"},
-  {"country": "Pound sterling", "code": "GBP"},
   {"country": "United Arab Emirates dirham", "code": "AED"},
   {"country": "Afghan afghani", "code": "AFN"},
   {"country": "Albanian lek", "code": "ALL"},
@@ -242,7 +242,7 @@ final List<Map<String, String>> currencyList = [
   {"country": "Philippine peso", "code": "PHP"},
   {"country": "Pakistani rupee", "code": "PKR"},
   {"country": "Polish złoty", "code": "PLN"},
-  {"country": "Transnistrian ruble", "code": "PRB"},
+  // {"country": "Transnistrian ruble", "code": "PRB"},
   {"country": "Paraguayan guaraní", "code": "PYG"},
   {"country": "Qatari riyal", "code": "QAR"},
   {"country": "Romanian leu", "code": "RON"},
@@ -254,10 +254,10 @@ final List<Map<String, String>> currencyList = [
   {"country": "Singapore dollar", "code": "SGD"},
   {"country": "Saint Helena pound", "code": "SHP"},
   {"country": "Sierra Leonean leone", "code": "SLL"},
-  {"country": "Somaliland shilling", "code": "SLS"},
+  // {"country": "Somaliland shilling", "code": "SLS"},
   {"country": "Somali shilling", "code": "SOS"},
   {"country": "Surinamese dollar", "code": "SRD"},
-  {"country": "South Sudanese pound", "code": "SSP"},
+  // {"country": "South Sudanese pound", "code": "SSP"},
   {"country": "São Tomé and Príncipe dobra", "code": "STN"},
   {"country": "Syrian pound", "code": "SYP"},
   {"country": "Swazi lilangeni", "code": "SZL"},
@@ -268,7 +268,7 @@ final List<Map<String, String>> currencyList = [
   {"country": "Tongan paʻanga", "code": "TOP"},
   {"country": "Turkish lira", "code": "TRY"},
   {"country": "Trinidad and Tobago dollar", "code": "TTD"},
-  {"country": "Tuvaluan dollar", "code": "TVD"},
+  // {"country": "Tuvaluan dollar", "code": "TVD"},
   {"country": "New Taiwan dollar", "code": "TWD"},
   {"country": "Tanzanian shilling", "code": "TZS"},
   {"country": "Ukrainian hryvnia", "code": "UAH"},
@@ -286,7 +286,7 @@ final List<Map<String, String>> currencyList = [
   {"country": "CFP franc", "code": "XPF"},
   {"country": "South African rand", "code": "ZAR"},
   {"country": "Zambian kwacha", "code": "ZMW"},
-  {"country": "Zimbabwean bonds", "code": "ZWB"},
+  // {"country": "Zimbabwean bonds", "code": "ZWB"},
 ];
 const Color defaultColur = Colors.blue;
 const IconData defaultAccountIcon = Icons.account_balance;

@@ -69,3 +69,18 @@ samples, guidance on mobile development, and a full API reference.
   final CategoryLimitDTO limit;
   final int index; // new variable (introduce for make order)
 ```
+
+
+
+https://github.com/madushanka2016/money_manager/milestones
+
+
+
+## Currrency Rates
+* from -> https://exchangerate.host/
+ 
+https://api.exchangerate.host/live
+    ? access_key = 9ed06bdf2605be87d7153d54bcee10ec
+    
+
+    * password musi123

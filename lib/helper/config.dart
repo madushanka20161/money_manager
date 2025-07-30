@@ -4,14 +4,13 @@ import 'package:money_manager_3/custom_painter.dart';
 class AppConfig {
   static Color appBackgroundColor = Color.fromARGB(255, 18, 73, 128);
   static Color appTitleColor = Color(0xFF242C3B);
-  static int decimalPlace = 2;
 
   static double headerFontSize = 30.0;
-  static double fontSize = 18.0;
+  static double fontSize = 17.0;
   static Color fontColor = Colors.white;
   static Color buttonSelectedColor = Color.fromARGB(144, 23, 96, 156);
   // icon
-  static double iconSize = 30;
+  static double iconSize = 25;
   static double iconSizeSmall = iconSize * 0.8;
   static Color iconColor = fontColor;
   // error

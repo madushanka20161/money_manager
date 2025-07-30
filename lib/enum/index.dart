@@ -69,7 +69,7 @@ extension NumberSelectionStyleTypeExtension on NumberSelectionStyleType {
       case NumberSelectionStyleType.us:
         return '1,000.00 (US Style)';
       case NumberSelectionStyleType.eu:
-        return '1.000.00 (EU Style)';
+        return '1.000,00 (EU Style)';
     }
   }
 }
