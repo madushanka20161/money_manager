@@ -12,10 +12,10 @@ import 'package:money_manager_3/service/database_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
 import 'package:money_manager_3/widget/account/account_page.dart';
-import 'package:money_manager_3/widget/category/category_limit_page.dart';
 import 'package:money_manager_3/widget/category/category_page.dart';
 import 'package:money_manager_3/widget/home/home_details.dart';
 import 'package:money_manager_3/widget/home/home_summary.dart';
+import 'package:money_manager_3/widget/setting/setting-page.dart';
 import 'package:money_manager_3/widget/transaction/create_transaction.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +29,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<List<TransactionDto>> filteredTransactions = filterTrnsaction(context.watch<AppState>(), null);
+    List<List<TransactionDto>> filteredTransactions =
+        filterTrnsaction(context.watch<AppState>(), null);
     UserDTO user = context.watch<UserState>().user!;
     List<TransactionDto> income = filteredTransactions[0];
     List<TransactionDto> expenses = filteredTransactions[1];
@@ -44,7 +45,8 @@ class _HomePageState extends State<HomePage> {
         child: Stack(
           children: [
             CustomPaint(
-              size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
+              size: Size(MediaQuery.of(context).size.width,
+                  MediaQuery.of(context).size.height),
               painter: DiagonalPainter(),
             ),
             Column(
@@ -67,40 +69,69 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.zero,
                     children: [
                       ListTile(
-                        leading: Icon(Icons.home, color: AppConfig.iconColor, size: AppConfig.iconSizeSmall),
+                        leading: Icon(Icons.home,
+                            color: AppConfig.iconColor,
+                            size: AppConfig.iconSizeSmall),
                         title: Text('Home', style: AppConfig.fontStyle),
                         onTap: () {
                           Navigator.pop(context);
                         },
+                        // dense: true, // reduces height vertically
+                        // contentPadding: EdgeInsets.zero, // removes left/right padding
+                        visualDensity:
+                            VisualDensity(horizontal: 0, vertical: -4),
                       ),
                       ListTile(
-                        leading: Icon(Icons.account_balance, color: AppConfig.iconColor, size: AppConfig.iconSizeSmall),
+                        leading: Icon(Icons.account_balance,
+                            color: AppConfig.iconColor,
+                            size: AppConfig.iconSizeSmall),
                         title: Text('Accounts', style: AppConfig.fontStyle),
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => AccountPage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AccountPage()));
                         },
+                        visualDensity:
+                            VisualDensity(horizontal: 0, vertical: -4),
                       ),
                       ListTile(
-                        leading: Icon(Icons.category, color: AppConfig.iconColor, size: AppConfig.iconSizeSmall),
+                        leading: Icon(Icons.category,
+                            color: AppConfig.iconColor,
+                            size: AppConfig.iconSizeSmall),
                         title: Text('Category', style: AppConfig.fontStyle),
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryPage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CategoryPage()));
                         },
+                        visualDensity:
+                            VisualDensity(horizontal: 0, vertical: -4),
                       ),
-                      ListTile(
-                        leading: Icon(Icons.format_list_numbered_outlined, color: AppConfig.iconColor, size: AppConfig.iconSizeSmall),
-                        title: Text('Category Limit', style: AppConfig.fontStyle),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryLimitPage()));
-                        },
-                      ),
+                      // TODO [Need to enable thid]
                       // ListTile(
-                      //   leading: Icon(Icons.settings, color: AppConfig.iconColor, size: AppConfig.iconSizeSmall),
-                      //   title: Text('Settings', style: AppConfig.fontStyle),
+                      //   leading: Icon(Icons.format_list_numbered_outlined, color: AppConfig.iconColor, size: AppConfig.iconSizeSmall),
+                      //   title: Text('Category Limit', style: AppConfig.fontStyle),
                       //   onTap: () {
-                      //     Navigator.pop(context);
+                      //     Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryLimitPage()));
                       //   },
+                      //   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                       // ),
+                      ListTile(
+                        leading: Icon(Icons.settings,
+                            color: AppConfig.iconColor,
+                            size: AppConfig.iconSizeSmall),
+                        title: Text('Settings', style: AppConfig.fontStyle),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SettingPage()));
+                        },
+                        visualDensity:
+                            VisualDensity(horizontal: 0, vertical: -4),
+                      ),
                     ],
                   ),
                 ),
@@ -108,27 +139,39 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Divider(),
                     ListTile(
-                      leading: Icon(Icons.update, color: AppConfig.iconColor, size: AppConfig.iconSizeSmall),
+                      leading: Icon(Icons.update,
+                          color: AppConfig.iconColor,
+                          size: AppConfig.iconSizeSmall),
                       title: Text('Update', style: AppConfig.fontStyle),
                       onTap: () {
                         Navigator.pop(context);
                       },
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                     ),
                     ListTile(
-                      leading: Icon(Icons.logout, color: Colors.red, size: AppConfig.iconSizeSmall),
-                      title: Text('Logout', style: TextStyle(color: Colors.red, fontSize: AppConfig.fontSize)),
+                      leading: Icon(Icons.logout,
+                          color: Colors.red, size: AppConfig.iconSizeSmall),
+                      title: Text('Logout',
+                          style: TextStyle(
+                              color: Colors.red, fontSize: AppConfig.fontSize)),
                       onTap: () {
                         AuthService.instance.signOut();
                         // TODO [handle logout]
                         // Handle logout
                       },
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                     ),
                     ListTile(
-                      leading: Icon(Icons.delete, color: Colors.red, size: AppConfig.iconSizeSmall),
-                      title: Text('Delete Account', style: TextStyle(color: Colors.red, fontSize: AppConfig.fontSize * 0.9)),
+                      leading: Icon(Icons.delete,
+                          color: Colors.red, size: AppConfig.iconSizeSmall),
+                      title: Text('Delete Account',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: AppConfig.fontSize * 0.9)),
                       onTap: () {
                         onDeleteClick(context);
                       },
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                     ),
                   ],
                 ),
@@ -140,7 +183,8 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           CustomPaint(
-            size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
+            size: Size(MediaQuery.of(context).size.width,
+                MediaQuery.of(context).size.height),
             painter: DiagonalPainter(),
           ),
           SingleChildScrollView(
@@ -152,7 +196,9 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   constraints: BoxConstraints(
                     minHeight: 60,
-                    maxHeight: max(MediaQuery.of(context).size.height - 50 - 360, 300), // (50 - height of add button, 360 - height of home)
+                    maxHeight: max(
+                        MediaQuery.of(context).size.height - 50 - 360,
+                        300), // (50 - height of add button, 360 - height of home)
                   ),
                   height: double.infinity,
                   color: Colors.transparent,
@@ -174,20 +220,25 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                      CreateTransaction(transactionType: selectedTab,),
+                    builder: (context) => CreateTransaction(
+                      transactionType: selectedTab,
+                    ),
                   ),
                 );
               },
               child: Container(
-                width: MediaQuery.of(context).size.width - 40, 
+                width: MediaQuery.of(context).size.width - 40,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   color: AppConfig.buttonSelectedColor,
                 ),
                 height: 50,
                 child: Center(
-                  child: Icon(Icons.add, size: AppConfig.iconSize, color: AppConfig.iconColor,),
+                  child: Icon(
+                    Icons.add,
+                    size: AppConfig.iconSize,
+                    color: AppConfig.iconColor,
+                  ),
                 ),
               ),
             ),

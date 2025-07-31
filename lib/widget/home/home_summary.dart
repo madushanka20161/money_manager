@@ -4,8 +4,8 @@ import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/currency.dart';
-import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/helper/number-format.dart';
+import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
@@ -28,7 +28,9 @@ class HomeSummary extends StatefulWidget {
 
 class _HomeSummaryState extends State<HomeSummary> {
   AppState appState = AppState();
+  UserState userState = UserState();
   String? defaultTimePeriod = UserStateService.instance.defaultTimePeriod;
+  String? selectedTimePeriod;
   List<String> periods = TimePeriod.values.map((e) => e.displayName).cast<String>().toList();
   List<bool> isSelectedToggleButton = [false, false, false, false, false];
   /* if all account select display currency = default currency, 
@@ -38,23 +40,19 @@ class _HomeSummaryState extends State<HomeSummary> {
   @override
   void initState() {
     super.initState();
-    isSelectedToggleButton[periods.indexOf(defaultTimePeriod!)] = true;
-  }
-
-  void _onAccountChange(String id) {
-    displayCurrency = getDisplayCurrency(id);
-    
-    setState(() {
-      appState.setSelectedAccountId(id.toString());
-    });
+    setSelectedTimePeriodToggle();
   }
 
   @override
   Widget build(BuildContext context) {
     appState = context.watch<AppState>();
-    final userState = context.watch<UserState>();
-    final accounts = context.watch<AppState>().accounts;
-    final String selectedAccountId = context.watch<AppState>().selectedAccountId;
+    userState = context.watch<UserState>();
+    final accounts = appState.accounts;
+    final String selectedAccountId = appState.selectedAccountId;
+    defaultTimePeriod = userState.defaultTimePeriod;
+    selectedTimePeriod = userState.selectedTimePeriod;
+    setSelectedTimePeriodToggle();
+    setDisplayCurrency(selectedAccountId);
 
     final List<AccountDto> accountList = accounts.values.toList();
     accountList.insert(0, AccountDto(id: '0', name: 'All Accounts'));
@@ -126,25 +124,18 @@ class _HomeSummaryState extends State<HomeSummary> {
     }
 
     Future<void> onDataPeriodChanged(String period) async {
-      late DateTime startDate;
-      late DateTime endDate;
-
       switch (period) {
         case 'day':
         case 'week':
         case 'month':
         case 'year':
-          final dateRange = getDateRange(period, null);
-          startDate = dateRange[0];
-          endDate = dateRange[1];
-          appState.setDateRange(startDate, endDate);
           break;
         default:
           await showDateTimePicker();
           break;
       }
 
-      userState.setDefaultTimePeriod(period);
+      SharedService.instance.updateSetectedTimePeriod(period);
     }
 
     return Container(
@@ -233,5 +224,27 @@ class _HomeSummaryState extends State<HomeSummary> {
         ),
       ),
     );
+  }
+
+  void setSelectedTimePeriodToggle() {
+    String timePeriod = selectedTimePeriod ?? defaultTimePeriod!;
+
+    if (isSelectedToggleButton.contains(true)) {
+      isSelectedToggleButton[isSelectedToggleButton.indexOf(true)] = false;
+    }
+
+    isSelectedToggleButton[periods.indexOf(timePeriod)] = true;
+  }
+
+  void setDisplayCurrency(String id) {
+    displayCurrency = getDisplayCurrency(id);
+  }
+
+  void _onAccountChange(String id) {
+    setDisplayCurrency(id);
+    
+    setState(() {
+      appState.setSelectedAccountId(id.toString());
+    });
   }
 }

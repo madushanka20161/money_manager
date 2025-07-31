@@ -6,9 +6,11 @@ import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/exception/general-exception.dart';
+import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/database_service.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
+import 'package:money_manager_3/state/user_state.dart';
 import 'package:uuid/uuid.dart';
 
 class SharedService {
@@ -17,11 +19,13 @@ class SharedService {
 
   DatabaseService? databaseService;
   AppState? appState;
+  UserState? userState;
   int count = 1;
 
-  void init(AppState appState) {
+  void init(AppState appState, UserState userState) {
     databaseService = DatabaseService.instance;
     this.appState = appState;
+    this.userState = userState;
   }
 
   String generateUniqueId(String prefix) {
@@ -203,21 +207,34 @@ class SharedService {
   void updateDefaultCurrency(String currency) {
     UserStateService.instance.setDefaultCurrency(currency);
     _updateDefaultStore();
+    userState!.setDefaultCurrency(currency);
   }
 
   void updateDefaultTimePeriod(String timePeriod) {
     UserStateService.instance.setDefaultTimePeriod(timePeriod);
+    List<DateTime> dateRange = getDateRange(timePeriod, appState);
+    appState!.setDateRange(dateRange[0], dateRange[1]);
+    userState!.setDefaultTimePeriod(timePeriod);
+
     _updateDefaultStore();
+  }
+
+  void updateSetectedTimePeriod(String value) {
+    List<DateTime> dateRange = getDateRange(value, appState);
+    appState!.setDateRange(dateRange[0], dateRange[1]);
+    userState!.setSelectedTimePeriod(value);
   }
 
   void updateDefaultDecimalPlaces(String decimalPlaces) {
     UserStateService.instance.setDefaultDecimalPlaces(decimalPlaces);
     _updateDefaultStore();
+    userState!.setDefaultDecimalPlace(decimalPlaces);
   }
 
   void updateDefaultNumberFormatStyle(String numberFormat) {
     UserStateService.instance.setDefaultNumberFormatStyle(numberFormat);
     _updateDefaultStore();
+    userState!.setDefaultNumberFormat(numberFormat);
   }
 
   void _updateCategoryStore() {

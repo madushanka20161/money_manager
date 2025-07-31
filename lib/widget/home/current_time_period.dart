@@ -18,6 +18,7 @@ class _CurrentTimePeriodState extends State<CurrentTimePeriod> {
   late DateTime endDate;
   late String timePeriod;
   late AppState appState;
+  late UserState userState;
   bool disableSwipeLeft = false;
   bool disableSwipeRight = false;
 
@@ -156,8 +157,9 @@ class _CurrentTimePeriodState extends State<CurrentTimePeriod> {
 
   @override
   Widget build(BuildContext context) {
-    appState = context.watch<AppState>();    
-    String newTimePeriod = context.watch<UserState>().defaultTimePeriod!;
+    appState = context.watch<AppState>(); 
+    userState = context.watch<UserState>();
+    String newTimePeriod = userState.selectedTimePeriod ?? userState.defaultTimePeriod!;
 
     if (newTimePeriod != timePeriod) {
       timePeriod = newTimePeriod;

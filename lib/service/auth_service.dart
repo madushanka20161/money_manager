@@ -148,10 +148,8 @@ class AuthService {
       defaultNumberSeperationStyle: defaultNumberSeperationStyle
     );
 
-    List<DateTime> dateRange = getDateRange(defaultTimePeriod, null);
     UserStateService.instance.init(defaultDto);
-    _userState.setDefaultTimePeriod(defaultTimePeriod);
-    _appState.setDateRange(dateRange[0], dateRange[1]);
+    SharedService.instance.updateDefaultTimePeriod(defaultTimePeriod);
     SharedService.instance.updateDefaultConfig();
     // TODO: Need to send api request
 

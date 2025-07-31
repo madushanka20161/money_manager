@@ -17,16 +17,16 @@ Future<void> main() async {
   // debugPaintSizeEnabled = true;
   await DatabaseService.instance.init();
   await NotificationService.instance.init();
-  
-  // nsures all the core bindings and services (like platform channels, 
-  // rendering, and asynchronous tasks) are initialized before you run 
+
+  // nsures all the core bindings and services (like platform channels,
+  // rendering, and asynchronous tasks) are initialized before you run
   // your app or execute any native plugin code.
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
     MultiProvider(
       providers: [
-      ChangeNotifierProvider(create: (context) => AppState()),
+        ChangeNotifierProvider(create: (context) => AppState()),
         ChangeNotifierProvider(create: (context) => UserState()),
       ],
       child: MyApp(),
@@ -34,9 +34,11 @@ Future<void> main() async {
   );
 
   WidgetsBinding.instance.addPostFrameCallback((_) async {
-    final appState = Provider.of<AppState>(navigatorKey.currentContext!, listen: false);
-    final userState = Provider.of<UserState>(navigatorKey.currentContext!, listen: false);
-    SharedService.instance.init(appState);
+    final appState =
+        Provider.of<AppState>(navigatorKey.currentContext!, listen: false);
+    final userState =
+        Provider.of<UserState>(navigatorKey.currentContext!, listen: false);
+    SharedService.instance.init(appState, userState);
 
     try {
       await AuthService.instance.init(appState, userState);
@@ -69,18 +71,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: navigatorKey,
-      title: 'Money Mate',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-        appBarTheme: AppBarTheme(
-          backgroundColor: AppConfig.appTitleColor,
-          foregroundColor: AppConfig.fontColor,
-        )
-      ),
-      home: LandingScreen()
-    );
+        navigatorKey: navigatorKey,
+        title: 'Money Mate',
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+            appBarTheme: AppBarTheme(
+              backgroundColor: AppConfig.appTitleColor,
+              foregroundColor: AppConfig.fontColor,
+            )),
+        home: LandingScreen());
   }
 }
 
@@ -97,7 +97,7 @@ class _LandingScreenState extends State<LandingScreen> {
     final isLoading = context.watch<AppState>().isLoading;
     final isSignIn = context.watch<AppState>().isSignIn;
     final isFirstLogin = context.watch<AppState>().isFirstLogin;
-    
+
     return isLoading
         ? Scaffold(
             body: Center(

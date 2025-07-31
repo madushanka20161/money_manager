@@ -38,8 +38,8 @@ class CreateTransaction extends StatefulWidget {
 
 class _CreateTransactionState extends State<CreateTransaction> {
   DateTime today = DateTime.now();
-  Map<String, CategoryDTO> categories = {};
   String displayCurrency = UserStateService.instance.defaultCurrency!;
+  Map<String, CategoryDTO> categories = {};
   TransactionType? _selectedtransactionType;
   final _formKey = GlobalKey<FormState>();
   String? _selectedAccount;

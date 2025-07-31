@@ -6,6 +6,8 @@ class AppConfig {
   static Color appTitleColor = Color(0xFF242C3B);
 
   static double headerFontSize = 30.0;
+  static double alertTitleFontSize = 22.0;
+  static double alertContentFontSize = 14.0;
   static double fontSize = 17.0;
   static Color fontColor = Colors.white;
   static Color buttonSelectedColor = Color.fromARGB(144, 23, 96, 156);
