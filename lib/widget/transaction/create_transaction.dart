@@ -11,6 +11,7 @@ import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/widget/account/accoun_selection_dropdown.dart';
+import 'package:money_manager_3/widget/account/create_account.dart';
 import 'package:money_manager_3/widget/category/category_widget.dart';
 import 'package:money_manager_3/widget/category/select_category.dart';
 import 'package:provider/provider.dart';
@@ -161,7 +162,44 @@ class _CreateTransactionState extends State<CreateTransaction> {
   }
 
   Widget renderAccountSelection(List<AccountDto> accountList) {
-    return FormField<String>(
+    if (accountList.isEmpty) {
+      return Padding(
+        padding: EdgeInsets.only(top: AppConfig.padding),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => CreateAccount()));
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppConfig.buttonSelectedColor,
+            padding: EdgeInsets.all(AppConfig.padding),
+            textStyle: TextStyle(
+              fontSize: AppConfig.fontSize,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppConfig.borderRadius),
+            ),
+            minimumSize: Size(double.infinity, 50),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 3,
+                child: Text(
+                  capitalizeFirstLetter("Create Account"),
+                  style: TextStyle(color: AppConfig.fontColor),
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  maxLines: 1,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return FormField<String>(
       validator: (value) {
         if (_selectedAccount == null) {
           return 'Please select an account';
@@ -190,6 +228,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
         );
       },
     );
+    }
   }
 
   Widget renderAmountInput() {

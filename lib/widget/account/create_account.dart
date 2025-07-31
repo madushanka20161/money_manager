@@ -71,7 +71,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   children: <Widget>[
                     renderCreateAccountIcon(),
                     renderAccountName(),
-                    renderBalance(),
+                    isNewAccount ? renderBalance() : SizedBox.shrink(),
                     renderCurrency(),
                     renderAddToTotal(),
                     renderIconSelection(),
