@@ -4,21 +4,25 @@ class MyInterstitialAd {
   InterstitialAd? _interstitialAd;
 
   void loadAd() {
-    InterstitialAd.load(
+    try {
+      InterstitialAd.load(
       // adUnitId: 'ca-app-pub-4832836209041723/4779541540', // Replace with your real ID
       adUnitId: 'ca-app-pub-3940256099942544/1033173712',
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
-          print('11111111111111111 - app load');
           _interstitialAd = ad;
           _setupCallbacks();
+          print('🟢🟢🟢 add loaded');
         },
         onAdFailedToLoad: (LoadAdError error) {
-          print('222222222222 - InterstitialAd failed to load: $error');
+          print('🔴🔴🔴 - InterstitialAd failed to load: $error');
         },
       ),
     );
+    } catch (e) {
+      print('🔴🔴🔴🔴🔴🔴 - error 01 : $e');
+    }
   }
 
   void _setupCallbacks() {
