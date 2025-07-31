@@ -48,6 +48,8 @@ class _RadioGroupInputState extends State<RadioGroupInput> {
           },
           activeColor: Colors.white,
           dense: true,
+          visualDensity:
+                            VisualDensity(horizontal: 0, vertical: -4),
         );
       }).toList(),
     );
