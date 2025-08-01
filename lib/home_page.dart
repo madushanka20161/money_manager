@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.ads_click_sharp), // You can change this to any icon
             onPressed: () {
-              myAd.showAd();
+              myAd.showAd(context);
               // Your logic here (e.g., show ad or navigate)
               print('Ad icon tapped');
             },
