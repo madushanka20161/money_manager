@@ -6,9 +6,11 @@ import 'package:money_manager_3/dto/default_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/dto/user_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
+import 'package:money_manager_3/exception/general-exception.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'dart:convert';
 import 'package:money_manager_3/service/database_service.dart';
+import 'package:money_manager_3/service/network_service.dart';
 import 'package:money_manager_3/service/notification_service.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
@@ -24,26 +26,31 @@ class AuthService {
   late UserState _userState;
 
   Future<void> init(AppState appState, UserState userState) async {
-    _googleSignIn = GoogleSignIn();
+    _googleSignIn = GoogleSignIn(
+        scopes: ['email'],
+        clientId:
+            '581198894251-cc8a2924047shafk33gt5qe14u7bh22g.apps.googleusercontent.com');
     _appState = appState;
     _userState = userState;
-    // // throw Exception("Something went wrong:");
-    // final signInUser = await _googleSignIn.signInSilently();
-    // print('33333333333333333333333333333');
-    // print(storeUser);
-    // print(signInUser);
-    // print('444444444444444444444444444');
-    // throw Exception("Something went wrong:");
-    // if (storeUser == null && signInUser != null) {
-    //   signOut();
-    // }
-    // signIn();
   }
 
   Future<void> checkAuth() async {
     String? storeUser = await DatabaseService.instance.getData('user');
 
     if (storeUser != null) {
+      if (await checkNetworkConnection()) {
+        GoogleSignInAccount? user = await _googleSignIn.signIn();
+        final GoogleSignInAuthentication? googleAuth =
+            await user?.authentication;
+        final String? idToken = googleAuth?.idToken;
+
+        try {
+          await sendAuthRequest(idToken!, user!.displayName ?? '', false);
+        } catch (error) {
+          throw GeneralException(error.toString().replaceAll('Exception: ', ''));
+        }
+      }
+
       var userDecode = jsonDecode(storeUser);
       UserDTO userDTO = UserDTO(
         id: userDecode['id'],
@@ -71,9 +78,44 @@ class AuthService {
       DatabaseService.instance.deleteData('user');
 
       _appState.setIsSignIn(false);
-      // TODO: [Need to clear storage (data, accounts)]
     } catch (error) {
       throw Exception("Something went wrong. Please try again.");
+    }
+  }
+
+  Future<void> sendAuthRequest(
+    String idToken, String displayName, bool isSignInByUser) async {
+    
+    try {
+      final response = await NetworkService.instance.authRequest(idToken);
+      final responseBody = jsonDecode(response.body);
+
+      if (responseBody['statusCode'] == 200) {
+        if (responseBody['isNewUser']) {
+          _appState.setIsFirstLogin(responseBody['isNewUser']);
+
+          NotificationService.instance.showNotification('Welcome, $displayName',
+              'We’re excited to have you on board. Explore and enjoy your journey with us!');
+        } else {
+          if (isSignInByUser) {
+            NotificationService.instance.showNotification(
+                'Welcome back,  $displayName',
+                'Great to see you again. Let’s continue where you left off.');
+          }
+        }
+
+        return;
+      } else {
+        if (responseBody['message'].toString() == 'TOKEN_VERIFICATION_FAIL') {
+          throw GeneralException(
+              'Authentication with Google failed. Please try again.');
+        } else {
+          throw GeneralException(
+              'Authentication with Google failed. Please try again.');
+        }
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
@@ -82,39 +124,33 @@ class AuthService {
 
     try {
       user = await _googleSignIn.signIn();
+
+      if (user == null) {
+        throw Exception("Something went wrong. Please try again.");
+      }
+
+      final GoogleSignInAuthentication googleAuth = await user.authentication;
+      final String? idToken = googleAuth.idToken;
+
+      await sendAuthRequest(idToken!, user.displayName ?? '', true);
     } catch (e) {
       throw Exception("Something went wrong. Please try again.");
     }
 
-    if (user != null) {
-      // TODO [need to send request and check first login or not]
-      // _appState.setIsFirstLogin(true);
-      // 
+    UserDTO userDTO = UserDTO(
+      id: user.id,
+      email: user.email,
+      name: user.displayName ?? '--',
+      photoUrl: user.photoUrl ?? '',
+    );
 
-      UserDTO userDTO = UserDTO(
-        id: user.id,
-        email: user.email,
-        name: user.displayName ?? '--',
-        photoUrl: user.photoUrl ?? '',
-      );
-      
-      _userState.setUser(userDTO);
+    _userState.setUser(userDTO);
+    String jsonString = jsonEncode(userDTO);
+    DatabaseService.instance.saveData('user', jsonString);
+    DatabaseService.instance.setUserId(userDTO.id);
 
-      NotificationService.instance.showNotification(
-        'Welcome, ${userDTO.name}',
-        'We’re excited to have you on board. Explore and enjoy your journey with us!'
-      );
-
-      String jsonString = jsonEncode(userDTO);
-      DatabaseService.instance.saveData('user', jsonString);
-      DatabaseService.instance.setUserId(userDTO.id);
-      
-      await loadStoredData();
-      _appState.setIsSignIn(true);
-    } else {
-      // TODO [need to handle this part]
-      throw Exception("Something went wrong. Please try again.");
-    }
+    await loadStoredData();
+    _appState.setIsSignIn(true);
   }
 
   Future<void> loadStoredData() async {
@@ -142,11 +178,10 @@ class AuthService {
     }
 
     DefaultDto defaultDto = DefaultDto(
-      defaultTimePeriod: defaultTimePeriod, 
-      defaultCurrency: defaultCurrency, 
-      defaultDecimalPlace: int.parse(defaultDecimalPlace), 
-      defaultNumberSeperationStyle: defaultNumberSeperationStyle
-    );
+        defaultTimePeriod: defaultTimePeriod,
+        defaultCurrency: defaultCurrency,
+        defaultDecimalPlace: int.parse(defaultDecimalPlace),
+        defaultNumberSeperationStyle: defaultNumberSeperationStyle);
 
     UserStateService.instance.init(defaultDto);
     SharedService.instance.updateDefaultTimePeriod(defaultTimePeriod);
@@ -156,8 +191,10 @@ class AuthService {
     // String? categoriesString = null;
     String? categoriesString = DatabaseService.instance.getData('category');
     String? accountsString = DatabaseService.instance.getData('account');
-    String? transactionsString = DatabaseService.instance.getData('transaction');
-    String? accountTransactionsString = DatabaseService.instance.getData('account-trnsaction');
+    String? transactionsString =
+        DatabaseService.instance.getData('transaction');
+    String? accountTransactionsString =
+        DatabaseService.instance.getData('account-trnsaction');
 
     if (categoriesString != null) {
       Map<String, dynamic> categoriesObj = jsonDecode(categoriesString);
@@ -195,11 +232,10 @@ class AuthService {
                 ? TransactionType.income
                 : TransactionType.expenses,
             CategoryLimitDTO(type: CategoryLimitType.value, limit: 0),
-            int.tryParse(parts[4])!
-        );
+            int.tryParse(parts[4])!);
       });
     }
-      
+
     if (accountsString != null) {
       Map<String, dynamic> accounts = jsonDecode(accountsString);
       accounts = _unBindVersion(accounts);
@@ -221,26 +257,28 @@ class AuthService {
         _appState.addTransaction(transactionDto.id, transactionDto);
       });
     }
-      
+
     if (accountTransactionsString != null) {
-      Map<String, dynamic> accountTransactions = jsonDecode(accountTransactionsString);
+      Map<String, dynamic> accountTransactions =
+          jsonDecode(accountTransactionsString);
       accountTransactions = _unBindVersion(accountTransactions);
 
       accountTransactions.forEach((id, accountTransaction) {
-        accountTransaction['fromAccount'] = _appState.accounts[accountTransaction['fromAccount']];
-        accountTransaction['toAccount'] = _appState.accounts[accountTransaction['toAccount']];
-        AccountTransactionDTO accountTransactionDto = AccountTransactionDTO.fromJson(accountTransaction);
-        _appState.addAccountTrnsaction(accountTransactionDto.id, accountTransactionDto);
+        accountTransaction['fromAccount'] =
+            _appState.accounts[accountTransaction['fromAccount']];
+        accountTransaction['toAccount'] =
+            _appState.accounts[accountTransaction['toAccount']];
+        AccountTransactionDTO accountTransactionDto =
+            AccountTransactionDTO.fromJson(accountTransaction);
+        _appState.addAccountTrnsaction(
+            accountTransactionDto.id, accountTransactionDto);
       });
     }
   }
 
   Map<String, dynamic> _unBindVersionWithVersion(Map<String, dynamic> data) {
     if (data['version'] == null) {
-      return {
-        'version': 0,
-        'data': jsonEncode(data)
-      };
+      return {'version': 0, 'data': jsonEncode(data)};
     } else {
       return data;
     }

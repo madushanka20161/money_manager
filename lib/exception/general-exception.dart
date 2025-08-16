@@ -6,7 +6,7 @@ class GeneralException implements Exception {
 
   @override
   String toString() {
-    return '🔴🔴🔴🔴🔴🔴🔴🔴🔴 GeneralException: $message${details != null ? ' — $details' : ''}';
+    return '$message${details != null ? ' — $details' : ''}';
   }
 }
 

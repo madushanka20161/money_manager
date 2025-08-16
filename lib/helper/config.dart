@@ -95,4 +95,11 @@ class AppConfig {
       ],
     );
   }
+
+  // Nested network config
+  static _NetworkConfig network = _NetworkConfig();
+}
+
+class _NetworkConfig {
+  final String baseUrl = "https://us-central1-money-manager-18108.cloudfunctions.net/api";
 }
