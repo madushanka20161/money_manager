@@ -46,6 +46,10 @@ String formatDate(DateTime value) {
   return DateFormat('yyyy-MM-dd').format(value);
 }
 
+String formatDateTime(DateTime time) {
+  return DateFormat('yyyy-MM-dd hh.mm a').format(time);
+}
+
 List<CategoryDTO> getCategoryByType(Map<String, CategoryDTO> categories, TransactionType type) {
   return categories.values.where((CategoryDTO category) => category.type == type).toList();
 }

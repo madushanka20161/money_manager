@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart';
 import 'package:money_manager_3/helper/config.dart';
+import 'package:money_manager_3/state/user_state.dart';
 
 // TODO [V2 - need to use connectivity_plus for network connectivity]
 Future<bool> checkNetworkConnection() async {
@@ -17,14 +18,27 @@ Future<bool> checkNetworkConnection() async {
 class NetworkService {
   NetworkService._privateConstructor();
   static final NetworkService instance = NetworkService._privateConstructor();
+  UserState? userState;
 
-  Future<dynamic> authRequest(String idToken) async{
+  void init(UserState userState) {
+    this.userState = userState;
+  }
+
+  Future<dynamic> authRequest(String idToken, String email) async{
     String url = 'user';
 
     final Map<String, dynamic> body = {
       'authType': 'google',
       'idToken': idToken,
+      'email': email
     };
+
+    return await _postRequest(url, body);
+  }
+
+  Future<dynamic> updateUserRecodeRequest(Map<String, String> data) async{
+    String url = 'user/records';
+    final Map<String, dynamic> body = data;
 
     return await _postRequest(url, body);
   }
@@ -35,7 +49,10 @@ class NetworkService {
     try {
       final response = await post(
         url,
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${userState?.jwtToken ?? ''}'
+        },
         body: jsonEncode(body),
       );
 

@@ -7,6 +7,7 @@ import 'package:money_manager_3/dto/user_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/filter.dart';
+import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/auth_service.dart';
 import 'package:money_manager_3/service/database_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
@@ -31,7 +32,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     List<List<TransactionDto>> filteredTransactions =
         filterTrnsaction(context.watch<AppState>(), null);
-    UserDTO user = context.watch<UserState>().user!;
+    UserState userState = context.watch<UserState>();
+    UserDTO user = userState.user!;
     List<TransactionDto> income = filteredTransactions[0];
     List<TransactionDto> expenses = filteredTransactions[1];
     selectedTab = context.watch<AppState>().selectedTransactionType;
@@ -138,16 +140,16 @@ class _HomePageState extends State<HomePage> {
                 Column(
                   children: [
                     Divider(),
-                    ListTile(
-                      leading: Icon(Icons.update,
-                          color: AppConfig.iconColor,
-                          size: AppConfig.iconSizeSmall),
-                      title: Text('Update', style: AppConfig.fontStyle),
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    ),
+                    // ListTile(
+                    //   leading: Icon(Icons.update,
+                    //       color: AppConfig.iconColor,
+                    //       size: AppConfig.iconSizeSmall),
+                    //   title: Text('Update', style: AppConfig.fontStyle),
+                    //   onTap: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    //   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                    // ),
                     ListTile(
                       leading: Icon(Icons.logout,
                           color: Colors.red, size: AppConfig.iconSizeSmall),
@@ -173,6 +175,17 @@ class _HomePageState extends State<HomePage> {
                       },
                       visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                     ),
+                    if (userState.lastUpdatedTime != null)
+                      ListTile(
+                        dense: true,
+                        visualDensity:
+                            VisualDensity(horizontal: 0, vertical: -4),
+                        title: Text(
+                            'Last updated on ${formatDateTime(userState.lastUpdatedTime!.toLocal())}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: AppConfig.fontSize * 0.9)),
+                      )
                   ],
                 ),
               ],

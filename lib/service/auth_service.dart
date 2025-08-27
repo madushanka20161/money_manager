@@ -1,6 +1,7 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/dto/account_trnsaction_dto.dart';
+import 'package:money_manager_3/dto/ads_dto.dart';
 import 'package:money_manager_3/dto/category_dto.dart';
 import 'package:money_manager_3/dto/default_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
@@ -44,8 +45,12 @@ class AuthService {
             await user?.authentication;
         final String? idToken = googleAuth?.idToken;
 
+        // for (int i = 0; i < idToken!.length; i += 400) {
+        //   print(idToken.substring(i, i + 400 > idToken.length ? idToken.length : i + 400));
+        // }
+
         try {
-          await sendAuthRequest(idToken!, user!.displayName ?? '', false);
+          await sendAuthRequest(idToken!, user!.displayName ?? '', user.email, false);
         } catch (error) {
           throw GeneralException(error.toString().replaceAll('Exception: ', ''));
         }
@@ -84,10 +89,10 @@ class AuthService {
   }
 
   Future<void> sendAuthRequest(
-    String idToken, String displayName, bool isSignInByUser) async {
+    String idToken, String displayName, String email, bool isSignInByUser) async {
     
     try {
-      final response = await NetworkService.instance.authRequest(idToken);
+      final response = await NetworkService.instance.authRequest(idToken, email);
       final responseBody = jsonDecode(response.body);
 
       if (responseBody['statusCode'] == 200) {
@@ -103,6 +108,18 @@ class AuthService {
                 'Great to see you again. Let’s continue where you left off.');
           }
         }
+
+        if (responseBody['lastUpdatedTime'] != null) {
+          _userState.setLastUpdatedTime(
+              DateTime.parse(responseBody['lastUpdatedTime']));
+        }
+
+        _userState.setAds(AdsDTO(
+            remaingCount: responseBody['ads']['remaingCount'],
+            isAdsEnable: responseBody['ads']['isAdsEnable'],
+            isAdsReqEnable: responseBody['ads']['isAdsReqEnable']));
+
+        _userState.setJWTToken(responseBody['token']);
 
         return;
       } else {
@@ -132,7 +149,7 @@ class AuthService {
       final GoogleSignInAuthentication googleAuth = await user.authentication;
       final String? idToken = googleAuth.idToken;
 
-      await sendAuthRequest(idToken!, user.displayName ?? '', true);
+      await sendAuthRequest(idToken!, user.displayName ?? '', user.email, true);
     } catch (e) {
       throw Exception("Something went wrong. Please try again.");
     }
@@ -195,6 +212,14 @@ class AuthService {
         DatabaseService.instance.getData('transaction');
     String? accountTransactionsString =
         DatabaseService.instance.getData('account-trnsaction');
+
+    _updateUserRecode({
+      'default': defaultString ?? '',
+      'categories': categoriesString ?? '',
+      'accounts': accountsString ?? '',
+      'transactions': transactionsString ?? '',
+      'accountTransactions': accountTransactionsString ?? ''
+    });
 
     if (categoriesString != null) {
       Map<String, dynamic> categoriesObj = jsonDecode(categoriesString);
@@ -273,6 +298,16 @@ class AuthService {
         _appState.addAccountTrnsaction(
             accountTransactionDto.id, accountTransactionDto);
       });
+    }
+  }
+
+  void _updateUserRecode(Map<String, String> data) async {
+    if (await checkNetworkConnection()) {
+      var lastUpdatedTime = _userState.lastUpdatedTime;
+
+      if ((lastUpdatedTime == null) || (true)) {
+        NetworkService.instance.updateUserRecodeRequest(data);
+      }
     }
   }
 

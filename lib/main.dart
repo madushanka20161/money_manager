@@ -3,6 +3,7 @@ import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/home_page.dart';
 import 'package:money_manager_3/service/auth_service.dart';
 import 'package:money_manager_3/service/database_service.dart';
+import 'package:money_manager_3/service/network_service.dart';
 import 'package:money_manager_3/service/notification_service.dart';
 import 'package:money_manager_3/service/shared_service.dart';
 import 'package:money_manager_3/sign_up.dart';
@@ -39,6 +40,7 @@ Future<void> main() async {
     final userState =
         Provider.of<UserState>(navigatorKey.currentContext!, listen: false);
     SharedService.instance.init(appState, userState);
+    NetworkService.instance.init(userState);
 
     try {
       await AuthService.instance.init(appState, userState);

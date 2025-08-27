@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/dto/ads_dto.dart';
 import 'package:money_manager_3/dto/user_dto.dart';
 
 class UserState with ChangeNotifier {
@@ -8,6 +9,9 @@ class UserState with ChangeNotifier {
   int? _defaultDecimalPlace;
   String? _defaultNumberFormat;
   String? _defaultCurrency;
+  AdsDTO? _ads;
+  DateTime? _lastUpdatedTime;
+  String? _jwtToken;
 
   UserDTO? get user => _user;
   String? get selectedTimePeriod => _selectedTimePeriod;
@@ -15,6 +19,9 @@ class UserState with ChangeNotifier {
   int? get defaultDecimalPlace => _defaultDecimalPlace;
   String? get defaultNumberFormat => _defaultNumberFormat;
   String? get defaultCurrency => _defaultCurrency;
+  AdsDTO? get ads => _ads;
+  DateTime? get lastUpdatedTime => _lastUpdatedTime;
+  String? get jwtToken => _jwtToken;
 
   void setUser(UserDTO user) {
     _user = user;
@@ -48,6 +55,21 @@ class UserState with ChangeNotifier {
 
   void setDefaultCurrency(String value) {
     _defaultCurrency = value;
+    notifyListeners();
+  }
+
+  void setAds(AdsDTO ads) {
+    _ads = ads;
+    notifyListeners();
+  }
+
+  void setLastUpdatedTime(DateTime dateTime) {
+    _lastUpdatedTime = dateTime;
+    notifyListeners();
+  }
+
+  void setJWTToken(String jwtToken) {
+    _jwtToken = jwtToken;
     notifyListeners();
   }
 }
