@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/ads/interstitial_ads.dart';
 import 'package:money_manager_3/custom_painter.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/dto/user_dto.dart';
@@ -27,6 +28,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TransactionType selectedTab = TransactionType.expenses;
+  final myAd = InterstitialAds();
+
+  @override
+  void initState() {
+    super.initState();
+    myAd.loadAd();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +50,16 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Money Mate'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.ads_click_sharp), // You can change this to any icon
+            onPressed: () {
+              myAd.showAd(context);
+              // Your logic here (e.g., show ad or navigate)
+              print('Ad icon tapped');
+            },
+          ),
+        ],
       ),
       drawer: Drawer(
         child: Stack(

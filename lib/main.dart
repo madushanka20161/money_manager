@@ -11,6 +11,7 @@ import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
 import 'package:money_manager_3/widget/default/default-currency.dart';
 import 'package:provider/provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart' as ads;
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -23,6 +24,8 @@ Future<void> main() async {
   // rendering, and asynchronous tasks) are initialized before you run
   // your app or execute any native plugin code.
   WidgetsFlutterBinding.ensureInitialized();
+
+  ads.MobileAds.instance.initialize();
 
   runApp(
     MultiProvider(

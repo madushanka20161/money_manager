@@ -29,7 +29,7 @@ class AuthService {
   Future<void> init(AppState appState, UserState userState) async {
     _googleSignIn = GoogleSignIn(
         scopes: ['email'],
-        clientId:
+        serverClientId:
             '581198894251-cc8a2924047shafk33gt5qe14u7bh22g.apps.googleusercontent.com');
     _appState = appState;
     _userState = userState;
