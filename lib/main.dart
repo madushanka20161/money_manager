@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/home_page.dart';
+import 'package:money_manager_3/service/ads_service.dart';
 import 'package:money_manager_3/service/auth_service.dart';
 import 'package:money_manager_3/service/database_service.dart';
 import 'package:money_manager_3/service/network_service.dart';
@@ -44,6 +45,7 @@ Future<void> main() async {
         Provider.of<UserState>(navigatorKey.currentContext!, listen: false);
     SharedService.instance.init(appState, userState);
     NetworkService.instance.init(userState);
+    AdsService.instance.init(userState, appState);
 
     try {
       await AuthService.instance.init(appState, userState);

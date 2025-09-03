@@ -63,6 +63,10 @@ class UserState with ChangeNotifier {
     notifyListeners();
   }
 
+  void setAdsRemaingCount(int count) {
+    _ads = AdsDTO(remaingCount: count, isAdsEnable: _ads!.isAdsEnable, isAdsReqEnable: _ads!.isAdsReqEnable);
+  }
+
   void setLastUpdatedTime(DateTime dateTime) {
     _lastUpdatedTime = dateTime;
     notifyListeners();

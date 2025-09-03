@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:money_manager_3/ads/interstitial_ads.dart';
 import 'package:money_manager_3/custom_painter.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/dto/user_dto.dart';
@@ -9,6 +8,7 @@ import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/filter.dart';
 import 'package:money_manager_3/helper/index.dart';
+import 'package:money_manager_3/service/ads_service.dart';
 import 'package:money_manager_3/service/auth_service.dart';
 import 'package:money_manager_3/service/database_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
@@ -28,38 +28,37 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TransactionType selectedTab = TransactionType.expenses;
-  final myAd = InterstitialAds();
-
-  @override
-  void initState() {
-    super.initState();
-    myAd.loadAd();
-  }
 
   @override
   Widget build(BuildContext context) {
-    List<List<TransactionDto>> filteredTransactions =
-        filterTrnsaction(context.watch<AppState>(), null);
+    AppState appState = context.watch<AppState>();
     UserState userState = context.watch<UserState>();
+    List<List<TransactionDto>> filteredTransactions = filterTrnsaction(appState, null);
     UserDTO user = userState.user!;
     List<TransactionDto> income = filteredTransactions[0];
     List<TransactionDto> expenses = filteredTransactions[1];
-    selectedTab = context.watch<AppState>().selectedTransactionType;
+    selectedTab = appState.selectedTransactionType;
+    bool isAdsReady = appState.isAdsReady;
+
+    if (isAdsReady) {
+      Future.delayed(const Duration(seconds: 3), () {
+        AdsService.instance.showAds(context);
+        appState.setIsAdsReady(false);
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Money Mate'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.ads_click_sharp), // You can change this to any icon
-            onPressed: () {
-              myAd.showAd(context);
-              // Your logic here (e.g., show ad or navigate)
-              print('Ad icon tapped');
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.ads_click_sharp), // You can change this to any icon
+        //     onPressed: () {
+        //       AdsService.instance.showAds(context);
+        //     },
+        //   ),
+        // ],
       ),
       drawer: Drawer(
         child: Stack(

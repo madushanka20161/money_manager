@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:money_manager_3/helper/config.dart';
-import 'package:money_manager_3/popup-helper.dart';
 
 class InterstitialAds {
   InterstitialAd? _interstitialAd;
-  String errorMessage = '';
 
-  void loadAd() {
+  void loadAd(Function onSuccess, Function onError, Function onAdsShow) {
     try {
       InterstitialAd.load(
       adUnitId: 'ca-app-pub-4832836209041723/4779541540', // Replace with your real ID
@@ -17,46 +14,43 @@ class InterstitialAds {
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
           _interstitialAd = ad;
-          _setupCallbacks();
-          print('🟢🟢🟢 add loaded');
+          _setupCallbacks(onAdsShow, onError);
+          onSuccess();
+          // print('🟢🟢🟢 add loaded');
         },
         onAdFailedToLoad: (LoadAdError error) {
-          errorMessage = '🔴🔴🔴 - InterstitialAd failed to load: ${error.toString()}';
-          print('🔴🔴🔴 - InterstitialAd failed to load: $error');
+          // print('🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴 - InterstitialAd failed to load: $error');
+          onError('Ads load error 01 - ${error.toString()}');
         },
       ),
     );
-    } catch (e) {
-      print('🔴🔴🔴🔴🔴🔴 - error 01 : $e');
+    } catch (error) {
+      // print('🔴🔴🔴🔴🔴🔴 - error 01 : ${error.toString()}');
+      onError('Ads load error 01 - ${error.toString()}');
     }
   }
 
-  void _setupCallbacks() {
+  void _setupCallbacks(Function onAdsShow, Function onError) {
     _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
         ad.dispose();
-        print('333333333333 - Ad dismissed.');
-        loadAd();
+        // print('333333333333 - Ad dismissed.');
+        onAdsShow();
       },
       onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
         ad.dispose();
-        errorMessage = 'Ad failed to show: $error';
-        print('44444444444444 - Ad failed to show: $error');
-        loadAd();
+        // print('44444444444444 - Ad failed to show: $error');
+        onError('Ads show error - ${error.toString()}');
       },
     );
   }
 
-  void showAd(BuildContext context) {
+  void showAd(BuildContext context, Function onError) {
     if (_interstitialAd != null) {
       _interstitialAd!.show();
     } else {
-      PopupHelper.showPopup(context, [Text('Ad is not ready yet [$errorMessage]', style: AppConfig.fontStyle,)]);
-      print('55555555555555 - Ad is not ready yet');
+      onError('Ads error - ads is not ready yet');
+      // print('55555555555555 - Ad is not ready yet');
     }
   }
-
-  // void _showPopup(String message) {
-  //   PopupHelper.showPopup(context, content)
-  // }
 }

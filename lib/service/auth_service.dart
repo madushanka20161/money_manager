@@ -9,6 +9,7 @@ import 'package:money_manager_3/dto/user_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/exception/general-exception.dart';
 import 'package:money_manager_3/helper/index.dart';
+import 'package:money_manager_3/service/ads_service.dart';
 import 'dart:convert';
 import 'package:money_manager_3/service/database_service.dart';
 import 'package:money_manager_3/service/network_service.dart';
@@ -120,6 +121,8 @@ class AuthService {
             isAdsReqEnable: responseBody['ads']['isAdsReqEnable']));
 
         _userState.setJWTToken(responseBody['token']);
+
+        AdsService.instance.prepareAds();
 
         return;
       } else {

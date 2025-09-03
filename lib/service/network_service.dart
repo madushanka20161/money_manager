@@ -43,6 +43,33 @@ class NetworkService {
     return await _postRequest(url, body);
   }
 
+  Future<dynamic> updateAdsRemainingCount(int count) async {
+    String url = 'ads/remainingCount';
+    final Map<String, dynamic> body = {
+      "count": count
+    };
+
+    return await _postRequest(url, body);
+  }
+
+  Future<dynamic> updateAdsHistory(String adsType) async {
+    String url = 'ads/history';
+    final Map<String, dynamic> body = {
+      'type': adsType
+    };
+
+    return await _postRequest(url, body);
+  }
+
+  Future<dynamic> updateAdsErrors(List<String> errors) async {
+    String url = 'ads/errors';
+    final Map<String, dynamic> body = {
+      'errors': errors
+    };
+
+    return await _postRequest(url, body);
+  }
+
   Future<dynamic> _postRequest(String prefix, Map<String, dynamic> body) async {
     final url = Uri.parse('${AppConfig.network.baseUrl}/$prefix');
 

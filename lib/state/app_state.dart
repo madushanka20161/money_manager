@@ -16,6 +16,7 @@ class AppState with ChangeNotifier {
   bool _isLoading = true;
   bool _isSignIn = false;
   bool _isFirstLogin = false;
+  bool _isAdsReady = false;
   final Map<String, AccountTransactionDTO> _accountTrnsactions = {};
 
   Map<String, AccountDto> get accounts => _accounts;
@@ -27,6 +28,7 @@ class AppState with ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get isSignIn => _isSignIn;
   bool get isFirstLogin => _isFirstLogin;
+  bool get isAdsReady => _isAdsReady;
   TransactionType get selectedTransactionType => _selectedTransactionType;
   Map<String, AccountTransactionDTO> get accountTrnsactions => _accountTrnsactions;
   // to maintain a version for persisten data (user, category, trnsaction)
@@ -113,6 +115,11 @@ class AppState with ChangeNotifier {
 
   void removeAccountTrnsaction(String id) {
     _accountTrnsactions.remove(id);
+    notifyListeners();
+  }
+
+  void setIsAdsReady(bool isAdsReady) {
+    _isAdsReady = isAdsReady;
     notifyListeners();
   }
 }
