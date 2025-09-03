@@ -9,7 +9,7 @@ class UserState with ChangeNotifier {
   int? _defaultDecimalPlace;
   String? _defaultNumberFormat;
   String? _defaultCurrency;
-  AdsDTO? _ads;
+  AdsDTO? _ads = AdsDTO(remaingCount: 0, isAdsEnable: false, isAdsReqEnable: false);
   DateTime? _lastUpdatedTime;
   String? _jwtToken;
 

@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
     selectedTab = appState.selectedTransactionType;
     bool isAdsReady = appState.isAdsReady;
 
-    if (isAdsReady) {
+    if (isAdsReady && userState.ads!.isAdsEnable) {
       Future.delayed(const Duration(seconds: 3), () {
         AdsService.instance.showAds(context);
         appState.setIsAdsReady(false);
