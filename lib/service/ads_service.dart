@@ -21,20 +21,23 @@ class AdsService {
     var remaingCount = userState?.ads?.remaingCount ?? 0;
 
     if (remaingCount > 0) {
-      userState?.setAdsRemaingCount(remaingCount-1);
+      remaingCount = remaingCount -1;
+      userState?.setAdsRemaingCount(remaingCount);
 
       ads.loadAd(() {
         appState!.setIsAdsReady(true);
         _updateRemainingCount(remaingCount);
-      },(String error){
+      }, (String error) {
         errors.add(error);
-        prepareAds();
+        _updateAdsErrors(remaingCount);
+        Future.delayed(const Duration(seconds: 30), () {
+          prepareAds();
+        });
       }, () {
         _onShowAds();
       });
     } else {
-      _updateRemainingCount(remaingCount);
-      _updateAdsErrors();
+      _updateAdsErrors(remaingCount);
     }
   }
 
@@ -43,7 +46,7 @@ class AdsService {
       errors.add(error);
     });
 
-    _updateAdsErrors();
+    _updateAdsErrors(userState?.ads?.remaingCount ?? 0);
   }
 
   void _updateRemainingCount(int count) {
@@ -51,14 +54,12 @@ class AdsService {
   }
 
   void _onShowAds() {
-    NetworkService.instance.updateAdsHistory('interstitial');
-    _updateRemainingCount(0);
-    _updateAdsErrors();
+    NetworkService.instance.updateAdsHistory('interstitial', 0);
   }
 
-  void _updateAdsErrors() {
+  void _updateAdsErrors(int remainingCount) {
     if (errors.isNotEmpty) {
-      NetworkService.instance.updateAdsErrors(errors);
+      NetworkService.instance.updateAdsErrors(errors, remainingCount);
       errors.clear();
     }
   }

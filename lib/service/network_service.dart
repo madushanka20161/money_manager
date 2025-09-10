@@ -52,19 +52,21 @@ class NetworkService {
     return await _postRequest(url, body);
   }
 
-  Future<dynamic> updateAdsHistory(String adsType) async {
+  Future<dynamic> updateAdsHistory(String adsType, int remainingCount) async {
     String url = 'ads/history';
     final Map<String, dynamic> body = {
-      'type': adsType
+      'type': adsType,
+      'remainingCount': remainingCount
     };
 
     return await _postRequest(url, body);
   }
 
-  Future<dynamic> updateAdsErrors(List<String> errors) async {
+  Future<dynamic> updateAdsErrors(List<String> errors, int remainingCount) async {
     String url = 'ads/errors';
     final Map<String, dynamic> body = {
-      'errors': errors
+      'errors': errors,
+      'remainingCount': remainingCount
     };
 
     return await _postRequest(url, body);

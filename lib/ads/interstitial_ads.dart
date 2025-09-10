@@ -7,9 +7,9 @@ class InterstitialAds {
   void loadAd(Function onSuccess, Function onError, Function onAdsShow) {
     try {
       InterstitialAd.load(
-      // adUnitId: 'ca-app-pub-4832836209041723/4779541540', // Replace with your real ID
+      adUnitId: 'ca-app-pub-4832836209041723/4779541540', // Replace with your real ID
       // adUnitId: 'ca-app-pub-4832836209041723/4720729580', // test addd 2
-      adUnitId: 'ca-app-pub-3940256099942544/1033173712', // testing
+      // adUnitId: 'ca-app-pub-3940256099942544/1033173712', // testing
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {

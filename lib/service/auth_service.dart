@@ -306,9 +306,10 @@ class AuthService {
 
   void _updateUserRecode(Map<String, String> data) async {
     if (await checkNetworkConnection()) {
-      var lastUpdatedTime = _userState.lastUpdatedTime;
+      final lastUpdatedTime = _userState.lastUpdatedTime;
+      final DateTime today = DateTime.now();
 
-      if ((lastUpdatedTime == null) || (true)) {
+      if ((lastUpdatedTime == null) || (lastUpdatedTime.toString().split(" ")[0] != today.toString().split(" ")[0])) {
         NetworkService.instance.updateUserRecodeRequest(data);
       }
     }
