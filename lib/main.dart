@@ -11,6 +11,7 @@ import 'package:money_manager_3/sign_up.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
 import 'package:money_manager_3/widget/default/default-currency.dart';
+import 'package:money_manager_3/widget/loading/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart' as ads;
 
@@ -117,11 +118,7 @@ class _LandingScreenState extends State<LandingScreen> {
     final isFirstLogin = context.watch<AppState>().isFirstLogin;
 
     return isLoading
-        ? Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
+        ? Loading()
         : isSignIn
             ? isFirstLogin
                 ? DefaultCurrency()
