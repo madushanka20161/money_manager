@@ -53,7 +53,8 @@ class AuthService {
         try {
           await sendAuthRequest(idToken!, user!.displayName ?? '', user.email, false);
         } catch (error) {
-          throw GeneralException(error.toString().replaceAll('Exception: ', ''));
+          throw GeneralException(error.toString());
+          // throw GeneralException('Something went wrong with user validation. Please try again.');
         }
       }
 
@@ -130,8 +131,9 @@ class AuthService {
           throw GeneralException(
               'Authentication with Google failed. Please try again.');
         } else {
-          throw GeneralException(
-              'Authentication with Google failed. Please try again.');
+          throw GeneralException(responseBody['message'].toString());
+          // throw GeneralException(
+          //     'Sign-in with Google didn’t work. Please try again.');
         }
       }
     } catch (e) {
@@ -309,7 +311,7 @@ class AuthService {
       final lastUpdatedTime = _userState.lastUpdatedTime;
       final DateTime today = DateTime.now();
 
-      if ((lastUpdatedTime == null) || (lastUpdatedTime.toString().split(" ")[0] != today.toString().split(" ")[0])) {
+      if ((lastUpdatedTime == null) || (lastUpdatedTime.toLocal().toString().split(" ")[0] != today.toString().split(" ")[0])) {
         NetworkService.instance.updateUserRecodeRequest(data);
       }
     }

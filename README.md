@@ -24,6 +24,9 @@ samples, guidance on mobile development, and a full API reference.
 `flutter build appbundle --release`
 * this generate app bunddle at `build/app/outputs/bundle/release/app-release.aab`
 
+# For production build
+lib/helper/config -> baseUrl [`set correct URL`]
+
 
 ## SH1 key
 

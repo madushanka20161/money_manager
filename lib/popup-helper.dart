@@ -29,4 +29,28 @@ class PopupHelper {
       },
     );
   }
+
+  // static void showErrorMessage(BuildContext context, String message, bool isTryAgain, bool isReport) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) => AlertDialog(
+  //         title: Text("Something went wrong"),
+  //         content: Text(message.toString()),
+  //         actions: [
+  //           isTryAgain ?
+  //           TextButton(
+  //             onPressed: () => Navigator.pop(context),
+  //             child: Text("Try Again"),
+  //           ): TextButton(
+  //             onPressed: () => Navigator.pop(context),
+  //             child: Text("OK"),
+  //           ),
+  //           if (isReport) TextButton(
+  //             onPressed: () => Navigator.pop(context),
+  //             child: Text("Report"),
+  //           )
+  //         ],
+  //       ),
+  //     );
+  // }
 }

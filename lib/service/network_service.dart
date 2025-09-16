@@ -72,6 +72,16 @@ class NetworkService {
     return await _postRequest(url, body);
   }
 
+  Future<dynamic> sendErrorLogs(String error) async{
+    String url = 'logs/error';
+
+    final Map<String, dynamic> body = {
+      'error': error
+    };
+
+    return await _postRequest(url, body);
+  }
+
   Future<dynamic> _postRequest(String prefix, Map<String, dynamic> body) async {
     final url = Uri.parse('${AppConfig.network.baseUrl}/$prefix');
 

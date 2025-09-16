@@ -102,7 +102,7 @@ class AppConfig {
 
 class _NetworkConfig {
   // PROD
-  final String baseUrl = "https://us-central1-money-manager-18108.cloudfunctions.net/api";
+  // final String baseUrl = "https://us-central1-money-manager-18108.cloudfunctions.net/api";
   // DEV
-  // final String baseUrl = "https://api-sauq2g43rq-uc.a.run.app/";
+  final String baseUrl = "https://api-sauq2g43rq-uc.a.run.app/";
 }

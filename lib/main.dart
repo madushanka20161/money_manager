@@ -38,38 +38,49 @@ Future<void> main() async {
     ),
   );
 
+  
   WidgetsBinding.instance.addPostFrameCallback((_) async {
-    final appState =
-        Provider.of<AppState>(navigatorKey.currentContext!, listen: false);
-    final userState =
-        Provider.of<UserState>(navigatorKey.currentContext!, listen: false);
-    SharedService.instance.init(appState, userState);
-    NetworkService.instance.init(userState);
-    AdsService.instance.init(userState, appState);
-
-    try {
-      await AuthService.instance.init(appState, userState);
-      await AuthService.instance.checkAuth();
-    } catch (e) {
-      showDialog(
-        context: navigatorKey.currentContext!,
-        builder: (context) => AlertDialog(
-          title: Text("Something went wrong"),
-          content: Text(e.toString().replaceFirst('Exception: ', '')),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("OK"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("Report"),
-            )
-          ],
-        ),
-      );
-    }
+    setupApp();
   });
+}
+
+Future<void> setupApp() async {
+  final appState =
+      Provider.of<AppState>(navigatorKey.currentContext!, listen: false);
+  final userState =
+      Provider.of<UserState>(navigatorKey.currentContext!, listen: false);
+  SharedService.instance.init(appState, userState);
+  NetworkService.instance.init(userState);
+  AdsService.instance.init(userState, appState);
+
+  try {
+    await AuthService.instance.init(appState, userState);
+    await AuthService.instance.checkAuth();
+  } catch (e) {
+    NetworkService.instance.sendErrorLogs(e.toString());
+
+    showDialog(
+      context: navigatorKey.currentContext!,
+      builder: (context) => AlertDialog(
+        title: Text("Something went wrong"),
+        // content: Text(e.toString().replaceFirst('Exception: ', '')),
+        content: Text('Something went wrong. Please try again.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              setupApp();
+            },
+            child: Text("Try Again"),
+          ),
+          // TextButton(
+          //   onPressed: () => Navigator.pop(context),
+          //   child: Text("Report"),
+          // )
+        ],
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
