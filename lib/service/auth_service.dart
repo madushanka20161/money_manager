@@ -12,6 +12,7 @@ import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/ads_service.dart';
 import 'dart:convert';
 import 'package:money_manager_3/service/database_service.dart';
+import 'package:money_manager_3/service/log-service.dart';
 import 'package:money_manager_3/service/network_service.dart';
 import 'package:money_manager_3/service/notification_service.dart';
 import 'package:money_manager_3/service/shared_service.dart';
@@ -127,6 +128,8 @@ class AuthService {
 
         return;
       } else {
+        LogService.instance.error(responseBody['message'].toString());
+
         if (responseBody['message'].toString() == 'TOKEN_VERIFICATION_FAIL') {
           throw GeneralException(
               'Authentication with Google failed. Please try again.');
@@ -137,6 +140,8 @@ class AuthService {
         }
       }
     } catch (e) {
+      LogService.instance.error(e.toString());
+
       throw Exception(e);
     }
   }

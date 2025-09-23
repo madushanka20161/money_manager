@@ -11,6 +11,7 @@ import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/ads_service.dart';
 import 'package:money_manager_3/service/auth_service.dart';
 import 'package:money_manager_3/service/database_service.dart';
+import 'package:money_manager_3/service/network_service.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
 import 'package:money_manager_3/widget/account/account_page.dart';
@@ -45,6 +46,9 @@ class _HomePageState extends State<HomePage> {
         AdsService.instance.showAds(context);
         appState.setIsAdsReady(false);
       });
+    } else if (isAdsReady) {
+      var remaingCount = userState.ads?.remaingCount ?? 0;
+      NetworkService.instance.updateAdsHistory('interstitial-not', remaingCount);
     }
 
     return Scaffold(

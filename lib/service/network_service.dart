@@ -72,11 +72,31 @@ class NetworkService {
     return await _postRequest(url, body);
   }
 
-  Future<dynamic> sendErrorLogs(String error) async{
+  Future<dynamic> sendErrorLogs(String log) async{
     String url = 'logs/error';
 
     final Map<String, dynamic> body = {
-      'error': error
+      'error': log
+    };
+
+    return await _postRequest(url, body);
+  }
+
+  Future<dynamic> sendInfoLogs(String log) async{
+    String url = 'logs/info';
+
+    final Map<String, dynamic> body = {
+      'info': log
+    };
+
+    return await _postRequest(url, body);
+  }
+
+  Future<dynamic> sendWarningLogs(String log) async{
+    String url = 'logs/warning';
+
+    final Map<String, dynamic> body = {
+      'warning': log
     };
 
     return await _postRequest(url, body);
