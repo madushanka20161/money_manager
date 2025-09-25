@@ -14,6 +14,7 @@ import 'package:money_manager_3/widget/default/default-currency.dart';
 import 'package:money_manager_3/widget/loading/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart' as ads;
+import 'package:showcaseview/showcaseview.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -99,7 +100,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: AppConfig.appTitleColor,
               foregroundColor: AppConfig.fontColor,
             )),
-        home: LandingScreen());
+        home: ShowCaseWidget(builder: (builder) => LandingScreen()));
   }
 }
 

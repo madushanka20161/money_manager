@@ -7,7 +7,7 @@ import 'package:money_manager_3/dto/user_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/filter.dart';
-import 'package:money_manager_3/helper/index.dart';
+// import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/ads_service.dart';
 import 'package:money_manager_3/service/auth_service.dart';
 import 'package:money_manager_3/service/database_service.dart';
@@ -21,6 +21,7 @@ import 'package:money_manager_3/widget/home/home_summary.dart';
 import 'package:money_manager_3/widget/setting/setting-page.dart';
 import 'package:money_manager_3/widget/transaction/create_transaction.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -29,10 +30,27 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TransactionType selectedTab = TransactionType.expenses;
+  final keyDrawer = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late AppState appState;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _maybeStartTour());
+  }
+
+  Future<void> _maybeStartTour() async {
+    print('🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴 - InterstitialAd failed to load: $appState ${appState.isFirstLogin}');
+    // TODO there is issue with isFirstLogin (after conficg default setting isFirstLogin = falseR)
+    if (appState.isFirstLogin) {
+      ShowCaseWidget.of(context).startShowCase([keyDrawer]);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    AppState appState = context.watch<AppState>();
+    appState = context.watch<AppState>();
     UserState userState = context.watch<UserState>();
     List<List<TransactionDto>> filteredTransactions = filterTrnsaction(appState, null);
     UserDTO user = userState.user!;
@@ -52,9 +70,26 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Money Mate'),
         centerTitle: true,
+        leading: Showcase(
+          key: keyDrawer,
+          description: 'Tap here to open the menu and access all features',
+          disposeOnTap: true,
+          onTargetClick: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+          child: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+          ),
+        ),
         // actions: [
         //   IconButton(
         //     icon: Icon(Icons.ads_click_sharp), // You can change this to any icon
@@ -196,17 +231,17 @@ class _HomePageState extends State<HomePage> {
                       },
                       visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                     ),
-                    if (userState.lastUpdatedTime != null)
-                      ListTile(
-                        dense: true,
-                        visualDensity:
-                            VisualDensity(horizontal: 0, vertical: -4),
-                        title: Text(
-                            'Last updated on ${formatDateTime(userState.lastUpdatedTime!.toLocal())}',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: AppConfig.fontSize * 0.9)),
-                      )
+                    // if (userState.lastUpdatedTime != null)
+                    //   ListTile(
+                    //     dense: true,
+                    //     visualDensity:
+                    //         VisualDensity(horizontal: 0, vertical: -4),
+                    //     title: Text(
+                    //         'Last updated on ${formatDateTime(userState.lastUpdatedTime!.toLocal())}',
+                    //         style: TextStyle(
+                    //             color: Colors.white,
+                    //             fontSize: AppConfig.fontSize * 0.9)),
+                    //   )
                   ],
                 ),
               ],
