@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/index.dart';
+import 'package:money_manager_3/no-data-available.dart';
 import 'package:money_manager_3/service/userstate_service.dart';
 import 'package:money_manager_3/widget/input/text-input.dart';
 
@@ -142,10 +143,12 @@ class _CurrencySelectionListState extends State<CurrencySelectionList> {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
-                        children: displayCurrencyList
-                            .map((Map<String, String> currencyObj) =>
-                                _buildOption(context, currencyObj))
-                            .toList(),
+                        children: displayCurrencyList.isNotEmpty
+                            ? displayCurrencyList
+                                .map((Map<String, String> currencyObj) =>
+                                    _buildOption(context, currencyObj))
+                                .toList()
+                            : [NoDataAvailable()],
                       ),
                     ),
                   ),
@@ -190,6 +193,7 @@ class _CurrencySelectionListState extends State<CurrencySelectionList> {
     String? displayLbel = currencyObj['displayLabel'];
 
     return SimpleDialogOption(
+      padding: EdgeInsets.only(left: AppConfig.padding2XLarge, right: AppConfig.padding2XLarge, top: AppConfig.paddingSmall),
       onPressed: () {
         setState(() {
           _selectedCurrency = currency;
@@ -213,7 +217,7 @@ class _CurrencySelectionListState extends State<CurrencySelectionList> {
               color: AppConfig.borderColor2, width: AppConfig.borderWidth),
         ),
         padding: EdgeInsets.symmetric(
-            horizontal: AppConfig.padding, vertical: AppConfig.paddingLarge),
+            horizontal: AppConfig.padding, vertical: AppConfig.paddingSmall),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

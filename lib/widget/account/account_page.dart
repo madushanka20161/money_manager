@@ -4,6 +4,7 @@ import 'package:money_manager_3/dto/account_dto.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/number-format.dart';
 import 'package:money_manager_3/helper/index.dart';
+import 'package:money_manager_3/no-data-available.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/widget/account/create_account_transaction.dart';
 import 'package:money_manager_3/widget/account/account_trnsaction_view.dart';
@@ -57,7 +58,7 @@ class _AccountPageState extends State<AccountPage> {
             child: Column(
               children: [
                 Expanded(
-                  child: ListView.builder(
+                  child: accountList.isNotEmpty ? ListView.builder(
                     itemCount: accountList.length,
                     itemBuilder: (context, index) {
                       return Column(
@@ -121,7 +122,8 @@ class _AccountPageState extends State<AccountPage> {
                         ],
                       );
                     },
-                  ),
+                  ) 
+                  : NoDataAvailable(message: 'You haven’t added any accounts yet.',),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -91,12 +91,12 @@ class AuthService {
     }
   }
 
-  Future<void> sendAuthRequest(
-    String idToken, String displayName, String email, bool isSignInByUser) async {
+  Future<void> sendAuthRequest(String idToken, String displayName, String email, bool isSignInByUser) async {
     
     try {
       final response = await NetworkService.instance.authRequest(idToken, email);
       final responseBody = jsonDecode(response.body);
+      _appState.setIsLoading(false);
 
       if (responseBody['statusCode'] == 200) {
         if (responseBody['isNewUser']) {
@@ -140,6 +140,8 @@ class AuthService {
         }
       }
     } catch (e) {
+      _appState.setIsLoading(false);
+      
       LogService.instance.error(e.toString());
 
       throw Exception(e);
