@@ -40,7 +40,7 @@ class _CurrencySelection extends State<CurrencySelection> {
     return FormField<String>(
       builder: (FormFieldState<String> state) {
         return Container(
-          padding: EdgeInsets.only(top: AppConfig.padding),
+          padding: EdgeInsets.only(top: 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -61,7 +61,11 @@ class _CurrencySelection extends State<CurrencySelection> {
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: AppConfig.buttonSelectedColor,
-                    padding: EdgeInsets.all(AppConfig.padding),
+                    padding: EdgeInsets.only(
+                      left: AppConfig.paddingXLarge, 
+                      top: AppConfig.paddingSmall, 
+                      bottom: AppConfig.paddingSmall
+                    ),
                     textStyle: TextStyle(
                       fontSize: AppConfig.fontSize,
                     ),
@@ -69,8 +73,8 @@ class _CurrencySelection extends State<CurrencySelection> {
                       borderRadius:
                           BorderRadius.circular(AppConfig.borderRadius),
                     ),
-                    fixedSize: Size(MediaQuery.of(context).size.width, 60)),
-                child: Row(
+                    ),
+                child: Row( 
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(

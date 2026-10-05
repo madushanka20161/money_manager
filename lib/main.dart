@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_3/exception/api-exception.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/home_page.dart';
 import 'package:money_manager_3/service/ads_service.dart';
@@ -57,30 +58,17 @@ Future<void> setupApp() async {
   try {
     await AuthService.instance.init(appState, userState);
     await AuthService.instance.checkAuth();
-  } catch (e) {
-    NetworkService.instance.sendErrorLogs(e.toString());
-
-    showDialog(
-      context: navigatorKey.currentContext!,
-      builder: (context) => AlertDialog(
-        title: Text("Something went wrong"),
-        // content: Text(e.toString().replaceFirst('Exception: ', '')),
-        content: Text('Something went wrong. Please try again.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              setupApp();
-            },
-            child: Text("Try Again"),
-          ),
-          // TextButton(
-          //   onPressed: () => Navigator.pop(context),
-          //   child: Text("Report"),
-          // )
-        ],
-      ),
-    );
+    
+    if (userState.user != null) {
+      await AuthService.instance.onAuthSuccess();
+    }
+  } on ApiException catch (error) {
+    NetworkService.instance.sendErrorLogs(error.message);
+    appState.setSignupErrorMessage(error.message);
+    appState.setIsLoading(false);
+  } catch (error) {
+    NetworkService.instance.sendErrorLogs(error.toString());
+    await AuthService.instance.onAuthSuccess();
   }
 }
 

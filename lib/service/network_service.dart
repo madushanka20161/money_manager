@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart';
@@ -7,10 +8,11 @@ import 'package:money_manager_3/state/user_state.dart';
 // TODO [V2 - need to use connectivity_plus for network connectivity]
 Future<bool> checkNetworkConnection() async {
   try {
-    final result = await InternetAddress.lookup('example.com');
-    
-    return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
-  } catch (e) {
+    final result = await InternetAddress.lookup('example.com')
+      .timeout(const Duration(seconds: 10));
+ 
+    return result.isNotEmpty && result.first.rawAddress.isNotEmpty;
+  } catch (_) {
     return false;
   }
 }
@@ -25,7 +27,7 @@ class NetworkService {
   }
 
   Future<dynamic> authRequest(String idToken, String email) async{
-    String url = 'user';
+    String url = 'user/signup';
 
     final Map<String, dynamic> body = {
       'authType': 'google',
@@ -34,6 +36,12 @@ class NetworkService {
     };
 
     return await _postRequest(url, body);
+  }
+
+  Future<dynamic> verifyTokenRequest() async{
+    String url = 'user/verify-token';
+
+    return await _getRequest(url);
   }
 
   Future<dynamic> updateUserRecodeRequest(Map<String, String> data) async{
@@ -110,14 +118,52 @@ class NetworkService {
         url,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${userState?.jwtToken ?? ''}'
+          'Authorization': 'Bearer ${userState?.user?.token ?? ''}'
         },
         body: jsonEncode(body),
       );
 
       return response;
+    } on TimeoutException {
+      throw Exception(
+        'The request timed out. Please try again.',
+      );
+    } on SocketException {
+      throw Exception(
+        'Unable to connect. Please check your internet connection and try again.',
+      );
     } catch (e) {
-      throw Exception('Oops! Something went wrong. Please try again.');
+      throw Exception(
+        'Unable to complete the request. Please try again.',
+      );
+    }
+  }
+
+  Future<dynamic> _getRequest(String prefix) async {
+    final url = Uri.parse('${AppConfig.network.baseUrl}/$prefix');
+
+    try {
+      final response = await get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${userState?.user?.token ?? ''}'
+        },
+      );
+
+      return response;
+    } on TimeoutException {
+      throw Exception(
+        'The request timed out. Please try again.',
+      );
+    } on SocketException {
+      throw Exception(
+        'Unable to connect. Please check your internet connection and try again.',
+      );
+    } catch (e) {
+      throw Exception(
+        'Unable to complete the request. Please try again.',
+      );
     }
   }
 }

@@ -11,7 +11,6 @@ class UserState with ChangeNotifier {
   String? _defaultCurrency;
   AdsDTO? _ads = AdsDTO(remaingCount: 0, isAdsEnable: false, isAdsReqEnable: false);
   DateTime? _lastUpdatedTime;
-  String? _jwtToken;
 
   UserDTO? get user => _user;
   String? get selectedTimePeriod => _selectedTimePeriod;
@@ -21,7 +20,6 @@ class UserState with ChangeNotifier {
   String? get defaultCurrency => _defaultCurrency;
   AdsDTO? get ads => _ads;
   DateTime? get lastUpdatedTime => _lastUpdatedTime;
-  String? get jwtToken => _jwtToken;
 
   void setUser(UserDTO user) {
     _user = user;
@@ -72,8 +70,11 @@ class UserState with ChangeNotifier {
     notifyListeners();
   }
 
-  void setJWTToken(String jwtToken) {
-    _jwtToken = jwtToken;
-    notifyListeners();
+  void setJWTToken(String token) {
+    UserDTO updateUser = user!.copyWith(
+      token: token
+    );
+    
+    setUser(updateUser);
   }
 }

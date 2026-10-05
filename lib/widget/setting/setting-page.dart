@@ -74,13 +74,13 @@ class _SettingPageState extends State<SettingPage> {
                 Padding(
                   padding: EdgeInsets.only(left: AppConfig.padding),
                   child: Text(
-                    'Decimal Places',
+                    'Default Currency',
                     style: AppConfig.fontStyle
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(AppConfig.padding),
+                  padding: EdgeInsets.symmetric(horizontal: AppConfig.padding),
                   child: CurrencySelection(
                     onCurrencyChange: (String currency) {
                       setState(() {
@@ -123,7 +123,7 @@ class _SettingPageState extends State<SettingPage> {
               horizontal: 30,
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(width: 16),
                 ElevatedButton(

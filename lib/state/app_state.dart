@@ -18,6 +18,7 @@ class AppState with ChangeNotifier {
   bool _isFirstLogin = false;
   bool _isAdsReady = false;
   final Map<String, AccountTransactionDTO> _accountTrnsactions = {};
+  String _signupErrorMessage = '';
 
   Map<String, AccountDto> get accounts => _accounts;
   Map<String, TransactionDto> get transactions => _transactions;
@@ -33,6 +34,7 @@ class AppState with ChangeNotifier {
   Map<String, AccountTransactionDTO> get accountTrnsactions => _accountTrnsactions;
   // to maintain a version for persisten data (user, category, trnsaction)
   int get userDataVersion => 1;
+  String get signupErrorMessage => _signupErrorMessage;
 
   void clearAll() {
     _accounts.clear();
@@ -45,6 +47,7 @@ class AppState with ChangeNotifier {
     // _endDate;
     // _isLoading = true;
     // _isSignIn = false;
+    _signupErrorMessage = '';
   }
 
   void addAccount(String id, AccountDto account) {
@@ -120,6 +123,11 @@ class AppState with ChangeNotifier {
 
   void setIsAdsReady(bool isAdsReady) {
     _isAdsReady = isAdsReady;
+    notifyListeners();
+  }
+
+  void setSignupErrorMessage(String message) {
+    _signupErrorMessage = message;
     notifyListeners();
   }
 }

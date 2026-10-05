@@ -7,7 +7,9 @@ import 'package:money_manager_3/dto/default_dto.dart';
 import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/dto/user_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
+import 'package:money_manager_3/exception/api-exception.dart';
 import 'package:money_manager_3/exception/general-exception.dart';
+import 'package:money_manager_3/helper/constant.dart';
 import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/service/ads_service.dart';
 import 'dart:convert';
@@ -29,10 +31,11 @@ class AuthService {
   late UserState _userState;
 
   Future<void> init(AppState appState, UserState userState) async {
-    _googleSignIn = GoogleSignIn(
-        scopes: ['email'],
-        serverClientId:
-            '581198894251-cc8a2924047shafk33gt5qe14u7bh22g.apps.googleusercontent.com');
+    _googleSignIn = GoogleSignIn.instance;
+  await _googleSignIn.initialize(
+    serverClientId:
+        '581198894251-cc8a2924047shafk33gt5qe14u7bh22g.apps.googleusercontent.com',
+  );
     _appState = appState;
     _userState = userState;
   }
@@ -40,44 +43,34 @@ class AuthService {
   Future<void> checkAuth() async {
     String? storeUser = await DatabaseService.instance.getData('user');
 
-    if (storeUser != null) {
-      if (await checkNetworkConnection()) {
-        GoogleSignInAccount? user = await _googleSignIn.signIn();
-        final GoogleSignInAuthentication? googleAuth =
-            await user?.authentication;
-        final String? idToken = googleAuth?.idToken;
+    if (storeUser == null) {
+      signOut();
 
-        // for (int i = 0; i < idToken!.length; i += 400) {
-        //   print(idToken.substring(i, i + 400 > idToken.length ? idToken.length : i + 400));
-        // }
-
-        try {
-          await sendAuthRequest(idToken!, user!.displayName ?? '', user.email, false);
-        } catch (error) {
-          throw GeneralException(error.toString());
-          // throw GeneralException('Something went wrong with user validation. Please try again.');
-        }
-      }
-
+      return;
+    } else {
       var userDecode = jsonDecode(storeUser);
       UserDTO userDTO = UserDTO(
         id: userDecode['id'],
         email: userDecode['email'],
         name: userDecode['name'],
         photoUrl: userDecode['photoUrl'],
+        token: userDecode['token']
       );
 
       _userState.setUser(userDTO);
-      _appState.setIsSignIn(true);
-      DatabaseService.instance.setUserId(userDTO.id);
 
-      await loadStoredData();
-    } else {
-      await signOut();
-      _appState.setIsSignIn(false);
+      await sendVerifyTokenRequest(jsonDecode(storeUser)['token']);
+
+      return;
     }
+  }
 
+  Future<void> onAuthSuccess() async {
+    _appState.setIsSignIn(true);
     _appState.setIsLoading(false);
+    DatabaseService.instance.setUserId(_userState.user!.id);
+
+    await loadStoredData();
   }
 
   Future<void> signOut() async {
@@ -86,17 +79,89 @@ class AuthService {
       DatabaseService.instance.deleteData('user');
 
       _appState.setIsSignIn(false);
+      _appState.setIsLoading(false);
     } catch (error) {
       throw Exception("Something went wrong. Please try again.");
     }
   }
 
-  Future<void> sendAuthRequest(String idToken, String displayName, String email, bool isSignInByUser) async {
-    
+  Future<void> sendVerifyTokenRequest(String token) async {
     try {
+      final response = await NetworkService.instance.verifyTokenRequest();
+      final responseBody = jsonDecode(response.body);
+
+      if (responseBody['statusCode'] == 200) {
+        if (responseBody['lastUpdatedTime'] != null) {
+          _userState.setLastUpdatedTime(
+              DateTime.parse(responseBody['lastUpdatedTime'] as String));
+        }
+
+        _userState.setAds(AdsDTO(
+            remaingCount: responseBody['ads']['remaingCount'],
+            isAdsEnable: responseBody['ads']['isAdsEnable'],
+            isAdsReqEnable: responseBody['ads']['isAdsReqEnable']));
+
+        _userState.setJWTToken(responseBody['token'] as String);
+
+        AdsService.instance.prepareAds();
+
+        return;
+      } else {
+        final String errorMessage = responseBody['message'].toString();
+
+        LogService.instance.error(errorMessage);
+
+        if (errorMessage == Constant.tokenVerificationFailExpired) {
+          throw ApiException(
+            code: responseBody['message'],
+            message: 'Your session has expired. Please sign in again.'
+          );
+        } else if (errorMessage == Constant.tokenVerificationFailInvalid) {
+          throw ApiException(
+            code: responseBody['message'],
+            message: 'Your session is no longer valid. Please sign in again.'
+          );
+        } else {
+          throw ApiException(
+            code: responseBody['message'],
+            message: 'Something went wrong. Please try again.'
+          );
+        }
+
+        // TODO [need to delet saved used data]
+      }
+    } on ApiException {
+      rethrow;
+    } catch (error) {
+      
+      LogService.instance.error(error.toString());
+
+      throw GeneralException(error.toString());
+    }
+  }
+
+  Future<void> sendAuthRequest(String idToken, GoogleSignInAccount user, bool isSignInByUser) async {
+    final String displayName = user.displayName ?? '';
+    final String email = user.email;
+
+    try {
+      _appState.setIsLoading(true);
       final response = await NetworkService.instance.authRequest(idToken, email);
       final responseBody = jsonDecode(response.body);
       _appState.setIsLoading(false);
+
+      UserDTO userDTO = UserDTO(
+        id: user.id,
+        email: user.email,
+        name: user.displayName ?? '--',
+        photoUrl: user.photoUrl ?? '',
+        token: responseBody['token']
+      );
+
+      _userState.setUser(userDTO);
+
+      String jsonString = jsonEncode(userDTO);
+      DatabaseService.instance.saveData('user', jsonString);
 
       if (responseBody['statusCode'] == 200) {
         if (responseBody['isNewUser']) {
@@ -121,8 +186,6 @@ class AuthService {
             remaingCount: responseBody['ads']['remaingCount'],
             isAdsEnable: responseBody['ads']['isAdsEnable'],
             isAdsReqEnable: responseBody['ads']['isAdsReqEnable']));
-
-        _userState.setJWTToken(responseBody['token']);
 
         AdsService.instance.prepareAds();
 
@@ -152,34 +215,16 @@ class AuthService {
     GoogleSignInAccount? user;
 
     try {
-      user = await _googleSignIn.signIn();
-
-      if (user == null) {
-        throw Exception("Something went wrong. Please try again.");
-      }
-
-      final GoogleSignInAuthentication googleAuth = await user.authentication;
+      user = await _googleSignIn.authenticate();
+      final GoogleSignInAuthentication googleAuth = user.authentication;
       final String? idToken = googleAuth.idToken;
 
-      await sendAuthRequest(idToken!, user.displayName ?? '', user.email, true);
+      await sendAuthRequest(idToken!, user, true);
     } catch (e) {
       throw Exception("Something went wrong. Please try again.");
     }
 
-    UserDTO userDTO = UserDTO(
-      id: user.id,
-      email: user.email,
-      name: user.displayName ?? '--',
-      photoUrl: user.photoUrl ?? '',
-    );
-
-    _userState.setUser(userDTO);
-    String jsonString = jsonEncode(userDTO);
-    DatabaseService.instance.saveData('user', jsonString);
-    DatabaseService.instance.setUserId(userDTO.id);
-
-    await loadStoredData();
-    _appState.setIsSignIn(true);
+    onAuthSuccess();
   }
 
   Future<void> loadStoredData() async {

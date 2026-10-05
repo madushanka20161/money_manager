@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/custom_painter.dart';
 
 class AppConfig {
-  static Color appBackgroundColor = Color.fromARGB(255, 18, 73, 128);
+  static Color appBackgroundColor = Color(0xFF123B5D);
   static Color appTitleColor = Color(0xFF242C3B);
 
   static double headerFontSize = 30.0;
@@ -16,7 +16,7 @@ class AppConfig {
   static double iconSizeSmall = iconSize * 0.8;
   static Color iconColor = fontColor;
   // error
-  static Color errorFontColor = Colors.red;
+  static Color errorFontColor = Color(0xFFFF6B6B);
   static double errorFontSize = 12.0;
   // padding
   static double paddingSmall = 5;
@@ -104,5 +104,6 @@ class _NetworkConfig {
   // PROD
   // final String baseUrl = "https://us-central1-money-manager-18108.cloudfunctions.net/api";
   // DEV
-  final String baseUrl = "https://api-sauq2g43rq-uc.a.run.app/";
+  final String baseUrl = "http://money-mate-backend-dev-env.eba-mfuxaamv.ap-south-1.elasticbeanstalk.com";
+  // final String baseUrl = "http://localhost:3000";
 }
