@@ -107,8 +107,7 @@ class _HomeDetailsState extends State<HomeDetails> with SingleTickerProviderStat
         _buildTabBar(appState.setSelectedTransactionType),
         Expanded(
           child: TabBarView(
-            // TODO [V2 - need to enable tab changes using swiping]
-            physics: const NeverScrollableScrollPhysics(),
+            // physics: const NeverScrollableScrollPhysics(),
             controller: _tabController,
             children: [
               _buildCategoryList(
