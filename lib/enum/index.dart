@@ -48,9 +48,9 @@ extension CategoryLimitTypeExtension on CategoryLimitType {
   String get displayName {
     switch (this) {
       case CategoryLimitType.value:
-        return 'value';
+        return 'Fixed Amount';
       case CategoryLimitType.percentage:
-        return 'percentage';
+        return 'Percentage';
     }
   }
 }

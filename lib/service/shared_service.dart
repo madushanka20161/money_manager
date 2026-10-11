@@ -71,6 +71,18 @@ class SharedService {
     _updateCategoryStore();
   }
 
+  void updateCategory(String id, String name, IconData icon, Color iconColor, CategoryLimitDTO limit) {
+    CategoryDTO category = appState!.categories[id]!;
+    
+    category.name = name;
+    category.icon = icon;
+    category.iconColor = iconColor;
+    category.limit = limit;
+
+    appState!.addCategory(category.id, category);
+    _updateCategoryStore();
+  }
+
   int _generateCategoryIndex() {
     int lastIndex = appState!.categories.entries
         .map((entry) => entry.value.index)

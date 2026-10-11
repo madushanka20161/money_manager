@@ -38,10 +38,9 @@ class _ColorSelectionState extends State<ColorSelection> {
         children: [
           Container(
             padding: EdgeInsets.only(
-              bottom: AppConfig.paddingSmall, 
-              left: AppConfig.padding
+              bottom: AppConfig.paddingSmall
             ),
-            child: Text('Select Icon', style: AppConfig.fontStyle,),
+            child: Text('Select Color', style: AppConfig.fontStyle,),
           ),
           Center(
             child: Wrap(

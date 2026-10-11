@@ -12,9 +12,12 @@ import 'package:money_manager_3/widget/input/text-input.dart';
 
 class CreateCategory extends StatefulWidget {
   final TransactionType transactionType;
+  final CategoryDTO? category;
 
   const CreateCategory({
-    required this.transactionType
+    super.key, 
+    required this.transactionType,
+    this.category
   });
   
   @override
@@ -31,19 +34,40 @@ class _CreateCategoryState extends State<CreateCategory> {
   List<Color> colorList = colorMap.values.toList();
   List<IconData> iconList = iconMap.values.toList();
   final TextEditingController _nameController = TextEditingController();
+  final ScrollController _iconScrollController = ScrollController();
+
+  bool get _isEditing => widget.category != null;
 
   @override
   void initState() {
     super.initState();
-    _selectedColor = colorList[0];
-    _selectedIcon = iconList[0];
+
+    final category = widget.category;
+
+    if (category != null) {
+      _selectedColor = category.iconColor;
+      _selectedIcon = category.icon;
+      _categoryName = category.name;
+      _nameController.text = category.name;
+      _limitValue = category.limit.limit;
+      _limitType = category.limit.type;
+    } else {
+      _selectedColor = colorList[0];
+      _selectedIcon = iconList[0];
+    }
+  }
+
+  @override
+  void dispose() {
+    _iconScrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Category'),
+        title: Text(_isEditing ? 'Edit Category' : 'Create Category'),
       ),
       body: Stack(
         children: [
@@ -112,9 +136,11 @@ class _CreateCategoryState extends State<CreateCategory> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.2,
             child: Scrollbar(
+              controller: _iconScrollController,
               thumbVisibility: true,
               radius: Radius.circular(AppConfig.borderRadius),
               child: SingleChildScrollView(
+                controller: _iconScrollController,
                 child: Center(
                   child: Wrap(
                   spacing: 10.0,
@@ -192,16 +218,28 @@ class _CreateCategoryState extends State<CreateCategory> {
         ),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            SharedService.instance.createCategory(
-              _categoryName!,
-              _selectedIcon,
-              _selectedColor,
-              widget.transactionType,
-              CategoryLimitDTO(type: _limitType, limit: _limitValue));
+            final category = widget.category;
+
+            if (category != null) {
+              SharedService.instance.updateCategory(
+                category.id,
+                _categoryName!,
+                _selectedIcon,
+                _selectedColor,
+                CategoryLimitDTO(type: _limitType, limit: _limitValue));
+            } else {
+              SharedService.instance.createCategory(
+                _categoryName!,
+                _selectedIcon,
+                _selectedColor,
+                widget.transactionType,
+                CategoryLimitDTO(type: _limitType, limit: _limitValue));
+            }
+
             Navigator.pop(context);
           }
         },
-        child: Text('Create', style: AppConfig.fontStyle,),
+        child: Text(_isEditing ? 'Update' : 'Create', style: AppConfig.fontStyle,),
       ),
     );
   }

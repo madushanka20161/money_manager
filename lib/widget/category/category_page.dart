@@ -93,10 +93,8 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   List<Widget> renderCategoryList(BuildContext context) {
-    double categoryButtonWidth =
-        (MediaQuery.of(context).size.width - AppConfig.padding * 2 - 10 * 3) /
-            4;
-    double categoryButtonHeight = 80;
+    double categoryButtonWidth = 75;
+    double categoryButtonHeight = 75;
 
     List<CategoryDTO> categoryList =
         getCategoryByTypeOrderByIndex(categories, type);
@@ -113,6 +111,15 @@ class _CategoryPageState extends State<CategoryPage> {
         iconColorOpacity: 0.8,
         fontSize: AppConfig.fontSize,
         isTooltip: false,
+        onClick: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateCategory(
+              transactionType: category.type,
+              category: category,
+            )),
+          )
+        },
       );
 
       widgetList.add(

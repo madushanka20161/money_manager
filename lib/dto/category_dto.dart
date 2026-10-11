@@ -6,11 +6,11 @@ import 'package:money_manager_3/helper/index.dart';
 
 class CategoryDTO {
   final String id;
-  final String name;
+  String name;
   final TransactionType type;
-  final IconData icon;
-  final Color iconColor;
-  final CategoryLimitDTO limit;
+  IconData icon;
+  Color iconColor;
+  CategoryLimitDTO limit;
   int index; // this is used for make orders
 
   CategoryDTO({
