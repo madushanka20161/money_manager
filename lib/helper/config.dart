@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_3/custom_painter.dart';
 
 class AppConfig {
-  static Color appBackgroundColor = Color(0xFF123B5D);
+  static Color appBackgroundColor = Color(0xFF242C3B);
   static Color appTitleColor = Color(0xFF242C3B);
 
   static double headerFontSize = 30.0;
@@ -34,7 +34,7 @@ class AppConfig {
       BorderRadius.all(Radius.circular(AppConfig.borderRadius));
   // popup
   static double popupRadius = borderRadius;
-  static Color popupBKColor = Color.fromARGB(255, 18, 73, 128);
+  static Color popupBKColor = appBackgroundColor;
   // radio button
   static Color activeColor = Colors.white;
   // tool tip

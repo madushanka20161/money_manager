@@ -4,6 +4,7 @@ import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/currency.dart';
+import 'package:money_manager_3/helper/date-picker/date-range-picker-dialog.dart';
 import 'package:money_manager_3/helper/number-format.dart';
 import 'package:money_manager_3/helper/text.dart';
 import 'package:money_manager_3/service/shared_service.dart';
@@ -80,48 +81,38 @@ class _HomeSummaryState extends State<HomeSummary> {
               transaction.amount);
     });
 
-    Future<void> showDateTimePicker() async {
-      late DateTime startDate;
-      late DateTime endDate;
-
-      // TODO: [V2] Implement check box for select all dates
-      await showDateRangePicker(
+    // Returns true if the user confirmed a selection (Done or "All Time"),
+    // false if they cancelled/dismissed the popup. The caller uses this to
+    // decide whether 'custom' should actually be persisted as the selected
+    // period - without it, cancelling would still mark Custom as selected.
+    Future<bool> showDateTimePicker() async {
+      final result = await showCustomDateRangePicker(
         context: context,
-        firstDate: DateTime(2000),
+        firstDate: DateTime(2010),
         lastDate: DateTime.now(),
-        initialEntryMode: DatePickerEntryMode.calendarOnly,
-        builder: (BuildContext context, Widget? child) {
-          return Theme(
-            data: ThemeData(
-              colorScheme: ColorScheme.light(
-                primary: Colors.white,
-                onPrimary: Colors.black,
-                surface: AppConfig.popupBKColor,
-                onSurface: Colors.white,
-                secondary: Colors.white.withOpacity(0.5),
-              ),
-              textTheme: TextTheme(
-                // bodyLarge: TextStyle(color: Colors.black),
-                bodyMedium: TextStyle(color: Colors.white),
-              ),
-            ),
-            child: Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: 520,
-                child: child,
-              ),
-            ),
-          );
-        },
-      ).then((pickedDateRange) {
-        if (pickedDateRange != null) {
-          startDate = DateTime(pickedDateRange.start.year, pickedDateRange.start.month, pickedDateRange.start.day, 0, 0, 0);
-          endDate = DateTime(pickedDateRange.end.year, pickedDateRange.end.month, pickedDateRange.end.day, 23, 59, 59);
+        initialStart: appState.startDate,
+        initialEnd: appState.endDate,
+      );
 
-          appState.setDateRange(startDate, endDate);
-        }
-      });
+      if (result == null) return false;
+
+      if (result.isAllTime) {
+        final startDate = DateTime(2010, 1, 1, 0, 0, 0);
+        final end = DateTime.now();
+        final endDate = DateTime(end.year, end.month, end.day, 0, 0, 0);
+
+        appState.setDateRange(startDate, endDate);
+      } else if (result.start != null) {
+        final startDate = DateTime(result.start!.year, result.start!.month, result.start!.day, 0, 0, 0);
+        final end = result.end ?? result.start!;
+        final endDate = DateTime(end.year, end.month, end.day, 23, 59, 59);
+
+        appState.setDateRange(startDate, endDate);
+      } else {
+        return false;
+      }
+
+      return true;
     }
 
     Future<void> onDataPeriodChanged(String period) async {
@@ -130,13 +121,16 @@ class _HomeSummaryState extends State<HomeSummary> {
         case 'week':
         case 'month':
         case 'year':
+          SharedService.instance.updateSetectedTimePeriod(period);
           break;
         default:
-          await showDateTimePicker();
+          final confirmed = await showDateTimePicker();
+
+          if (confirmed) {
+            SharedService.instance.updateSetectedTimePeriod(period);
+          }
           break;
       }
-
-      SharedService.instance.updateSetectedTimePeriod(period);
     }
 
     return Container(
@@ -209,9 +203,9 @@ class _HomeSummaryState extends State<HomeSummary> {
               isSelected: isSelectedToggleButton,
               fillColor: AppConfig.buttonSelectedColor,
               onPressed: (int index) {
-                onDataPeriodChanged(periods[index]);
-                isSelectedToggleButton.fillRange(0, isSelectedToggleButton.length, false);
-                isSelectedToggleButton[index] = !isSelectedToggleButton[index];
+                onDataPeriodChanged(periods[index]).then((_) {
+                  if (mounted) setState(() {});
+                });
               },
               children: <Widget>[
                 Padding(

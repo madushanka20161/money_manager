@@ -102,13 +102,13 @@ class _CurrentTimePeriodState extends State<CurrentTimePeriod> {
     int multiplier = direction == 'left' ? -1 : 1;
 
     void updateDay() {
-      startDate = startDate.add(Duration(days: multiplier));
-      endDate = endDate.add(Duration(days: multiplier));
+      startDate = DateTime(startDate.year, startDate.month, startDate.day + multiplier, 0, 0, 0);
+      endDate = DateTime(startDate.year, startDate.month, startDate.day, 23, 59, 59);
     }
 
     void updateWeek() {
-      startDate = startDate.add(Duration(days: 7 * multiplier));
-      endDate = endDate.add(Duration(days: 7 * multiplier));
+      startDate = DateTime(startDate.year, startDate.month, startDate.day + 7 * multiplier, 0, 0, 0);
+      endDate = DateTime(startDate.year, startDate.month, startDate.day + 6, 23, 59, 59);
     }
 
     void updateMonth() {
@@ -118,7 +118,7 @@ class _CurrentTimePeriodState extends State<CurrentTimePeriod> {
 
     void updateYear() {
       startDate = DateTime(startDate.year + multiplier, 1, 1, 0, 0, 0);
-      endDate = DateTime(startDate.year + multiplier, 12, 31, 23, 59, 59);
+      endDate = DateTime(startDate.year, 12, 31, 23, 59, 59);
     }
 
     switch (timePeriod) {
