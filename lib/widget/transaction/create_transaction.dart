@@ -437,9 +437,9 @@ class _CreateTransactionState extends State<CreateTransaction> {
                     onPressed: () async {
                       final selectedDate = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
+                        initialDate: _selectedDate ?? DateTime.now(),
+                        firstDate: DateTime(2010),
+                        lastDate: DateTime.now(),
                         builder: (context, child) {
                           return Theme(
                             data: ThemeData(
