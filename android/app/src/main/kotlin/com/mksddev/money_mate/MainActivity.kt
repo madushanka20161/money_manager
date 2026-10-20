@@ -1,4 +1,4 @@
-package com.mksddev.money_mate
+package com.mksdtec.money_mate
 
 import io.flutter.embedding.android.FlutterActivity
 import android.content.Intent

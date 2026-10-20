@@ -40,7 +40,9 @@ lib/helper/config -> baseUrl [`set correct URL`]
 
 ## Remove appliation from app
 
-`adb uninstall com.mksddev.money_mate`
+<!-- `adb uninstall com.mksddev.money_mate` -->
+`adb uninstall com.mksdtec.money_mate`
+
 
 
 

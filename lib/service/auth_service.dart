@@ -34,7 +34,7 @@ class AuthService {
     _googleSignIn = GoogleSignIn.instance;
   await _googleSignIn.initialize(
     serverClientId:
-        '581198894251-cc8a2924047shafk33gt5qe14u7bh22g.apps.googleusercontent.com',
+        '552343521160-b3fcde5tjqossm80b6qa6oat1e9bfqaa.apps.googleusercontent.com',
   );
     _appState = appState;
     _userState = userState;
