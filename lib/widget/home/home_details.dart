@@ -4,6 +4,7 @@ import 'package:money_manager_3/dto/transaction_dto.dart';
 import 'package:money_manager_3/enum/index.dart';
 import 'package:money_manager_3/helper/config.dart';
 import 'package:money_manager_3/helper/currency.dart';
+import 'package:money_manager_3/helper/index.dart';
 import 'package:money_manager_3/helper/number-format.dart';
 import 'package:money_manager_3/state/app_state.dart';
 import 'package:money_manager_3/state/user_state.dart';
@@ -321,7 +322,7 @@ class _CategoryTile extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: Text(
-                            category.name,
+                            capitalizeFirstLetter(category.name),
                             style: TextStyle(
                               fontSize: AppConfig.fontSize,
                               color: AppConfig.fontColor,
@@ -343,11 +344,11 @@ class _CategoryTile extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (isOverLimit) ...[
-                                    const Icon(
-                                      Icons.warning_amber_rounded,
-                                      size: 14,
-                                      color: Colors.redAccent,
-                                    ),
+                                    // const Icon(
+                                    //   Icons.warning_amber_rounded,
+                                    //   size: 14,
+                                    //   color: Colors.redAccent,
+                                    // ),
                                     const SizedBox(width: 4),
                                   ],
                                   Flexible(
