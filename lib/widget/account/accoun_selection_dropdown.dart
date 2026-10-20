@@ -82,7 +82,7 @@ class _AccountSelectionDropdownState extends State<AccountSelectionDropdown> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
-        padding: EdgeInsets.all(AppConfig.padding),
+        padding: EdgeInsets.only(left: AppConfig.padding2XLarge),
         textStyle: TextStyle(fontSize: AppConfig.fontSize,),
         elevation: 0,
         minimumSize: Size(double.infinity, 50),
